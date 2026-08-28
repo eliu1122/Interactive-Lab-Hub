@@ -1,0 +1,134 @@
+<svg viewBox="0 0 1012 484" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2b2b2b"/></marker></defs>
+<rect x="0" y="0" width="1012" height="484" fill="#fffdf6"/>
+<text x="506.0" y="58.0" font-family="Segoe Print, Bradley Hand, Comic Sans MS, cursive" font-size="26" fill="#1c1c22" text-anchor="middle" font-weight="bold">Storyboard 3 - The Subway Platform</text>
+<g>
+<rect x="30" y="76" width="300" height="300" rx="4" fill="#faf6ea" stroke="#2b2b2b" stroke-width="2.4"/>
+<rect x="33" y="79" width="294" height="294" rx="3" fill="none" stroke="#2b2b2b" stroke-width="1" stroke-dasharray="2 3" opacity="0.35"/>
+<g clip-path="url(#clip0_storyboard3_subway_platform.svg)">
+<path d="M 50.0 336.0 Q 180.0 334.1 310.0 336.0" stroke="#2b2b2b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+<circle cx="60.3" cy="105.4" r="6.4" stroke="#2b2b2b" stroke-width="2" fill="#ece6d2"/>
+<rect x="57.9" y="110.0" width="4.2" height="3.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 57.6 104.0 Q 61.4 104.3 62.4 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="96.1" cy="106.6" r="5.5" stroke="#2b2b2b" stroke-width="2" fill="#ece6d2"/>
+<rect x="93.9" y="110.0" width="4.2" height="3.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 93.6 104.0 Q 97.1 104.7 98.4 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="132.3" cy="105.9" r="5.5" stroke="#2b2b2b" stroke-width="2" fill="#ece6d2"/>
+<rect x="129.9" y="110.0" width="4.2" height="3.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 129.6 104.0 Q 130.7 107.6 134.4 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="168.7" cy="106.3" r="6.8" stroke="#2b2b2b" stroke-width="2" fill="#ece6d2"/>
+<rect x="165.9" y="110.0" width="4.2" height="3.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 165.6 104.0 Q 168.0 106.0 170.4 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="204.5" cy="105.8" r="5.3" stroke="#2b2b2b" stroke-width="2" fill="#ece6d2"/>
+<rect x="201.9" y="110.0" width="4.2" height="3.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 201.6 104.0 Q 204.1 105.8 206.4 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="240.7" cy="106.1" r="6.2" stroke="#2b2b2b" stroke-width="2" fill="#ece6d2"/>
+<rect x="237.9" y="110.0" width="4.2" height="3.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 237.6 104.0 Q 238.4 107.9 242.4 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="275.3" cy="105.8" r="6.7" stroke="#2b2b2b" stroke-width="2" fill="#ece6d2"/>
+<rect x="273.9" y="110.0" width="4.2" height="3.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 273.6 104.0 Q 274.5 107.8 278.4 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="120.8" cy="248.9" r="8.1" stroke="#2b2b2b" stroke-width="2.2" fill="none"/>
+<path d="M 120.0 257.1 Q 119.8 271.6 120.0 286.0" stroke="#2b2b2b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<path d="M 120.0 267.3 Q 111.3 273.2 106.4 282.6" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 120.0 267.3 Q 126.6 275.1 133.6 282.6" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 120.0 286.0 Q 114.8 299.3 111.5 313.2" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 120.0 286.0 Q 121.5 300.4 128.5 313.2" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<circle cx="179.3" cy="255.0" r="7.1" stroke="#2b2b2b" stroke-width="2.2" fill="none"/>
+<path d="M 180.0 262.1 Q 179.5 276.6 180.0 291.0" stroke="#2b2b2b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<path d="M 180.0 272.3 Q 175.6 282.6 168.1 291.0" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 180.0 272.3 Q 185.4 280.5 193.6 285.9" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 180.0 291.0 Q 177.0 304.2 171.5 316.5" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 180.0 291.0 Q 187.1 302.0 190.2 314.8" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<circle cx="239.3" cy="251.3" r="7.3" stroke="#2b2b2b" stroke-width="2.2" fill="none"/>
+<path d="M 240.0 259.1 Q 238.3 273.6 240.0 288.0" stroke="#2b2b2b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<path d="M 240.0 269.3 Q 233.4 277.1 226.4 284.6" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 240.0 269.3 Q 244.7 278.8 253.6 284.6" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 240.0 288.0 Q 238.4 302.4 231.5 315.2" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 240.0 288.0 Q 246.1 301.0 248.5 315.2" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<text x="180.0" y="362.0" font-family="Segoe Print, Bradley Hand, Comic Sans MS, cursive" font-size="12" fill="#555" text-anchor="middle" font-weight="normal">strangers waiting on the platform</text>
+</g>
+<circle cx="48" cy="94" r="13" fill="#fffdf6" stroke="#2b2b2b" stroke-width="2"/>
+<text x="48.0" y="99.0" font-family="Segoe Print, Bradley Hand, Comic Sans MS, cursive" font-size="15" fill="#2b2b2b" text-anchor="middle" font-weight="bold">1</text>
+<text x="180.0" y="398.0" font-family="Segoe Print, Bradley Hand, Comic Sans MS, cursive" font-size="14" fill="#2b2b2b" text-anchor="middle" font-weight="normal"><tspan x="180.0" dy="0">A dim string of bulbs runs</tspan><tspan x="180.0" dy="18">along the platform ceiling</tspan></text>
+</g>
+<g>
+<rect x="356" y="76" width="300" height="300" rx="4" fill="#faf6ea" stroke="#2b2b2b" stroke-width="2.4"/>
+<rect x="359" y="79" width="294" height="294" rx="3" fill="none" stroke="#2b2b2b" stroke-width="1" stroke-dasharray="2 3" opacity="0.35"/>
+<g clip-path="url(#clip1_storyboard3_subway_platform.svg)">
+<path d="M 506.0 146.0 Q 508.1 241.0 506.0 336.0" stroke="#2b2b2b" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<circle cx="505.5" cy="236.3" r="10.1" stroke="#2b2b2b" stroke-width="2.5" fill="none"/>
+<text x="546.0" y="233.0" font-family="Segoe Print, Bradley Hand, Comic Sans MS, cursive" font-size="10" fill="#666" text-anchor="middle" font-weight="normal">sensor</text>
+<text x="546.0" y="246.0" font-family="Segoe Print, Bradley Hand, Comic Sans MS, cursive" font-size="10" fill="#666" text-anchor="middle" font-weight="normal">grip</text>
+<circle cx="476.1" cy="260.0" r="7.7" stroke="#2b2b2b" stroke-width="2.2" fill="none"/>
+<path d="M 476.0 267.1 Q 474.3 281.6 476.0 296.0" stroke="#2b2b2b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<path d="M 476.0 277.3 Q 466.2 273.1 455.6 273.9" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 476.0 277.3 Q 485.9 273.5 496.4 273.9" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 476.0 296.0 Q 472.9 309.8 468.4 323.2" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 476.0 296.0 Q 477.2 310.3 483.6 323.2" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 478.5 116 L 492.25 116 L 497.75 102 L 506.0 130 L 512.6 116 L 533.5 116" stroke="#2b2b2b" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="506.0" y="362.0" font-family="Segoe Print, Bradley Hand, Comic Sans MS, cursive" font-size="12" fill="#555" text-anchor="middle" font-weight="normal">one commuter grips the sensor pole</text>
+</g>
+<circle cx="374" cy="94" r="13" fill="#fffdf6" stroke="#2b2b2b" stroke-width="2"/>
+<text x="374.0" y="99.0" font-family="Segoe Print, Bradley Hand, Comic Sans MS, cursive" font-size="15" fill="#2b2b2b" text-anchor="middle" font-weight="bold">2</text>
+<text x="506.0" y="398.0" font-family="Segoe Print, Bradley Hand, Comic Sans MS, cursive" font-size="14" fill="#2b2b2b" text-anchor="middle" font-weight="normal"><tspan x="506.0" dy="0">One commuter grips a</tspan><tspan x="506.0" dy="18">sensor built into the pole</tspan></text>
+</g>
+<g>
+<rect x="682" y="76" width="300" height="300" rx="4" fill="#faf6ea" stroke="#2b2b2b" stroke-width="2.4"/>
+<rect x="685" y="79" width="294" height="294" rx="3" fill="none" stroke="#2b2b2b" stroke-width="1" stroke-dasharray="2 3" opacity="0.35"/>
+<g clip-path="url(#clip2_storyboard3_subway_platform.svg)">
+<path d="M 702.0 336.0 Q 832.0 335.4 962.0 336.0" stroke="#2b2b2b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+<circle cx="712.0" cy="105.5" r="5.7" stroke="#2b2b2b" stroke-width="2" fill="#ece6d2"/>
+<rect x="709.9" y="110.0" width="4.2" height="3.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 709.6 104.0 Q 710.7 107.6 714.4 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="747.4" cy="106.7" r="6.2" stroke="#2b2b2b" stroke-width="2" fill="#ece6d2"/>
+<rect x="745.9" y="110.0" width="4.2" height="3.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 745.6 104.0 Q 747.9 106.1 750.4 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="784.2" cy="106.7" r="5.6" stroke="#2b2b2b" stroke-width="2" fill="#ece6d2"/>
+<rect x="781.9" y="110.0" width="4.2" height="3.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 781.6 104.0 Q 784.6 105.3 786.4 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="819.5" cy="105.3" r="7.2" stroke="#2b2b2b" stroke-width="2" fill="#f5e08a"/>
+<rect x="817.2" y="112.0" width="5.6" height="4.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 816.8 104.0 Q 819.9 106.1 823.2 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<path d="M 832.0 106.0 Q 835.5 104.9 839.0 106.0" stroke="#2b2b2b" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<path d="M 828.5 114.5 Q 829.5 118.5 833.4 119.4" stroke="#2b2b2b" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<path d="M 820.0 118.0 Q 821.8 121.5 820.0 125.0" stroke="#2b2b2b" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<path d="M 811.5 114.5 Q 811.1 119.0 806.6 119.4" stroke="#2b2b2b" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<path d="M 808.0 106.0 Q 804.5 106.2 801.0 106.0" stroke="#2b2b2b" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<path d="M 811.5 97.5 Q 807.4 96.6 806.6 92.6" stroke="#2b2b2b" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<path d="M 820.0 94.0 Q 818.9 90.5 820.0 87.0" stroke="#2b2b2b" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<path d="M 828.5 97.5 Q 829.8 93.9 833.4 92.6" stroke="#2b2b2b" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<circle cx="856.2" cy="106.7" r="5.5" stroke="#2b2b2b" stroke-width="2" fill="#ece6d2"/>
+<rect x="853.9" y="110.0" width="4.2" height="3.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 853.6 104.0 Q 856.5 105.4 858.4 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="891.7" cy="106.7" r="6.2" stroke="#2b2b2b" stroke-width="2" fill="#ece6d2"/>
+<rect x="889.9" y="110.0" width="4.2" height="3.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 889.6 104.0 Q 891.8 106.2 894.4 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="928.4" cy="105.5" r="5.2" stroke="#2b2b2b" stroke-width="2" fill="#ece6d2"/>
+<rect x="925.9" y="110.0" width="4.2" height="3.0" fill="none" stroke="#2b2b2b" stroke-width="1.6"/>
+<path d="M 925.6 104.0 Q 929.7 103.9 930.4 108.0" stroke="#2b2b2b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="772.5" cy="249.8" r="6.9" stroke="#2b2b2b" stroke-width="2.2" fill="none"/>
+<path d="M 772.0 257.1 Q 772.9 271.6 772.0 286.0" stroke="#2b2b2b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<path d="M 772.0 267.3 Q 764.9 274.7 758.4 282.6" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 772.0 267.3 Q 777.9 275.8 785.6 282.6" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 772.0 286.0 Q 770.2 300.4 763.5 313.2" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 772.0 286.0 Q 775.1 300.0 780.5 313.2" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<circle cx="832.7" cy="253.7" r="8.0" stroke="#2b2b2b" stroke-width="2.2" fill="none"/>
+<path d="M 832.0 262.1 Q 831.6 276.6 832.0 291.0" stroke="#2b2b2b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<path d="M 832.0 272.3 Q 836.3 259.6 840.5 246.8" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 832.0 272.3 Q 823.7 277.6 818.4 285.9" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 832.0 291.0 Q 829.0 304.8 824.4 318.2" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 832.0 291.0 Q 834.9 304.9 839.6 318.2" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<circle cx="891.8" cy="251.5" r="8.3" stroke="#2b2b2b" stroke-width="2.2" fill="none"/>
+<path d="M 892.0 259.1 Q 889.6 273.6 892.0 288.0" stroke="#2b2b2b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<path d="M 892.0 269.3 Q 888.4 280.2 880.1 288.0" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 892.0 269.3 Q 896.8 278.1 905.6 282.9" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 892.0 288.0 Q 888.8 301.1 883.5 313.5" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<path d="M 892.0 288.0 Q 897.3 299.8 902.2 311.8" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<text x="832.0" y="362.0" font-family="Segoe Print, Bradley Hand, Comic Sans MS, cursive" font-size="12" fill="#555" text-anchor="middle" font-weight="normal">one bulb flickers; most never look up</text>
+</g>
+<circle cx="700" cy="94" r="13" fill="#fffdf6" stroke="#2b2b2b" stroke-width="2"/>
+<text x="700.0" y="99.0" font-family="Segoe Print, Bradley Hand, Comic Sans MS, cursive" font-size="15" fill="#2b2b2b" text-anchor="middle" font-weight="bold">3</text>
+<text x="832.0" y="398.0" font-family="Segoe Print, Bradley Hand, Comic Sans MS, cursive" font-size="14" fill="#2b2b2b" text-anchor="middle" font-weight="normal"><tspan x="832.0" dy="0">A single bulb pulses</tspan><tspan x="832.0" dy="18">overhead - only one rider</tspan><tspan x="832.0" dy="18">notices</tspan></text>
+</g>
+</svg>
