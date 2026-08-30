@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6075b2dd-035d-46e3-915e-d337d8b7a62f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Lab 1/storyboards/storyboard1_first_encounter.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Lab 1/storyboards/storyboard2_living_room.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Lab 1/storyboards/storyboard3_subway_platform.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lab 1/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Lab 1/README.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="20" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0" />
+      <entry key="S5" value="1.0000000000530531" />
+      <entry key="S10" value="1.0000456461213518" />
+      <entry key="S30" value="1.4171210152854055" />
+      <entry key="S60" value="5.083621465366403" />
+      <entry key="M2" value="13.77979082441274" />
+      <entry key="M5" value="26.341862088190265" />
+      <entry key="M10" value="32.8381697977636" />
+      <entry key="M15" value="35.354618885988565" />
+      <entry key="M30" value="38.069998302729445" />
+      <entry key="H1" value="39.61211530462783" />
+      <entry key="H2" value="50.52728295904067" />
+      <entry key="H4" value="142.7458922739851" />
+      <entry key="D1" value="734.1717634497301" />
+      <entry key="W1" value="1003.8038815192923" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.8467453123625271" />
+      <entry key="MS500" value="0.9672763296139321" />
+      <entry key="S2" value="0.9917167307382933" />
+      <entry key="S5" value="0.9966784222718331" />
+      <entry key="S10" value="0.9983834564744329" />
+      <entry key="S30" value="1.4165073368225363" />
+      <entry key="S60" value="5.0830534222015595" />
+      <entry key="M2" value="13.779196756303232" />
+      <entry key="M5" value="26.341445200673384" />
+      <entry key="M10" value="32.83791498863128" />
+      <entry key="M15" value="35.35443703834184" />
+      <entry key="M30" value="38.069900917764265" />
+      <entry key="H1" value="39.612064704273855" />
+      <entry key="H2" value="50.52724726590777" />
+      <entry key="H4" value="142.74582850819073" />
+      <entry key="D1" value="734.1717029014583" />
+      <entry key="W1" value="1003.8038695964904" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3ITHROtEZGHiVCVAYaS8f2dS8VY" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "Fall2026",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/yceri/Desktop/Interactive-Lab-Hub",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.jshint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.jshint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\yceri\Desktop\Interactive-Lab-Hub\Lab 1" />
+      <recent name="C:\Users\yceri\Desktop\Interactive-Lab-Hub\Lab 1\storyboards" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-34e2839f716b-intellij.indexing.shared.core-IU-262.9437.185" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.9437.185" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6075b2dd-035d-46e3-915e-d337d8b7a62f" name="Changes" comment="" />
+      <created>1787781629633</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1787781629633</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
