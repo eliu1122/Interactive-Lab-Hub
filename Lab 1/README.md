@@ -216,6 +216,8 @@ who doesn't should come away understanding what it's famous for. How might you i
 acknowledging their contributions, and credit any other influences (YouTube,
 Github, Twitter, a friend who lent you a lamp) that informed your recreation.
 
+Hong Yuan Cao
+
 ---
 
 # Part 2 — ReMastering the light
