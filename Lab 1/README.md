@@ -4,7 +4,11 @@ _This project is to be done in teams of 2._
 
 **NAME OF BOTH COLLABORATOR(S) HERE**
 
+Yun-Chung Liu, Hong Yuan Cao
+
 **THE MASTERWORK YOU DREW FROM THE HAT:**
+
+Pulse Room - Rafael Lozano-Hemmer, 2006
 
 ---
 
@@ -84,13 +88,22 @@ drew. Do real research. You are looking less for trivia than for the *shape of
 the interaction*:
 
 - What inputs are available to the user? What responses does the work give?
+  - The input is a heart beat sensor that allows the users/multiple users to interact with a sensor that detects their heartbeat. The sensor is a device where the user can place both hands where it would detect the heartbeat. 
+  - The response given would be an intial lightbult with the participant's heartbeat, and then projected to one of the 100 lightbulbs within the building as light pulses and then it shifts the next person down by one after temporarily dimming all the lights. 
 - Who is present, and how does the piece color the relationships between them?
+  - The lightbulb and the person is present. I also think that the lightbulb being located in a dim warehouse adds an effect on the art and makes it more noticeable, compared with being outside.
+  - This piece shows the relationship by having their exact heartbeat rate displayed as lightpulses on a lightbulb associated with them, with a total of 100 lightbulbs. It's an interesting relationship because the people who are interacting with the art becomes part of the art.
 - What is the piece famous for? What are its strengths and its weaknesses?
+  - I think this piece is famous because of the interactive element involved, along with the queue associated with everyone (the 100 people that have interacted with the lightbulb), making it an active history of the people that have interacted with the art.
+  - I think the strength associated with it is that it allows the users to easily access the sensor and see an immediate representation of their heartbeat as lightpulses on an immediate light.
+  - A weakness I think would be that it is only limited to 100 people, given the size of the room and the amount of lightbulbs, the last person of the 100 would be pushed out by the newest 100, losing that representation that makes the artwork so unique.
 
-  Sometimes the details of how the interaction worked are lost in history. Try filling it in with your imagination!
+    Sometimes the details of how the interaction worked are lost in history. Try filling it in with your imagination!
 
 **Describe your masterwork here, in your own words. What is the core interaction
 someone would recognize it by?**
+
+I think the core interaction someone would remember this work by would be having both hands wrapped around two handles that would be able to detect the user's heartbeat and project it as lightpulses along with the other 99 previous participants. Please look at more in-depth answers above that are being represented as bullet points!
 
 ## Part A. Plan
 
@@ -105,6 +118,11 @@ For your masterwork, reconstruct the interaction as a scene:
 
 **Describe your setting, players, activity, and goals here.**
 
+Setting - I think this can be in many settings, such as at home, within the hospital, or just in a dark room.
+Players - I think anyone can be involved, ranging from little kids to senior citizens. I think this would be a good representation since it would result in different lightbulbs having different pulses being displayed. I think a family can be involved, distant relatives, strangers even.
+Activity - I think the core activity is always the same no matter the setting: someone places their hand (or hands) on a sensor, and their heartbeat gets translated into pulses of light on a bulb somewhere nearby. What changes is what that activity means depending on where it's happening. In the gallery version it's about joining a long line of 100 strangers who did the same thing before you. In the living room version it's more like a check-in, grandma touching her sensor so her family miles away knows she's okay. In the hospital version it's quieter and more emotional, it's proof that someone's heart is still beating.
+Goals - I think each player's goal really depends on the setting. In the gallery, the goal is just to see your own heartbeat become part of something bigger for a little while. In the living room, grandma's goal is to reassure her family, and the family's goal is just to notice the lamp change and feel relieved. In the hospital, the goal is comfort, just having something steady to look at.
+
 Now **sketch a 3 storyboards** of the interaction you are recreating. (The number may depend on the thing you drew, but stretch your thinking!) They
 don't need to be beautiful, but they must capture and communicate not only the behavior of the light, but how it affects
 and the people around it. If you're new to storyboarding, read
@@ -112,9 +130,15 @@ and the people around it. If you're new to storyboarding, read
 
 **Include pictures of your storyboards here.**
 
+Please refer the Storyboard 1, 2, and 3 within Lab 1 folder.
+
 Use the storyboards to decide what interaction to prototype.
 
+I like my sterile room where the sensor is more of a praticality, allowing users, with the light, who aren't nearby to the person with the sensor to determine if the person is doing ok.
+
 **Summarize the feedback you got here.**
+
+I think that when someone first touches the sensor, the piece could respond instantly or with a short delay, and that choice changes whether it feels reactive or "alive." Especially because I had to manually flick the light on and off, sometimes it would be difficult to replicate the instantaneous light up that we see in the actual Master's work. Another moment that could go a different way is how long someone keeps their hand on the sensor - if they let go quickly, does the light still get a full pulse, or does it cut off early? I think depending on how we answer that, the piece feels either more forgiving or more strict about how you're supposed to interact with it. There's also the moment when a new person shows up while someone else's bulb is still pulsing - we didn't fully decide if the new person has to wait their turn or if the light just switches over right away, and acting it out made us realize that's actually a real design decision, not just a detail.
 
 ## Part B. Act out the Interaction
 
@@ -124,10 +148,16 @@ it aloud.
 
 **Are there things that seemed better on paper than when acted out?**
 
+- Yes, the idea of having 100 lightbulbs to mimic the actual Master's was way better on paper, but just having one or two lightbulbs (or having our phones act like it) was already a lot of work. On paper it looks like a satisfying chain reaction; in the room, miming "the whole wall shifts" with one light source just looked like the light blinking once, and Hong Yuan and I kept having to explain out loud what was supposed to be happening off-screen. We also assumed the moment of "hands on the sensor" would read as obviously significant, but without any resistance or feedback in our hands (we were literally just holding a phone), it looked more like checking a text message than making contact with something. The gesture needed to be held and slowed down a lot more than the storyboard implied. 
+
 **Did new ideas about the piece surface once you were on your feet?**
+
+- Sketching the variant settings (living room and hospital) also surfaced an idea we hadn't intially thought of. The meaning of the same exact gesture changes depending on who's watching - a stranger noticing your pulse on a wall of 100 lights feels anonymous, but the same gesture in front of family (our living-room version) felt almost too intimate for a public gallery. That contrast wasn't something we appreciated from the original write-up alone.
 
 **Are there key moments in the interaction where things could go in a different direction?**
 Iterate your storyboards to capture key non-sequential aspects of the interaction. 
+
+- I think that when someone first touches the sensor, the piece could respond instantly or with a short delay, and that choice changes whether it feels reactive or "alive." And especially because I had to manually flick the light on and off, sometimes it would be difficult to replicate the instataneous light up that we see in the actual Master work.
 
 ## Part C. Prototype the Light (light first!)
 
@@ -145,6 +175,8 @@ masterwork should you consider layering in a second modality (sound, vibration,
 motion). If in doubt, keep polishing the light. The other modalities are next
 week's business.
 
+**Please refer to the video under Lab 1.**
+
 ## Part D. Wizard the Device
 
 Set up a "wizard" arrangement so one person can secretly drive the light while
@@ -153,6 +185,8 @@ building any real electronics. (Zoom works well for recording; you can pin the
 video feed of whichever scene you want to capture.)
 
 **Include your first attempts at recording the wizarded set-up here.**
+
+**Please refer to the video under Lab 1.**
 
 ## Part E. (optional) Costume the Device
 
@@ -176,6 +210,8 @@ who doesn't should come away understanding what it's famous for. How might you i
 
 **Include your video here.**
 
+**Please refer to the video under Lab 1.**
+
 **Please indicate who you collaborated with on this lab.** Be generous in
 acknowledging their contributions, and credit any other influences (YouTube,
 Github, Twitter, a friend who lent you a lamp) that informed your recreation.
@@ -187,7 +223,6 @@ Github, Twitter, a friend who lent you a lamp) that informed your recreation.
 *This describes the second week's work for this lab activity.*
 
 ## Prep (before the next lab)
-
 Find three other groups. (How? Maybe Slack?) Visit their Lab Hub pages, watch their
 videos, and give them reactions and feedback: tell them what you saw happening,
 guess the masterwork and the goals of the characters, and ask about anything that
