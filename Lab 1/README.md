@@ -235,9 +235,15 @@ wasn't clear.
 
 ## Remix, Update, or Critique the Master
 
+https://github.com/hongyuanc/Interactive-Lab-Hub
+https://github.com/certaindragon3/Interactive-Lab-Hub
+https://github.com/jovianw/Interactive-Lab-Hub/blob/Fall2026/Lab%201/README.md
+
 Now that you understand your masterwork from the inside, respond to it. Do the
 recreation again, but this time make it your own — pick one of these moves (or
 combine them):
+
+I think a feedback that I've gotten was that I can keep the original's "history of many people" instead of just showing one live pulse of grandmother/family member, we can let the lamp/lightbulb retain a subtle 24-hour history. 5 dim lights for the recent checkins and only current live checkin would have exact replications and brighter lighting.
 
 1. **Remix the modality.** Your recreation no longer has to (just) use light. Use
    vibration, sound, motion, heat — whatever best carries the interaction. Feel
@@ -253,6 +259,139 @@ your response engages with what your master was really doing.
 
 **Document everything here — especially the storyboard and video. Photos of the
 prototype are great too.**
+
+### Our second pass
+
+The feedback we got back pushed on a few things:
+
+- **From the professor:** there is a specific feeling to standing in a room full
+  of 100 people's heartbeats, and our first version lost it when we turned it into
+  a practical "check in on grandma" lamp. Once it became useful it stopped being
+  overwhelming, and being overwhelmed is kind of the whole point of Pulse Room.
+- **From our crit group, on the history:** instead of the lamp only showing one
+  live pulse at a time, keep the original's "history of many people" by letting
+  the light hold a subtle 24-hour history — 5 dim lights for the recent check-ins
+  and one brighter light playing the current person's actual heartbeat (this is
+  the note we wrote up above).
+- **From our crit group, on setting:** the "check-in" framing made it feel too
+  private and domestic. Try putting it somewhere strangers already stand together
+  in the dark without talking — a setting Lozano-Hemmer never had to imagine.
+- **From a partner group, on sound:** we dropped sound completely, but the real
+  Pulse Room bulbs audibly buzz and the room hums. Half the atmosphere is the
+  noise. Bring the sound back, and let people feel the beat, not just watch it.
+- **From acting it out in Part C:** flicking the light on and off by hand just
+  looked like a light blinking once, not a heartbeat. The pulse has to breathe,
+  and ideally you hear or feel it too.
+- **On scale:** even a booth felt a little tame and controlled. The awe in the
+  original comes from sheer number and volume, so at least one version should not
+  compromise on scale.
+
+So for this pass we tried to pull the piece back toward the original feeling while
+keeping the part of our idea that still worked, and we used the feedback above to
+make three storyboards instead of one. The starting point is a small dark booth
+about the size of a phone booth that could sit in a dorm lobby or a hospital
+waiting room. You step inside, grip two handles, and hold. Six lights are arranged
+around you at arm's length. Five of them are dim and slow, replaying the last five
+people's heartbeats from the past day, and the sixth one, right in front of your
+face, flares up bright and locks onto your actual pulse, with your heartbeat
+coming through speakers at the same time. When the next person comes in, everything
+dims for a second, your pulse drops back to become one of the five dim ones, and
+the oldest one fades out completely. It is the same 100-bulb queue from Pulse Room,
+just shrunk down to six and close enough that you can feel the heat and a thump
+through the floor. The other two storyboards take this and either move it (onto a
+late-night train) or stop compromising on scale (a full room turned up loud).
+
+**Remixing the modality.** Answering the sound note and the Part C note, we
+brought sound back as a real part of the piece: your heartbeat plays through
+speakers while your light pulses, and the bulbs keep a low hum between beats like
+the originals do. On top of that the light nearest you warms up while it is
+pulsing and cools as it ages, so a check-in from yesterday is actually cold when
+you touch it, and there is a thump you feel through the floor or the handrail more
+than hear. We also made the lights breathe in and out instead of blinking, because
+acting it out in Part C showed that the manual on and off just looked like a light
+flickering once, not a heartbeat.
+
+**Updating it.** The warehouse full of 100 bulbs becomes six lights in a booth you
+could actually put somewhere. Because there are only six, the history turns over in
+about a day instead of staying up for months, but the tradeoff is that the people
+in it are recent and close, so you are standing next to yesterday's strangers
+instead of looking at a wall of anonymous flickers. We also kept the two design
+questions we could not decide in Part A: you have to hold the handles for about
+ten seconds for a clean reading, and if you let go early your light just keeps a
+weak, uncertain flicker. The booth also takes a beat to "accept" you before your
+light locks on, so it feels a little alive.
+
+**Fixing the weakness.** In Part 0 we said the weak point of Pulse Room is that
+the 101st person erases someone with nothing to mark it. In our version the oldest
+light does not just cut out. Over its last minute it slows down, dims, and goes
+cold and dark on the far wall while you are standing there, so you actually watch
+someone get pushed out of the history instead of it happening somewhere you cannot
+see.
+
+### Iterated storyboards
+
+Each storyboard is aimed at a different piece of the feedback above. All three
+keep the masterwork's real setup — a space full of lights, you add your heartbeat,
+the crowd's pulses stay around you — and all three bring the sound back.
+
+#### Storyboard 4 — Pulse Room on the last train
+
+![Storyboard 4](Storyboard%204.jpg)
+
+*Answers the setting note and the professor's "put me back inside the crowd" note.*
+The last train of the night. The ceiling lights are already pulsing slowly above
+the riders, each one carrying a heartbeat from someone who rode earlier, and the
+car has a low hum under the usual train noise. You grab the overhead handrail and
+hold, and at first you feel the pulses that are already there, someone else's
+rhythm coming up through the metal. Then the light above your spot switches over
+and starts reflecting your heartbeat, and you feel your own pulse in the handrail.
+As you get off, your light dims and sinks back to pulsing softly with the others,
+waiting for whoever grabs that rail next. It is a setting Lozano-Hemmer never had
+to imagine — strangers already standing together in the dark without talking — and
+you cannot step out of it, you are in the car until your stop.
+
+#### Storyboard 5 — the curtain booth
+
+![Storyboard 5](Storyboard%205.jpg)
+
+*Answers the crit group's history note and the sound note.* You pull a curtain
+aside and step into a small dark room. Five lights are dimly pulsing, one for each
+of the last five people, and one spot is still dark. You grip the two handrails;
+your heartbeat comes through speakers mounted on the rails and the light in front
+of you starts pulsing in time with it, so you hear it and see it at once. When
+someone new steps in behind you, everything dims for a beat, all the pulses shift
+over one, and the oldest one goes out. This is the 5-dim-plus-1-bright history
+idea made literal, with the buzz and hum we had dropped put back.
+
+#### Storyboard 6 — the Beating Room
+
+![Storyboard 6](Storyboard%206.jpg)
+
+*Answers the scale note and the professor's "being overwhelmed is the point" note.*
+This is the version that does not hold back. You walk into a room packed wall to
+wall with bulbs, all of them pulsing dimly together to the last person's heartbeat,
+and speakers loud enough that you feel the tremor of each beat before you see it.
+You put both hands on the sensor and the whole room blows up: every bulb surges
+bright, the speakers fill with your heartbeat, and for a minute you are standing
+inside your own pulse, a room of lights and a wall of sound all beating with you.
+When you step away it sinks back to a dim afterimage, still carrying your rhythm,
+and the next person walks in to the sound of your heart before they add their own.
+Nothing here is shrunk down or made convenient — it is the number and the volume
+the other two compromise on.
+
+### Video sketch — the redo (Tinkerbelle)
+
+<video src="https://github.com/eliu1122/Interactive-Lab-Hub/raw/Fall2026/Lab%201/Tinkerbell%20Redo.mp4" controls width="480"></video>
+
+[Watch the redo video (Tinkerbell Redo.mp4)](Tinkerbell%20Redo.mp4)
+
+Our re-recorded Tinkerbelle sketch for the second pass — the wizarded phone-light
+driven to a heartbeat rhythm. This is based on Storyboard 4, where the user is on
+the subway: the light pulses to a previous rider's heartbeat, switches to the
+actor's own rhythm when they take the handrail, and sinks back to a soft pulse as
+they leave.
+
+_Prototype photos go here._
 
 ---
 

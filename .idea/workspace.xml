@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6075b2dd-035d-46e3-915e-d337d8b7a62f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Lab 1/storyboards/storyboard1_first_encounter.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lab 1/storyboards/storyboard2_living_room.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lab 1/storyboards/storyboard3_subway_platform.svg" afterDir="false" />
+    <list default="true" id="6075b2dd-035d-46e3-915e-d337d8b7a62f" name="Changes" comment="Finished with Lab 1 8/30">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Lab 1/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Lab 1/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -16,35 +14,46 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="20" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;eliu1122&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/eliu1122/Interactive-Lab-Hub.git&quot;,
+    &quot;accountId&quot;: &quot;390b7f9c-20b2-4311-9800-eb52d8494919&quot;
+  }
+}</component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0" />
-      <entry key="S5" value="1.0000000000530531" />
-      <entry key="S10" value="1.0000456461213518" />
-      <entry key="S30" value="1.4171210152854055" />
-      <entry key="S60" value="5.083621465366403" />
-      <entry key="M2" value="13.77979082441274" />
-      <entry key="M5" value="26.341862088190265" />
-      <entry key="M10" value="32.8381697977636" />
-      <entry key="M15" value="35.354618885988565" />
-      <entry key="M30" value="38.069998302729445" />
-      <entry key="H1" value="39.61211530462783" />
-      <entry key="H2" value="50.52728295904067" />
-      <entry key="H4" value="142.7458922739851" />
-      <entry key="D1" value="734.1717634497301" />
-      <entry key="W1" value="1003.8038815192923" />
+      <entry key="MS100" value="1.0000000000539877" />
+      <entry key="MS500" value="1.0253587302394518" />
+      <entry key="S2" value="2.9904889188607915" />
+      <entry key="S5" value="8.13782801857991" />
+      <entry key="S10" value="15.90272663302707" />
+      <entry key="S30" value="39.575224627277564" />
+      <entry key="S60" value="57.65989259453299" />
+      <entry key="M2" value="72.94935253055267" />
+      <entry key="M5" value="86.46386672575485" />
+      <entry key="M10" value="96.3927874894326" />
+      <entry key="M15" value="106.50694947011287" />
+      <entry key="M30" value="130.982669263632" />
+      <entry key="H1" value="155.28798872868282" />
+      <entry key="H2" value="172.84421404509135" />
+      <entry key="H4" value="187.5536148352061" />
+      <entry key="D1" value="429.0959596233914" />
+      <entry key="W1" value="1135.040099124136" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -66,23 +75,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.8467453123625271" />
-      <entry key="MS500" value="0.9672763296139321" />
-      <entry key="S2" value="0.9917167307382933" />
-      <entry key="S5" value="0.9966784222718331" />
-      <entry key="S10" value="0.9983834564744329" />
-      <entry key="S30" value="1.4165073368225363" />
-      <entry key="S60" value="5.0830534222015595" />
-      <entry key="M2" value="13.779196756303232" />
-      <entry key="M5" value="26.341445200673384" />
-      <entry key="M10" value="32.83791498863128" />
-      <entry key="M15" value="35.35443703834184" />
-      <entry key="M30" value="38.069900917764265" />
-      <entry key="H1" value="39.612064704273855" />
-      <entry key="H2" value="50.52724726590777" />
-      <entry key="H4" value="142.74582850819073" />
-      <entry key="D1" value="734.1717029014583" />
-      <entry key="W1" value="1003.8038695964904" />
+      <entry key="MS100" value="5.020087077187511E-4" />
+      <entry key="MS500" value="0.23980943576533167" />
+      <entry key="S2" value="2.6231536247609974" />
+      <entry key="S5" value="7.947167620019787" />
+      <entry key="S10" value="15.784084126815877" />
+      <entry key="S30" value="39.513208589645174" />
+      <entry key="S60" value="57.6213081733298" />
+      <entry key="M2" value="72.92721546536373" />
+      <entry key="M5" value="86.45412484041996" />
+      <entry key="M10" value="96.38768998441287" />
+      <entry key="M15" value="106.50344111789937" />
+      <entry key="M30" value="130.9807974648335" />
+      <entry key="H1" value="155.28699711776093" />
+      <entry key="H2" value="172.84369839654042" />
+      <entry key="H4" value="187.55334847069372" />
+      <entry key="D1" value="429.0958932410551" />
+      <entry key="W1" value="1135.0400809499301" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -97,27 +106,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "Fall2026",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/yceri/Desktop/Interactive-Lab-Hub",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.jshint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.jshint": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Fall2026&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/yceri/Desktop/Interactive-Lab-Hub&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.jshint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.jshint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\yceri\Desktop\Interactive-Lab-Hub\Lab 1" />
@@ -144,6 +153,10 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Finished with Lab 1 8/30" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished with Lab 1 8/30" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
