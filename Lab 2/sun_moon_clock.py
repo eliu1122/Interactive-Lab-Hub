@@ -3,15 +3,19 @@ import random
 import time
 import digitalio
 import board
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 import adafruit_rgb_display.st7789 as st7789
 
-# Sun & Moon clock: a body travels around an oval track once per day.
-#   6 AM  -> left of the oval (sunrise)
-#   12 PM -> top of the oval, the sun is at its biggest and brightest
-#   6 PM  -> right of the oval (sunset)
-#   12 AM -> bottom of the oval, it has fully turned into a crescent moon
-# Hold button A to fast-forward through the day (handy for the demo video).
+# Sun & Moon clock (version 1: animation only, not tied to the real time yet)
+# The body travels along a half circle above the horizon:
+#   sunrise  -> left end, the sun rises out of the ground
+#   noon     -> top of the arc, the sun is at its biggest and brightest
+#   sunset   -> right end, it fades and starts turning into the moon
+#   midnight -> top of the arc again, now a crescent moon heading back left
+#   dawn     -> back on the left, the moon turns back into the sun
+
+# How many seconds one full day takes in the animation
+DAY_SECONDS = 12
 
 # Configuration for CS and DC pins (these are FeatherWing defaults on M0/M4):
 cs_pin = digitalio.DigitalInOut(board.D5)
@@ -44,20 +48,14 @@ image = Image.new("RGB", (width, height))
 rotation = 90
 draw = ImageDraw.Draw(image)
 
-font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 20)
-
 # Turn on the backlight
 backlight = digitalio.DigitalInOut(board.D22)
 backlight.switch_to_output()
 backlight.value = True
 
-# Buttons are active-LOW because of pull-ups
-buttonA = digitalio.DigitalInOut(board.D23)
-buttonA.switch_to_input(pull=digitalio.Pull.UP)
-
-# Oval track
-CX, CY = width // 2, height // 2 + 6
-RX, RY = 95, 42
+# Half circle track sitting on the horizon
+CX, HORIZON = width // 2, 120
+R = 86
 
 # Colors
 NOON_SKY = (110, 190, 255)
@@ -66,9 +64,11 @@ NIGHT_SKY = (8, 10, 35)
 SUN_NOON = (255, 235, 60)
 SUN_LOW = (255, 140, 40)
 MOON = (225, 225, 240)
+DAY_GROUND = (60, 120, 50)
+NIGHT_GROUND = (10, 25, 20)
 
 random.seed(7)
-STARS = [(random.randrange(width), random.randrange(height)) for _ in range(30)]
+STARS = [(random.randrange(width), random.randrange(HORIZON)) for _ in range(30)]
 
 
 def lerp(a, b, t):
@@ -76,14 +76,17 @@ def lerp(a, b, t):
     return tuple(int(a[i] + (b[i] - a[i]) * t) for i in range(3))
 
 
-def draw_scene(hours):
-    # Angle around the oval: 0 = midnight (bottom), increases through left, top, right.
-    theta = 2 * math.pi * hours / 24
-    x = CX - RX * math.sin(theta)
-    y = CY + RY * math.cos(theta)
+def draw_scene(progress):
+    # progress: 0 = sunrise, 0.25 = noon, 0.5 = sunset, 0.75 = midnight, 1 = sunrise again
+    if progress < 0.5:
+        angle = math.pi * (1 - progress * 2)  # sun goes left -> right
+    else:
+        angle = math.pi * (progress - 0.5) * 2  # moon goes right -> left
+    x = CX + R * math.cos(angle)
+    y = HORIZON - R * math.sin(angle)
 
     # moonness: 0 at noon (full sun) -> 0.5 at sunrise/sunset -> 1 at midnight (moon)
-    moonness = (1 + math.cos(theta)) / 2
+    moonness = (1 - math.sin(2 * math.pi * progress)) / 2
     brightness = max(0.0, 1 - 2 * moonness)  # sun glow, strongest at noon
 
     if moonness < 0.5:
@@ -102,11 +105,11 @@ def draw_scene(hours):
         for sx, sy in STARS:
             draw.point((sx, sy), fill=star)
 
-    # Dotted oval track
+    # Dotted half circle track
     track = lerp(sky, (255, 255, 255), 0.35)
-    for deg in range(0, 360, 6):
+    for deg in range(0, 181, 6):
         a = math.radians(deg)
-        draw.point((CX + RX * math.cos(a), CY + RY * math.sin(a)), fill=track)
+        draw.point((CX + R * math.cos(a), HORIZON - R * math.sin(a)), fill=track)
 
     # The sun is bigger at noon and shrinks as it turns into the moon
     r = 12 + 6 * (1 - moonness)
@@ -134,29 +137,14 @@ def draw_scene(hours):
         mask_draw.ellipse((sx - r, sy - r, sx + r, sy + r), fill=0)
     image.paste(body, (0, 0, width, height), mask)
 
-    # Time in the middle of the oval
-    h, m = int(hours) % 24, int(hours * 60) % 60
-    label = "%d:%02d %s" % (h % 12 or 12, m, "AM" if h < 12 else "PM")
-    left, top, right, bottom = draw.textbbox((0, 0), label, font=font)
-    luminance = 0.299 * sky[0] + 0.587 * sky[1] + 0.114 * sky[2]
-    text_color = (20, 30, 60) if luminance > 140 else (240, 240, 255)
-    draw.text((CX - (right - left) / 2, CY - (bottom - top) / 2 - top), label, font=font, fill=text_color)
+    # Ground drawn last so the sun and moon rise out from behind it
+    draw.rectangle((0, HORIZON, width, height), fill=lerp(DAY_GROUND, NIGHT_GROUND, moonness))
 
 
-demo_hours = None
+start = time.monotonic()
 
 while True:
-    if not buttonA.value:
-        now = time.localtime()
-        if demo_hours is None:
-            demo_hours = now.tm_hour + now.tm_min / 60
-        demo_hours = (demo_hours + 0.25) % 24  # a full day in ~10 seconds
-        hours = demo_hours
-    else:
-        demo_hours = None
-        now = time.localtime()
-        hours = now.tm_hour + now.tm_min / 60 + now.tm_sec / 3600
-
-    draw_scene(hours)
+    progress = ((time.monotonic() - start) / DAY_SECONDS) % 1
+    draw_scene(progress)
     disp.image(image, rotation)
-    time.sleep(0.02 if demo_hours is not None else 1)
+    time.sleep(0.02)
