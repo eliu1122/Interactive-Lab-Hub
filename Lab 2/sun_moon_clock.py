@@ -13,6 +13,10 @@ import adafruit_rgb_display.st7789 as st7789
 #   sunset   -> right end, it fades and starts turning into the moon
 #   midnight -> top of the arc again, now a crescent moon heading back left
 #   dawn     -> back on the left, the moon turns back into the sun
+#
+# AI Disclaimer: partially written with help from AI (Claude Code): the visuals,
+# the coordinates along the half circle, smoothing the animation, and checking
+# that the script runs without errors.
 
 # How many seconds one full day takes in the animation
 DAY_SECONDS = 12

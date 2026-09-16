@@ -217,6 +217,14 @@ Start small, pick just one element of your overall idea, just to show you have a
 
 \*\*\***Put a copy of your code in your Lab 2 Github repo.**\*\*\*
 
+My code: [sun_moon_clock.py](sun_moon_clock.py)
+
+> **AI Disclaimer:** The code for this clock (`sun_moon_clock.py`) was partially written with help from AI (Claude Code). The sun-and-moon idea and the overall design are mine. The AI helped with:
+> - **Visuals:** the sky colors changing through the day, the sun's glow and rays, the stars, and the crescent shape as the sun turns into the moon.
+> - **Coordinates:** the math that places the sun and moon along the half-circle path above the horizon.
+> - **Smooth animation:** timing the loop so the sun and moon move and change color smoothly rather than jumping.
+> - **Checking the code:** making sure the script runs without errors.
+
 ## Make a short video of your modified barebones PiClock
 
 \*\*\***Take a video of your barely modified PiClock.**\*\*\*
