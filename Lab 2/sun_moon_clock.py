@@ -61,15 +61,10 @@ backlight.value = True
 CX, HORIZON = width // 2, 120
 R = 86
 
-# Colors
-NOON_SKY = (110, 190, 255)
-DUSK_SKY = (230, 120, 80)
-NIGHT_SKY = (8, 10, 35)
-SUN_NOON = (255, 235, 60)
-SUN_LOW = (255, 140, 40)
-MOON = (225, 225, 240)
-DAY_GROUND = (60, 120, 50)
-NIGHT_GROUND = (10, 25, 20)
+# Colors at noon, at sunrise/sunset, and at midnight
+SKY = ((110, 190, 255), (230, 120, 80), (8, 10, 35))
+BODY = ((255, 235, 60), (255, 140, 40), (225, 225, 240))
+GROUND = ((60, 120, 50), (35, 70, 35), (10, 25, 20))
 
 random.seed(7)
 STARS = [(random.randrange(width), random.randrange(HORIZON)) for _ in range(30)]
@@ -80,34 +75,33 @@ def lerp(a, b, t):
     return tuple(int(a[i] + (b[i] - a[i]) * t) for i in range(3))
 
 
+def blend(colors, moonness):
+    # Noon -> sunset colors during the day, sunset -> midnight colors at night
+    noon, dusk, night = colors
+    if moonness < 0.5:
+        return lerp(noon, dusk, (moonness * 2) ** 2)  # stay bright most of the day
+    return lerp(dusk, night, math.sqrt(moonness * 2 - 1))  # get dark quickly
+
+
 def draw_scene(progress):
     # progress: 0 = sunrise, 0.25 = noon, 0.5 = sunset, 0.75 = midnight, 1 = sunrise again
-    if progress < 0.5:
-        angle = math.pi * (1 - progress * 2)  # sun goes left -> right
-    else:
-        angle = math.pi * (progress - 0.5) * 2  # moon goes right -> left
+    # The sun goes left -> right during the day, the moon comes back right -> left at night
+    angle = math.pi * abs(1 - 2 * progress)
     x = CX + R * math.cos(angle)
     y = HORIZON - R * math.sin(angle)
 
     # moonness: 0 at noon (full sun) -> 0.5 at sunrise/sunset -> 1 at midnight (moon)
     moonness = (1 - math.sin(2 * math.pi * progress)) / 2
-    brightness = max(0.0, 1 - 2 * moonness)  # sun glow, strongest at noon
-
-    if moonness < 0.5:
-        t = (moonness * 2) ** 2  # stay blue most of the day, warm up near sunset
-        sky = lerp(NOON_SKY, DUSK_SKY, t)
-        body = lerp(SUN_NOON, SUN_LOW, t)
-    else:
-        sky = lerp(DUSK_SKY, NIGHT_SKY, math.sqrt((moonness - 0.5) * 2))  # get dark quickly
-        body = lerp(SUN_LOW, MOON, (moonness - 0.5) * 2)
+    sky, body = blend(SKY, moonness), blend(BODY, moonness)
+    r = 12 + 6 * (1 - moonness)  # biggest at noon
 
     draw.rectangle((0, 0, width, height), fill=sky)
 
     # Stars fade in as the night deepens
     if moonness > 0.6:
         star = lerp(sky, (255, 255, 255), (moonness - 0.6) / 0.4)
-        for sx, sy in STARS:
-            draw.point((sx, sy), fill=star)
+        for star_x, star_y in STARS:
+            draw.point((star_x, star_y), fill=star)
 
     # Dotted half circle track
     track = lerp(sky, (255, 255, 255), 0.35)
@@ -115,34 +109,27 @@ def draw_scene(progress):
         a = math.radians(deg)
         draw.point((CX + R * math.cos(a), HORIZON - R * math.sin(a)), fill=track)
 
-    # The sun is bigger at noon and shrinks as it turns into the moon
-    r = 12 + 6 * (1 - moonness)
-
-    # Glow rings and rays, only while it is still a sun
-    if brightness > 0:
-        for i in (3, 2, 1):
-            rr = r + i * 5 * brightness
-            glow = lerp(sky, body, 0.3 * (4 - i) / 3 * brightness)
-            draw.ellipse((x - rr, y - rr, x + rr, y + rr), fill=glow)
+    # Sun glow and rays: strongest at noon, gone by sunset
+    glow = 1 - 2 * moonness
+    if glow > 0:
+        gr = r + 8 * glow
+        draw.ellipse((x - gr, y - gr, x + gr, y + gr), fill=lerp(sky, (255, 255, 255), 0.35 * glow))
         for k in range(8):
             a = k * math.pi / 4
-            r1, r2 = r + 4, r + 4 + 10 * brightness
+            r1, r2 = r + 4, r + 4 + 10 * glow
             draw.line((x + r1 * math.cos(a), y + r1 * math.sin(a),
                        x + r2 * math.cos(a), y + r2 * math.sin(a)), fill=body, width=2)
 
-    # Body, with a shadow that carves out a crescent after sunset
-    mask = Image.new("L", (width, height), 0)
-    mask_draw = ImageDraw.Draw(mask)
-    mask_draw.ellipse((x - r, y - r, x + r, y + r), fill=255)
+    draw.ellipse((x - r, y - r, x + r, y + r), fill=body)
+
+    # After sunset, a sky-colored circle slides over the body to carve out a crescent
     if moonness > 0.5:
-        k = (moonness - 0.5) * 2
-        offset = r * (2 - 1.4 * k)
+        offset = r * (2 - 1.4 * (moonness * 2 - 1))
         sx, sy = x + offset, y - offset * 0.3
-        mask_draw.ellipse((sx - r, sy - r, sx + r, sy + r), fill=0)
-    image.paste(body, (0, 0, width, height), mask)
+        draw.ellipse((sx - r, sy - r, sx + r, sy + r), fill=sky)
 
     # Ground drawn last so the sun and moon rise out from behind it
-    draw.rectangle((0, HORIZON, width, height), fill=lerp(DAY_GROUND, NIGHT_GROUND, moonness))
+    draw.rectangle((0, HORIZON, width, height), fill=blend(GROUND, moonness))
 
 
 start = time.monotonic()
