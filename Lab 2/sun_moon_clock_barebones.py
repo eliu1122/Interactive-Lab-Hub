@@ -1,23 +1,19 @@
 import math
-import random
 import time
 import digitalio
 import board
 from PIL import Image, ImageDraw
 import adafruit_rgb_display.st7789 as st7789
 
-# Sun & Moon clock, barebones version: the animation only, with nothing to press.
-# The sun and moon travel along a half circle above the horizon:
-#   sunrise  -> left end of the arc
-#   noon     -> top of the arc
-#   sunset   -> right end of the arc
-#   midnight -> top of the arc again, now a crescent moon heading back left
-# The sky, the ground and the body itself all change color along the way, and
-# the stars fade in once night sets in.
+# Sun & Moon clock, barebones version: one circle in the middle of the screen
+# that turns from the sun into the moon and back again.
+#   start of the day -> a full yellow sun
+#   middle of the day -> a white crescent moon
+# Nothing moves and nothing else is drawn.
 #
-# AI Disclaimer: partially written with help from AI (Claude Code): the visuals,
-# the coordinates along the half circle, smoothing the animation, and checking
-# that the script runs without errors.
+# AI Disclaimer: partially written with help from AI (Claude Code): the colors,
+# the math that turns the sun into a crescent, and checking that the script runs
+# without errors.
 
 # How many seconds one full day takes in the animation
 DAY_SECONDS = 12
@@ -58,64 +54,32 @@ backlight = digitalio.DigitalInOut(board.D22)
 backlight.switch_to_output()
 backlight.value = True
 
-# The half circle the sun and moon travel along, sitting on the horizon
-CX, HORIZON, R = width // 2, 120, 86
-BODY_R = 14
+BACKGROUND = (0, 0, 0)
+SUN = (255, 235, 60)
+MOON = (225, 225, 240)
 
-# Colors at noon, at sunrise and sunset, and at midnight
-SKY = ((110, 190, 255), (230, 120, 80), (8, 10, 35))
-BODY = ((255, 235, 60), (255, 140, 40), (225, 225, 240))
-GROUND = ((60, 120, 50), (35, 70, 35), (10, 25, 20))
-
-random.seed(7)
-STARS = [(random.randrange(width), random.randrange(HORIZON)) for _ in range(30)]
-
-
-def mix(a, b, t):
-    return tuple(int(a[i] + (b[i] - a[i]) * t) for i in range(3))
-
-
-def blend(colors, moonness):
-    # moonness: 0 at noon, 0.5 at sunrise and sunset, 1 at midnight
-    noon, dusk, night = colors
-    if moonness < 0.5:
-        return mix(noon, dusk, moonness * 2)
-    return mix(dusk, night, moonness * 2 - 1)
+# The circle sits in the middle of the screen and never moves
+CX, CY, RADIUS = width // 2, height // 2, 45
 
 
 def draw_scene(progress):
-    # progress: 0 = sunrise, 0.25 = noon, 0.5 = sunset, 0.75 = midnight
-    # The sun goes left to right during the day, the moon comes back at night
-    angle = math.pi * abs(1 - 2 * progress)
-    x = CX + R * math.cos(angle)
-    y = HORIZON - R * math.sin(angle)
-    moonness = (1 - math.sin(2 * math.pi * progress)) / 2
+    # moonness: 0 is a full sun, 1 is a crescent moon
+    moonness = (1 - math.cos(2 * math.pi * progress)) / 2
 
-    sky = blend(SKY, moonness)
-    draw.rectangle((0, 0, width, height), fill=sky)
+    draw.rectangle((0, 0, width, height), fill=BACKGROUND)
 
-    # Stars fade in as the night deepens
-    if moonness > 0.6:
-        star = mix(sky, (255, 255, 255), (moonness - 0.6) / 0.4)
-        for star_x, star_y in STARS:
-            draw.point((star_x, star_y), fill=star)
+    # The sun's yellow fades into the moon's white
+    color = tuple(int(SUN[i] + (MOON[i] - SUN[i]) * moonness) for i in range(3))
+    draw.ellipse((CX - RADIUS, CY - RADIUS, CX + RADIUS, CY + RADIUS), fill=color)
 
-    # Dotted half circle track
-    track = mix(sky, (255, 255, 255), 0.35)
-    for degrees in range(0, 181, 6):
-        a = math.radians(degrees)
-        draw.point((CX + R * math.cos(a), HORIZON - R * math.sin(a)), fill=track)
-
-    # The sun or moon itself
-    draw.ellipse((x - BODY_R, y - BODY_R, x + BODY_R, y + BODY_R), fill=blend(BODY, moonness))
-
-    # After sunset a sky colored circle slides over the body to carve out a crescent
+    # Past the halfway point a background colored circle slides across to bite
+    # a crescent out of it
     if moonness > 0.5:
-        shift = BODY_R * (2 - 1.4 * (moonness * 2 - 1))
-        draw.ellipse((x + shift - BODY_R, y - BODY_R, x + shift + BODY_R, y + BODY_R), fill=sky)
-
-    # Ground drawn last so the sun and moon rise out from behind it
-    draw.rectangle((0, HORIZON, width, height), fill=blend(GROUND, moonness))
+        shift = RADIUS * (2 - 1.4 * (moonness * 2 - 1))
+        draw.ellipse(
+            (CX + shift - RADIUS, CY - RADIUS, CX + shift + RADIUS, CY + RADIUS),
+            fill=BACKGROUND,
+        )
 
 
 start = time.monotonic()

@@ -229,8 +229,14 @@ Coffee becomes colder as the day goes on, changing from a steaming cup to an ice
 <img src="assets/storyboard-coffee.jpg" alt="Two-panel storyboard showing hot coffee transitioning to an iced drink as the day progresses" width="960">
 
 
-
 **Put the names of the people you gave feedback to here. (Even better, add links to their repos here!)**
+
+https://github.com/certaindragon3/Interactive-Lab-Hub/tree/Fall2026/Lab%202
+
+https://github.com/jovianw/Interactive-Lab-Hub/tree/Fall2026/Lab%202
+
+https://github.com/Alexyen04/Alex-Yen-Interactive-Lab-Hub/blob/Fall2026/Lab%202/README.md
+
 
 # Lab 2 Part 2
 
@@ -253,12 +259,11 @@ Start small, pick just one element of your overall idea, just to show you have a
 
 My code (version 1): [sun_moon_clock_barebones.py](sun_moon_clock_barebones.py)
 
-For the first pass I took just one piece of the storyboard: the sun and moon travelling along a half circle above the horizon. Sunrise is the left end of the arc, noon is the top, sunset is the right end, and at midnight a crescent moon is back at the top heading left again. The sky, the ground, and the body itself all change color along the way, and stars fade in once night sets in. There is no input at this stage — it just runs on its own.
+For the first pass I took the single simplest piece of the storyboard: one circle in the middle of the screen that turns from the sun into the moon and back again. It starts as a full yellow sun, the yellow fades to white, and then a bite is taken out of it until all that is left is a crescent moon, before the whole thing runs in reverse. Nothing moves and nothing else is drawn — no sky, no horizon, no stars — and there is nothing to press. It just runs on its own.
 
-> **AI Disclaimer:** The code for this clock (`sun_moon_clock.py`) was partially written with help from AI (Claude Code). The sun-and-moon idea and the overall design are mine. The AI helped with:
-> - **Visuals:** the sky colors changing through the day, the sun's glow and rays, the stars, and the crescent shape as the sun turns into the moon.
-> - **Coordinates:** the math that places the sun and moon along the half-circle path above the horizon.
-> - **Smooth animation:** timing the loop so the sun and moon move and change color smoothly rather than jumping.
+> **AI Disclaimer:** The code for this clock (`sun_moon_clock_barebones.py`) was partially written with help from AI (Claude Code). The sun-and-moon idea and the overall design are mine. The AI helped with:
+> - **Colors:** choosing the sun's yellow and the moon's white, and fading one into the other.
+> - **The crescent:** the math that slides a background colored circle across the sun to bite a crescent moon out of it.
 > - **Checking the code:** making sure the script runs without errors.
 
 ## Make a short video of your modified barebones PiClock
