@@ -3,10 +3,10 @@ import random
 import time
 import digitalio
 import board
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import adafruit_rgb_display.st7789 as st7789
 
-# Sun & Moon clock (version 1: animation only, not tied to the real time yet)
+# Sun & Moon clock (version 2: animation, plus a button you hold to read the time)
 # The body travels along a half circle above the horizon:
 #   sunrise  -> left end, the sun rises out of the ground
 #   noon     -> top of the arc, the sun is at its biggest and brightest
@@ -14,9 +14,12 @@ import adafruit_rgb_display.st7789 as st7789
 #   midnight -> top of the arc again, now a crescent moon heading back left
 #   dawn     -> back on the left, the moon turns back into the sun
 #
+# Hold the top button to freeze the sky and read the time of day the sun or moon
+# has reached. Let go and the animation picks up from exactly where it stopped.
+#
 # AI Disclaimer: partially written with help from AI (Claude Code): the visuals,
-# the coordinates along the half circle, smoothing the animation, and checking
-# that the script runs without errors.
+# the coordinates along the half circle, smoothing the animation, the hold-to-read
+# time button, and checking that the script runs without errors.
 
 # How many seconds one full day takes in the animation
 DAY_SECONDS = 12
@@ -56,6 +59,12 @@ draw = ImageDraw.Draw(image)
 backlight = digitalio.DigitalInOut(board.D22)
 backlight.switch_to_output()
 backlight.value = True
+
+# Top button on the Mini PiTFT. The pull up means it reads False while held down.
+button_a = digitalio.DigitalInOut(board.D23)
+button_a.switch_to_input(pull=digitalio.Pull.UP)
+
+FONT = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
 
 # Half circle track sitting on the horizon
 CX, HORIZON = width // 2, 120
@@ -132,10 +141,34 @@ def draw_scene(progress):
     draw.rectangle((0, HORIZON, width, height), fill=blend(GROUND, moonness))
 
 
+def draw_time(progress):
+    # Sunrise sits at 6:00, so one lap around the arc is one 24 hour day
+    minutes = int((6 + progress * 24) * 60) % (24 * 60)
+    hour, minute = divmod(minutes, 60)
+    label = "%d:%02d %s" % (hour % 12 or 12, minute, "AM" if hour < 12 else "PM")
+
+    # A dark plate behind the text so it stays readable against any sky
+    box = draw.textbbox((width // 2, 6), label, font=FONT, anchor="mt")
+    draw.rectangle((box[0] - 8, box[1] - 4, box[2] + 8, box[3] + 4), fill=(0, 0, 0))
+    draw.text((width // 2, 6), label, font=FONT, fill=(255, 255, 255), anchor="mt")
+
+
 start = time.monotonic()
+held_since = None
 
 while True:
-    progress = ((time.monotonic() - start) / DAY_SECONDS) % 1
+    pressed = not button_a.value
+    if pressed and held_since is None:
+        held_since = time.monotonic()  # freeze the clock at this moment
+    elif not pressed and held_since is not None:
+        start += time.monotonic() - held_since  # skip the paused time, resume in place
+        held_since = None
+
+    now = held_since if held_since is not None else time.monotonic()
+    progress = ((now - start) / DAY_SECONDS) % 1
+
     draw_scene(progress)
+    if held_since is not None:
+        draw_time(progress)
     disp.image(image, rotation)
     time.sleep(0.02)
