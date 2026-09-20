@@ -1,5 +1,6 @@
 # Interactive Prototyping: The Clock of Pi
 **NAMES OF COLLABORATORS HERE**
+Hong Yuan Cao (hc2343), Yun-Chung Liu (yl4445)
 
 Does it feel like time is moving strangely during this semester?
 
@@ -9,6 +10,8 @@ It is worth spending a little time thinking about how you mark time, and what wo
 
 **Please indicate anyone you collaborated with on this Lab here.**
 Be generous in acknowledging their contributions! And also recognizing any other influences (e.g. from YouTube, Github, Twitter) that informed your design. 
+
+Hong and Yun-Chung both worked on setting up the Pi, along with brainstorming the storyboards for the clocks.
 
 ## Prep
 
@@ -158,10 +161,25 @@ You can look in `image.py` for an example of how to display an image on the scre
 
 \*\*\***Include a picture of your own Raspberry Pi displaying the piscreen.service with your unique MAC address. Additionally, please provide another picture showing the successful completion of the screen test.**\*\*\*
 
+### Screen test photos
+
+The startup screen shows the Pi's network information and unique MAC address.
+
+<img src="assets/pi-network-mac.jpg" alt="Raspberry Pi displaying its IP address, Hong network, and unique MAC address" width="720">
+
+The MiniPiTFT displays green during the screen test.
+
+<img src="assets/pi-screen-test-green.jpg" alt="Raspberry Pi MiniPiTFT displaying green during the screen test" width="720">
 
 ## Part D. 
 ### Set up the Display Clock Demo
 Work on `screen_clock.py`, try to show the time by filling in the while loop (at the bottom of the script where we noted "TODO" for you). You can use the code in `cli_clock.py` and `stats.py` to figure this out.
+
+### Working clock
+
+The completed [screen_clock.py](screen_clock.py) displays the date and time on the MiniPiTFT.
+
+<img src="assets/pi-clock-demo.jpg" alt="Raspberry Pi displaying the date and time on a red background" width="720">
 
 ### How to Edit Scripts on Pi
 Option 1. One of the ways for you to edit scripts on Pi through terminal is using [`nano`](https://linuxize.com/post/how-to-use-nano-text-editor/) command. You can go into the `screen_clock.py` by typing the follow command line:
@@ -192,7 +210,23 @@ Another might be novel units of time. How do you measure a year? [In daylights? 
 We strongly discourage literal digital or analog clock display: Be creative.
 
 
-** Insert ideas, sketches, [Verplank diagrams](https://ccrma.stanford.edu/courses/250a-fall-2004/IDSketchbok.pdf)), storyboards for your ideas **
+### Idea 1: Sun and moon clock
+
+The sun and moon move across the display to represent early morning, noon, evening, and midnight.
+
+<img src="assets/storyboard-sun-moon.jpg" alt="Four-panel storyboard showing the sun and moon moving across the sky throughout the day" width="960">
+
+### Idea 2: Daily routine clock
+
+An animated character represents the time of day through activities: sleeping early in the morning, running in the afternoon, reading in the evening, and returning to bed at night. The background changes with the time of day.
+
+<img src="assets/storyboard-daily-routine.jpg" alt="Four-panel storyboard of a character sleeping, running, reading, and returning to bed" width="960">
+
+### Idea 3: Coffee clock
+
+Coffee becomes colder as the day goes on, changing from a steaming cup to an iced drink as a visual representation of passing time.
+
+<img src="assets/storyboard-coffee.jpg" alt="Two-panel storyboard showing hot coffee transitioning to an iced drink as the day progresses" width="960">
 
 
 
@@ -217,7 +251,9 @@ Start small, pick just one element of your overall idea, just to show you have a
 
 \*\*\***Put a copy of your code in your Lab 2 Github repo.**\*\*\*
 
-My code: [sun_moon_clock.py](sun_moon_clock.py)
+My code (version 1): [sun_moon_clock_barebones.py](sun_moon_clock_barebones.py)
+
+For the first pass I took just one piece of the storyboard: the sun and moon travelling along a half circle above the horizon. Sunrise is the left end of the arc, noon is the top, sunset is the right end, and at midnight a crescent moon is back at the top heading left again. The sky, the ground, and the body itself all change color along the way, and stars fade in once night sets in. There is no input at this stage — it just runs on its own.
 
 > **AI Disclaimer:** The code for this clock (`sun_moon_clock.py`) was partially written with help from AI (Claude Code). The sun-and-moon idea and the overall design are mine. The AI helped with:
 > - **Visuals:** the sky colors changing through the day, the sun's glow and rays, the stars, and the crescent shape as the sun turns into the moon.
@@ -228,6 +264,7 @@ My code: [sun_moon_clock.py](sun_moon_clock.py)
 ## Make a short video of your modified barebones PiClock
 
 \*\*\***Take a video of your barely modified PiClock.**\*\*\*
+
 
 After you edit and work on the scripts for Lab 2, the files should be upload back to your own GitHub repo! You can push to your personal github repo by adding the files here, commiting and pushing.
 
@@ -245,10 +282,33 @@ Do take advantage of having done the previous iteration to refine and simplify y
 
 ** Insert any updates ideas, sketches, [Verplank diagrams](https://ccrma.stanford.edu/courses/250a-fall-2004/IDSketchbok.pdf))!, storyboards for your ideas **
 
+### Verplank diagram
+
+<img src="assets/verplank-sun-moon.svg" alt="Verplank interaction diagram for the sun and moon clock: holding the top button freezes the sky and shows the exact time" width="960">
+
+**How do you do?** Hold down the top button. That is the only control — a discrete handle worth one bit, held or not held. The rest of the time the clock runs untouched.
+
+**How do you feel?** The sky answers on the screen. Normally the sun and moon drift along the arc and the colors shift from morning blue to sunset orange to a starry night. While the button is held, the motion freezes and the exact time appears at the top of the screen. Let go and it picks up from where it stopped, so nothing is lost by checking.
+
+**How do you know?** The sky is the dial, and everyone already knows how to read one: the sun comes up on the left, stands overhead at noon, goes down on the right, and the moon carries the night back around to dawn. That gets you the rough time at a glance. The button is the escape hatch for when a glance is not enough and you want the number.
+
 
 \*\*\***Put a copy of your code in your Lab 2 Github repo.**\*\*\*
 
+My code (version 2): [sun_moon_clock.py](sun_moon_clock.py)
+
+Version 2 keeps the sky from version 1 and adds the one interaction from the Verplank diagram above. Holding the top button freezes the sun or moon wherever it is on the arc and prints the exact time at the top of the screen; letting go picks the animation back up from the same point, so checking the time never costs you your place. Sunrise is mapped to 6:00, which makes one lap of the arc a full 24 hour day.
+
+> **AI Disclaimer:** The code for this clock (`sun_moon_clock.py`) was partially written with help from AI (Claude Code). The sun-and-moon idea, the overall design, and the hold-to-read-the-time interaction are mine. The AI helped with:
+> - **Visuals:** the sky colors changing through the day, the sun's glow and rays, the stars, and the crescent shape as the sun turns into the moon.
+> - **Coordinates:** the math that places the sun and moon along the half-circle path above the horizon.
+> - **Smooth animation:** timing the loop so the sun and moon move and change color smoothly rather than jumping.
+> - **The button:** wiring the top button to pause the animation, mapping the paused position to a time of day, and drawing the time label so it stays readable against any sky.
+> - **Checking the code:** making sure the script runs without errors.
+
 \*\*\***Take a video of your PiClock.**\*\*\*
+
+https://drive.google.com/file/d/1t0AICHvMHk5uZFBkT0ykgvwBgNhIl_5-/view?usp=sharing
 
 
 As always, make sure you document contributions and ideas from others (and AI) explicitly in your writeup.
