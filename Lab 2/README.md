@@ -270,6 +270,7 @@ For the first pass I took the single simplest piece of the storyboard: one circl
 
 \*\*\***Take a video of your barely modified PiClock.**\*\*\*
 
+https://drive.google.com/file/d/1nB5kaFLdy2_bdgLoZhgs1cU6hOIfKim1/view?usp=sharing
 
 After you edit and work on the scripts for Lab 2, the files should be upload back to your own GitHub repo! You can push to your personal github repo by adding the files here, commiting and pushing.
 
