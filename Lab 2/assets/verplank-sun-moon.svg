@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 600" width="980" height="600" role="img"
+     aria-label="Verplank interaction diagram for the sun and moon clock: DO is holding the top button, FEEL is the sky freezing with the time shown, KNOW is the sky-as-dial metaphor.">
+  <defs>
+    <marker id="ah" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M1 1 L11 6 L1 11 z" fill="#1f2430"/>
+    </marker>
+  </defs>
+
+  <style>
+    .ink   { fill:none; stroke:#1f2430; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+    .thin  { fill:none; stroke:#1f2430; stroke-width:2; stroke-linecap:round; }
+    text   { font-family:'Trebuchet MS','Segoe UI',Helvetica,Arial,sans-serif; fill:#1f2430; }
+    .title { font-size:26px; font-weight:bold; }
+    .sub   { font-size:15px; fill:#6b7280; }
+    .q     { font-size:15px; font-style:italic; fill:#8a6d1f; }
+    .big   { font-size:26px; font-weight:bold; letter-spacing:2px; }
+    .body  { font-size:15px; }
+    .small { font-size:13px; font-style:italic; fill:#6b7280; }
+    .tag   { font-size:16px; font-weight:bold; }
+    .tiny  { font-size:12px; fill:#6b7280; }
+    .plate { font-size:13px; font-weight:bold; fill:#ffffff; }
+  </style>
+
+  <rect width="980" height="600" fill="#FBF8F1"/>
+  <rect x="6" y="6" width="968" height="588" rx="10" fill="none" stroke="#e4ddcd" stroke-width="2"/>
+
+  <text class="title" x="40" y="48">Sun &amp; Moon Clock — Verplank Interaction Diagram</text>
+  <text class="sub"   x="40" y="74">Lab 2 Part 2 · the clock runs on its own; one button is the only thing you touch</text>
+
+  <!-- ============ DO (top arc) ============ -->
+  <text class="q"     x="435" y="118" text-anchor="middle">How do you do?</text>
+  <text class="big"   x="435" y="150" text-anchor="middle">DO</text>
+  <text class="body"  x="435" y="174" text-anchor="middle">hold down the top button</text>
+  <text class="small" x="435" y="194" text-anchor="middle">a discrete handle — one bit, held or not held</text>
+  <path class="ink" d="M200 252 Q435 196 660 258" marker-end="url(#ah)"/>
+
+  <!-- ============ YOU ============ -->
+  <circle class="ink" cx="160" cy="250" r="20"/>
+  <path class="ink" d="M160 270 L160 326"/>
+  <path class="ink" d="M132 290 L188 290"/>
+  <path class="ink" d="M160 326 L138 366 M160 326 L182 366"/>
+  <text class="tag" x="160" y="392" text-anchor="middle">YOU</text>
+
+  <!-- ============ THE PI ============ -->
+  <rect x="690" y="228" width="210" height="132" rx="16" fill="#ffffff" stroke="#1f2430" stroke-width="3"/>
+  <!-- the two Mini PiTFT buttons on the left edge; the top one is the live one -->
+  <rect x="674" y="248" width="18" height="28" rx="5" fill="#FF8C28" stroke="#1f2430" stroke-width="2.5"/>
+  <rect x="674" y="306" width="18" height="28" rx="5" fill="#ffffff" stroke="#1f2430" stroke-width="2.5"/>
+  <text class="tiny" x="636" y="300" text-anchor="middle">top button</text>
+  <path class="thin" d="M636 288 Q642 268 670 264" stroke="#9aa0ab"/>
+
+  <!-- the screen -->
+  <g>
+    <rect x="706" y="244" width="178" height="100" rx="6" fill="#6EBEFF" stroke="#1f2430" stroke-width="2.5"/>
+    <clipPath id="scr"><rect x="706" y="244" width="178" height="100" rx="6"/></clipPath>
+    <g clip-path="url(#scr)">
+      <path d="M733 326 A62 62 0 0 1 857 326" fill="none" stroke="#ffffff" stroke-width="2"
+            stroke-dasharray="2.5 5" opacity="0.95"/>
+      <g stroke="#FFEB3C" stroke-width="2.5" stroke-linecap="round">
+        <path d="M839 265 v-7 M839 299 v7 M822 282 h-7 M856 282 h7"/>
+        <path d="M827 270 l-5 -5 M851 294 l5 5 M851 270 l5 -5 M827 294 l-5 5"/>
+      </g>
+      <circle cx="839" cy="282" r="11" fill="#FFEB3C" stroke="#E8A317" stroke-width="1.5"/>
+      <rect x="706" y="326" width="178" height="18" fill="#3C7832"/>
+      <!-- the plate the button call up -->
+      <rect x="758" y="250" width="74" height="22" rx="4" fill="#0b0d1f" opacity="0.88"/>
+      <text class="plate" x="795" y="266" text-anchor="middle">3:40 PM</text>
+    </g>
+  </g>
+  <text class="tag" x="795" y="388" text-anchor="middle">PI + MINI PiTFT</text>
+
+  <!-- ============ KNOW (centre) ============ -->
+  <rect x="282" y="258" width="306" height="156" rx="14" fill="#FDF3D8" stroke="#1f2430" stroke-width="2.5"/>
+  <text class="q"    x="435" y="286" text-anchor="middle">How do you know?</text>
+  <text class="big"  x="435" y="318" text-anchor="middle">KNOW</text>
+  <text class="body" x="435" y="348" text-anchor="middle">The sky is the dial: sun up at left,</text>
+  <text class="body" x="435" y="370" text-anchor="middle">overhead at noon, down at right —</text>
+  <text class="body" x="435" y="392" text-anchor="middle">the moon carries the night back.</text>
+
+  <!-- ============ FEEL (bottom arc) ============ -->
+  <path class="ink" d="M666 400 Q435 500 206 400" marker-end="url(#ah)"/>
+  <text class="q"     x="435" y="490" text-anchor="middle">How do you feel?</text>
+  <text class="big"   x="435" y="522" text-anchor="middle">FEEL</text>
+  <text class="body"  x="435" y="546" text-anchor="middle">the sky freezes mid-arc and the exact time appears;</text>
+  <text class="body"  x="435" y="566" text-anchor="middle">let go and it picks up from where it stopped</text>
+</svg>
