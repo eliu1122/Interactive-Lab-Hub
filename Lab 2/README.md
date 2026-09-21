@@ -231,11 +231,33 @@ Coffee becomes colder as the day goes on, changing from a steaming cup to an ice
 
 **Put the names of the people you gave feedback to here. (Even better, add links to their repos here!)**
 
-https://github.com/certaindragon3/Interactive-Lab-Hub/tree/Fall2026/Lab%202
+### Feedback on classmates’ designs
 
-https://github.com/jovianw/Interactive-Lab-Hub/tree/Fall2026/Lab%202
+**[Jiesen Huang — Orange laundry timer](https://github.com/certaindragon3/Interactive-Lab-Hub/tree/Fall2026/Lab%202)**
 
-https://github.com/Alexyen04/Alex-Yen-Interactive-Lab-Hub/blob/Fall2026/Lab%202/README.md
+I like how the ripening oranges connect time to a daily routine. Using two oranges for washing and three for drying also makes the modes visually distinct. One thing to clarify is how much time each fruit represents: A button-triggered view of the remaining minutes could help someone decide whether they have time to leave the room. I would also test whether the completion signal is noticeable from where the device normally sits.
+
+**[Jovian — Plant clock](https://github.com/jovianw/Interactive-Lab-Hub/tree/Fall2026/Lab%202)**
+
+I like the progression from a small plant to a flowering plant throughout the day. The moving sun helps explain the connection between growth and time. However, the nighttime panel could be clearer: an empty pot might look like the clock reset. Also, keeping the plant visible with a closed flower and darker background could communicate that it is resting. It would also help to clarify whether leaves appear at specific hours or the plant grows continuously.
+
+**[Alexander Yen and David Zhang — NYC Sun and Moon Clock](https://github.com/Alexyen04/Alex-Yen-Interactive-Lab-Hub/blob/Fall2026/Lab%202/README.md)**
+
+I like how the NYC skyline gives the clock a personal connection to the city. The button for checking the exact time makes the visual concept practical. I would include that interaction in the storyboard, showing what appears after pressing the button and how the display returns to the skyline. I would also check whether the skyline leaves enough space for the sun and moon to remain visible near the horizon.
+
+### Feedback received on our design
+
+**Jiesen Huang**
+
+The sun and moon make the general time of day easy to understand. I would clarify how their positions correspond to specific times. For example, when does the sun rise, when does it reach the top, and when does the moon appear? It would also help to distinguish a repeating demonstration animation from a clock that follows the actual time.
+
+**Jovian**
+
+I like the changes between morning, afternoon, and night. One thing to consider is whether someone can distinguish early evening from late night just by looking at the moon. Combining its position with changes in the background color could make those stages clearer.
+
+**Alexander Yen and David Zhang**
+
+The sun and moon give a clear general sense of the time of day. Since the original storyboards only show the animation, adding a button to briefly reveal the exact time could make the clock more practical. A follow-up diagram could show how the user activates this feature and returns to the sky view.
 
 
 # Lab 2 Part 2
