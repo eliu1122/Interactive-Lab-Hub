@@ -111,6 +111,25 @@ The demo script also shows `--output-raw`, which streams audio to the speaker as
 
 \*\***Then answer: Is the same greeting, in these different voices, the same greeting? Describe one concrete way the voice changed what the utterance seemed to mean or who seemed to be speaking.**\*\*
 
+My shell file: [greet_me.sh](speech-scripts/greet_me.sh)
+
+Run with no arguments it greets me through Piper, which is my favorite of the three. Run as `./speech-scripts/greet_me.sh --all` it speaks the identical sentence through espeak-ng, festival and Piper one after another, which is how I compared them.
+
+```
+(venv) $ ./speech-scripts/greet_me.sh
+(venv) $ ./speech-scripts/greet_me.sh --all
+```
+
+### Is it the same greeting?
+
+No. The words are identical and the meaning is not.
+
+Through espeak-ng the pitch barely moves and every word gets the same weight, including my name. "Hello, Yun-Chung" lands with exactly the stress of "your raspberry pi is awake," so the sentence stops being a greeting addressed to me and turns into a status report about the machine: my name reads as a field in a log line rather than as someone being spoken to. Piper puts a rise on my name and lets the line fall away on "listening," and that single change of contour makes the same sentence sound like it is aimed at a person who just walked into the room.
+
+The concrete shift is in the word "listening." Out of espeak-ng it is a fact about hardware, the way a device reports that its microphone is live, and it is faintly unsettling for exactly that reason. Out of Piper the falling, unhurried delivery turns it into an offer of attention, closer to "go ahead, I am paying attention" than to "recording has started." Festival sits between the two: the timbre is human, because the fragments were cut from a real recording, but the seams are audible at the word boundaries, so it sounds less like someone speaking to me than like something assembling a sentence out of a person who is not there.
+
+So who seems to be speaking changes too. With espeak-ng the speaker is the Pi itself, and it sounds like an instrument. With Piper the speaker is a person the Pi is standing in for, which makes the greeting warmer and, at the same time, slightly more of a performance: nobody is actually there.
+
 ## B. Speech to Text
 
 We use [faster-whisper](https://github.com/SYSTRAN/faster-whisper), a reimplementation of OpenAI's Whisper model that runs several times faster on CPU and does not require PyTorch. All processing happens on the Pi; nothing is sent to a server.
