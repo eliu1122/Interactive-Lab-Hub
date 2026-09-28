@@ -243,9 +243,7 @@ Our listening pauses are informed by Part C, where short silence thresholds ofte
 
 ## E. Acting out the dialogue
 
-<video src="https://github.com/eliu1122/Interactive-Lab-Hub/raw/Fall2026/Lab%203/Video%20of%20Raspberry%20Judge.mp4" controls width="640"></video>
-
-[Watch our Tiny Court role-play (Video of Raspberry Judge.mp4)](Video%20of%20Raspberry%20Judge.mp4)
+**[▶ Watch our Tiny Court role-play](https://github.com/eliu1122/Interactive-Lab-Hub/blob/Fall2026/Lab%203/Video%20of%20Raspberry%20Judge.mp4)** — the recording is in this folder as `Video of Raspberry Judge.mp4`, and GitHub plays it in its file viewer.
 
 Find a partner, and *without sharing the script with your partner* try out the dialogue you've designed, where you (as the device designer) act as the device you are designing. Please record this interaction (for example, using Zoom's record feature).
 
