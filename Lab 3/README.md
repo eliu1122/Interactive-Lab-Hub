@@ -321,7 +321,7 @@ It runs entirely on the Pi, using the mini screen and its button, a USB micropho
 
 Video of the Mini Judge in use: https://drive.google.com/file/d/1RMILTvas-BQMBVSTVRinUnw2pYWzzAzT/view?usp=sharing
 
-> **AI Disclaimer:** We used AI (Claude Code) to help write and test the code, make the screen captures, and draft this write-up. The Mini Judge idea, the storyboard, and the charger case are ours. The food and chores cases were suggested by AI, and AI helped write the judge's lines.
+> **AI Disclaimer:** We used AI to help assist in writing and test the code. The Mini Judge idea, the storyboard, and the write up are ours.
 
 ## Test the system
 
