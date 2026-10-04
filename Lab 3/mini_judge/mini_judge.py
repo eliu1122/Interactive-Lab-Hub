@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
 """Mini Judge: a Wizard of Oz speech device for Lab 3 Part 2.
 
-The Pi does everything the participant can see and hear. It notices someone
-stepping up to the bench, speaks the judge's lines with Piper, listens with
+The Pi does everything the participant can see and hear. It opens court when
+someone presses the top button, speaks the judge's lines with Piper, listens with
 Silero VAD, transcribes with faster-whisper, and shows on the Mini PiTFT who has
 the floor. A hidden wizard decides what the judge says next from a web page.
 
     python mini_judge.py
     python mini_judge.py --mic 4            # choose the microphone
-    python mini_judge.py --proximity 40     # how close counts as stepping up
 
 Then open the controller from a laptop on the same network:
     http://<pi address>:5000
 
 AI Disclaimer: partially written with help from AI (Claude Code): the audio,
-screen, sensor and web controller code, and checking that it runs without
+screen, button and web controller code, and checking that it runs without
 errors. The Mini Judge concept, the storyboard and the charger case are ours;
 the food and chores cases were suggested by AI, and the judge's lines for all
 three cases were drafted with AI help.
@@ -30,10 +29,8 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-import adafruit_apds9960.apds9960
 import adafruit_rgb_display.st7789 as st7789
 import board
-import busio
 import digitalio
 import numpy as np
 import sherpa_onnx
@@ -144,34 +141,11 @@ class Screen:
             self.disp.image(self.image, 90)
 
 
-class Bench:
-    """Notices someone stepping up: the proximity sensor, or the top button."""
-
-    def __init__(self, threshold):
-        self.threshold = threshold
-        self.last = 0
-        self.button = digitalio.DigitalInOut(board.D23)
-        self.button.switch_to_input(pull=digitalio.Pull.UP)
-        try:
-            i2c = busio.I2C(board.SCL, board.SDA)
-            self.sensor = adafruit_apds9960.apds9960.APDS9960(i2c)
-            self.sensor.enable_proximity = True
-        except Exception as error:  # any failure means no sensor, and the button still works
-            print(f"Proximity sensor not found ({error}). The top button opens court instead.")
-            self.sensor = None
-
-    def someone_there(self):
-        # Only the watcher thread calls this, so the I2C bus is never shared
-        self.last = self.sensor.proximity if self.sensor else 0
-        return (not self.button.value) or self.last >= self.threshold
-
-
 class Judge:
     """Runs one job at a time: speak a line, then listen, think or rule."""
 
-    def __init__(self, args, screen, bench):
+    def __init__(self, args, screen):
         self.screen = screen
-        self.bench = bench
         self.mic = args.mic
         self.speaker = args.speaker
         self.whisper = WhisperModel(args.model, device="cpu", compute_type="int8")
@@ -197,8 +171,7 @@ class Judge:
         self.screen.show(color or state, title, subtitle)
 
     def go_idle(self):
-        how = "Step up to the bench" if self.bench.sensor else "Press the top button"
-        self.set_state("idle", "MINI JUDGE", f"{how} to file a complaint.")
+        self.set_state("idle", "MINI JUDGE", "Press the top button to file a complaint.")
 
     def snapshot(self):
         with self.lock:
@@ -208,8 +181,6 @@ class Judge:
                 "title": self.title,
                 "subtitle": self.subtitle,
                 "transcript": self.transcript[-60:],
-                "proximity": self.bench.last,
-                "sensor": self.bench.sensor is not None,
             }
 
     def submit(self, job):
@@ -234,7 +205,6 @@ class Judge:
             "time": datetime.now().isoformat(timespec="seconds"),
             "who": who,
             "text": text,
-            "proximity": self.bench.last,
         }
         if audio is not None:
             self.turn += 1
@@ -334,18 +304,20 @@ class Judge:
             self.set_state("thinking", "THINKING...", "")
 
 
-def watch_bench(judge, bench):
-    """Opens court when someone steps up, but only once per visit."""
+def watch_button(judge):
+    """Opens court when the top button is pressed, once per press."""
+    button = digitalio.DigitalInOut(board.D23)
+    button.switch_to_input(pull=digitalio.Pull.UP)
     armed = True
     while True:
-        present = bench.someone_there()
-        if not present:
+        pressed = not button.value  # the pull up makes it read False while held
+        if not pressed:
             armed = True
         elif judge.state != "idle":
-            armed = False
+            armed = False  # a press during a case must not carry over to the next one
         elif armed and judge.submit(dict(OPENING)):
             armed = False
-        time.sleep(0.1)
+        time.sleep(0.02)
 
 
 app = Flask(__name__)
@@ -403,8 +375,6 @@ def main():
                         help="input device index or name (default: system default)")
     parser.add_argument("--speaker", default=None,
                         help="output device index or name (default: system default)")
-    parser.add_argument("--proximity", type=int, default=40,
-                        help="proximity reading (0-255) that counts as stepping up")
     parser.add_argument("--port", type=int, default=5000)
     args = parser.parse_args()
 
@@ -421,11 +391,10 @@ def main():
     print("Loading models...", flush=True)
     screen = Screen()
     screen.show("thinking", "STARTING", "Loading the court...")
-    bench = Bench(args.proximity)
-    judge = Judge(args, screen, bench)
+    judge = Judge(args, screen)
 
     threading.Thread(target=judge.run, daemon=True).start()
-    threading.Thread(target=watch_bench, args=(judge, bench), daemon=True).start()
+    threading.Thread(target=watch_button, args=(judge,), daemon=True).start()
 
     addresses = subprocess.run(["hostname", "-I"], capture_output=True, text=True).stdout.split()
     print("\nWizard controller:")

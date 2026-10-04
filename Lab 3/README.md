@@ -279,7 +279,7 @@ The Mini PiTFT is the turn signal. Every state has its own color and title, so y
 
 | Screen | Color | Meaning |
 |---|---|---|
-| MINI JUDGE | navy | waiting for someone to step up |
+| MINI JUDGE | navy | waiting for someone to press the button |
 | THE JUDGE | amber | the judge is talking, and its words are shown |
 | LISTENING | green | your turn; pause when you are done |
 | THINKING... | purple | the judge is working on your answer |
@@ -287,7 +287,7 @@ The Mini PiTFT is the turn signal. Every state has its own color and title, so y
 
 The verdict colors never reuse a turn color, so a FAIR verdict is not mistaken for LISTENING. We used the whole screen rather than a single LED because a color with a word on it cannot be misread, and showing the judge's words helps when the speaker is hard to hear.
 
-The **proximity sensor** replaces a wake word. Stepping up to the bench opens court. After a verdict, the judge does not reopen until you step away, so someone still standing at the bench is not pulled into a second case.
+The **top button** replaces a wake word. Pressing it opens court, so nobody has to guess what to say to wake the judge up. A press only counts between cases: one in the middle of a case is ignored, so it cannot start a second case by accident.
 
 **3. New diagram and script**
 
@@ -295,7 +295,7 @@ The **proximity sensor** replaces a wake word. Stepping up to the bench opens co
 stateDiagram-v2
     direction LR
     [*] --> Idle
-    Idle --> Speaking: someone steps up, or top button
+    Idle --> Speaking: someone presses the top button
     Speaking --> Listening: judge asks a question
     Listening --> Thinking: participant pauses 1.2 to 1.5 s
     Thinking --> Speaking: wizard picks the next line
@@ -314,7 +314,7 @@ Every line the judge can say is in [cases.py](mini_judge/cases.py). Each case fo
 
 **4. Input devices**
 
-We added the APDS-9960 proximity sensor over Qwiic to notice someone at the bench. The Mini PiTFT's top button does the same job if the sensor is not plugged in.
+We use the Mini PiTFT's top button: one press opens court. Unlike a proximity sensor, a button cannot be set off by someone just walking past, and pressing it makes starting a case a deliberate choice.
 
 ## Prototype your system
 
@@ -333,7 +333,7 @@ It is a Wizard of Oz system. Everything the participant sees and hears comes fro
 
 On the Pi, [mini_judge.py](mini_judge/mini_judge.py):
 
-1. watches the proximity sensor and opens court when someone steps up
+1. watches the top button and opens court when someone presses it
 2. speaks the judge's lines with Piper (`en_US-lessac-medium`)
 3. listens with Silero VAD, which decides when the participant's turn is over
 4. transcribes what they said with faster-whisper (`tiny.en`)
@@ -342,11 +342,11 @@ On the Pi, [mini_judge.py](mini_judge/mini_judge.py):
 
 The wizard sits out of sight with a laptop, reads what the participant said on the controller, and clicks the judge's next line or verdict.
 
-**Hardware:** Raspberry Pi 5, Mini PiTFT (screen and top button), APDS-9960 proximity sensor, USB microphone, and USB speaker.
+**Hardware:** Raspberry Pi 5, Mini PiTFT (screen and top button), USB microphone, and USB speaker.
 
 | File | What it does |
 |---|---|
-| [mini_judge/mini_judge.py](mini_judge/mini_judge.py) | runs the screen, sensor, microphone, speaker, and controller |
+| [mini_judge/mini_judge.py](mini_judge/mini_judge.py) | runs the screen, button, microphone, speaker, and controller |
 | [mini_judge/cases.py](mini_judge/cases.py) | every line the judge can say, for all three cases |
 | [mini_judge/templates/controller.html](mini_judge/templates/controller.html) | the wizard's controller page |
 
@@ -362,7 +362,6 @@ python mini_judge.py
 It prints the controller's address. Open that on a laptop on the same network.
 
 - **Two microphones plugged in?** List them with `python -c "import sounddevice; print(sounddevice.query_devices())"`, then pick one with `python mini_judge.py --mic 4`.
-- **Court opens too early or too late?** The controller's header shows the live proximity reading. Walk up to the bench, note the number, and set it with `python mini_judge.py --proximity 60`.
 
 ### What the participant sees
 
@@ -376,7 +375,7 @@ The controller has the opening and recovery lines at the top, a tab for each cas
 
 ### The recorded dataset
 
-Every visit is saved to `mini_judge/sessions/<date and time>/`. That folder holds `log.jsonl`, with one line per turn (who spoke, what was said, the time, and the proximity reading), and a `turn_NN.wav` recording of each answer. These recordings stay on the Pi and are kept out of git, because participants' voices should only be shared with their consent.
+Every visit is saved to `mini_judge/sessions/<date and time>/`. That folder holds `log.jsonl`, with one line per turn (who spoke, what was said, and the time), and a `turn_NN.wav` recording of each answer. These recordings stay on the Pi and are kept out of git, because participants' voices should only be shared with their consent.
 
 ### Videos
 
@@ -384,7 +383,7 @@ Video of the Mini Judge in use: *to be added after testing*
 
 Screen recording of the controller during the same session: *to be added after testing*
 
-> **AI Disclaimer:** The Mini Judge code (`mini_judge.py`, `cases.py`, and `templates/controller.html`) was partially written with help from AI (Claude Code): the audio, screen, sensor and web controller code, the screen and controller images above, and testing that it runs without errors. AI also helped draft this Part 2 write-up. The Mini Judge concept, the storyboard, and the charger case are ours. The food and chores cases were suggested by AI, and the judge's lines for all three cases were drafted with AI help.
+> **AI Disclaimer:** The Mini Judge code (`mini_judge.py`, `cases.py`, and `templates/controller.html`) was partially written with help from AI (Claude Code): the audio, screen, button and web controller code, the screen and controller images above, and testing that it runs without errors. AI also helped draft this Part 2 write-up. The Mini Judge concept, the storyboard, and the charger case are ours. The food and chores cases were suggested by AI, and the judge's lines for all three cases were drafted with AI help.
 
 ## Test the system
 

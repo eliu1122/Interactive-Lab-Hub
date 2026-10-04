@@ -21,7 +21,6 @@
   .badge { color: #fff; border-radius: 999px; padding: 4px 12px; font-weight: 700;
            letter-spacing: .5px; text-transform: uppercase; font-size: 13px; }
   .now { flex: 1 1 260px; color: var(--muted); font-size: 13px; }
-  .sensor { font-size: 13px; color: var(--muted); }
   main { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
          gap: 16px; padding: 16px; max-width: 1200px; margin: 0 auto; }
   @media (max-width: 800px) { main { grid-template-columns: 1fr; } }
@@ -72,7 +71,6 @@
   <h1>Mini Judge</h1>
   <span id="badge" class="badge" style="background: var(--idle)">connecting</span>
   <span id="now" class="now"></span>
-  <span id="sensor" class="sensor"></span>
 </header>
 
 <main>
@@ -148,7 +146,7 @@
     </section>
     <section>
       <h2>What was said</h2>
-      <ol class="log" id="log"><li class="empty">Nothing yet. Court opens when someone steps up.</li></ol>
+      <ol class="log" id="log"><li class="empty">Nothing yet. Court opens when someone presses the button.</li></ol>
     </section>
   </div>
 </main>
@@ -160,7 +158,6 @@
                    thinking: "--thinking", verdict: "--verdict" };
   const badge = document.getElementById("badge");
   const now = document.getElementById("now");
-  const sensor = document.getElementById("sensor");
   const log = document.getElementById("log");
   const toast = document.getElementById("toast");
   let busy = false;
@@ -228,7 +225,7 @@
     if (!entries.length) {
       const li = document.createElement("li");
       li.className = "empty";
-      li.textContent = "Nothing yet. Court opens when someone steps up.";
+      li.textContent = "Nothing yet. Court opens when someone presses the button.";
       log.append(li);
       return;
     }
@@ -255,7 +252,6 @@
       badge.textContent = s.state;
       badge.style.background = `var(${COLORS[s.state] || "--idle"})`;
       now.textContent = [s.title, s.subtitle].filter(Boolean).join(" · ");
-      sensor.textContent = s.sensor ? `proximity ${s.proximity}` : "no proximity sensor (top button)";
       document.querySelectorAll("button.line, button.verdict, #free button")
         .forEach(b => b.disabled = busy);
       render(s.transcript);
