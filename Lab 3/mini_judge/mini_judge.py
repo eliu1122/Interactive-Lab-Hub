@@ -67,6 +67,10 @@ COLORS = {
 }
 
 
+def log(message):
+    print(f"[{datetime.now():%H:%M:%S}] {message}", flush=True)
+
+
 class Screen:
     """The Mini PiTFT, set up the same way as in Lab 2."""
 
@@ -151,6 +155,10 @@ class Judge:
         self.whisper = WhisperModel(args.model, device="cpu", compute_type="int8")
         self.voice = PiperVoice.load(str(VOICE))
 
+        # The first transcription is much slower than the rest, so get it out of the way now
+        log("Warming up speech recognition...")
+        self.transcribe(np.zeros(SAMPLE_RATE, dtype=np.float32))
+
         self.jobs = queue.Queue()
         self.cancel = threading.Event()
         self.lock = threading.Lock()
@@ -217,7 +225,15 @@ class Judge:
 
     # ---- speaking and listening ----
 
+    def transcribe(self, audio):
+        # temperature 0 turns off Whisper's fallback of retrying at higher
+        # temperatures when it is unsure, so each answer is decoded exactly once
+        segments, _ = self.whisper.transcribe(audio, beam_size=1, temperature=0.0,
+                                              condition_on_previous_text=False)
+        return " ".join(s.text.strip() for s in segments).strip()
+
     def speak(self, text, color="speaking", title="THE JUDGE"):
+        log(f"Judge: {text}")
         self.set_state("speaking", title, text, color)
         self.record("judge", text)
         for chunk in self.voice.synthesize(text):
@@ -236,6 +252,7 @@ class Judge:
         window = config.silero_vad.window_size
 
         self.cancel.clear()
+        log(f"Listening (the turn ends after {silence}s of silence)...")
         self.set_state("listening", "LISTENING", "Your turn. Pause when you are done.")
         buffer = np.empty(0, dtype=np.float32)
         deadline = time.monotonic() + LISTEN_TIMEOUT
@@ -253,16 +270,21 @@ class Judge:
                 while not vad.empty():
                     utterance = np.array(vad.front.samples, dtype=np.float32)
                     vad.pop()
+                    log(f"Heard {len(utterance) / SAMPLE_RATE:.1f}s of speech. Transcribing...")
                     self.set_state("thinking", "THINKING...", "")
-                    segments, _ = self.whisper.transcribe(utterance, beam_size=1)
-                    text = " ".join(s.text.strip() for s in segments).strip()
+                    started = time.perf_counter()
+                    text = self.transcribe(utterance)
+                    log(f"Transcribed in {time.perf_counter() - started:.1f}s: "
+                        f"{text or '(nothing, only noise)'}")
                     if text:
                         self.record("participant", text, utterance)
                         return
                     # Only noise: go back to listening
                     self.set_state("listening", "LISTENING", "Your turn. Pause when you are done.")
 
-        self.record("system", "cancelled by wizard" if self.cancel.is_set() else "no answer")
+        outcome = "cancelled by wizard" if self.cancel.is_set() else "no answer"
+        log(f"Stopped listening: {outcome}")
+        self.record("system", outcome)
 
     # ---- the worker ----
 
@@ -293,6 +315,7 @@ class Judge:
 
         if then == "listen":
             self.listen(job["silence"])
+            log("Waiting for the wizard: click the next line on the controller.")
             self.set_state("thinking", "THINKING...", "The court is considering your answer.")
         elif then == "deliberate":
             self.set_state("thinking", "THINKING...", "The court is considering this dispute.")
