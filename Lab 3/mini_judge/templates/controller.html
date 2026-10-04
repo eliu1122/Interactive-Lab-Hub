@@ -21,6 +21,7 @@
   .badge { color: #fff; border-radius: 999px; padding: 4px 12px; font-weight: 700;
            letter-spacing: .5px; text-transform: uppercase; font-size: 13px; }
   .now { flex: 1 1 260px; color: var(--muted); font-size: 13px; }
+  .mode { font-size: 13px; color: var(--muted); }
   main { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
          gap: 16px; padding: 16px; max-width: 1200px; margin: 0 auto; }
   @media (max-width: 800px) { main { grid-template-columns: 1fr; } }
@@ -71,6 +72,7 @@
   <h1>Mini Judge</h1>
   <span id="badge" class="badge" style="background: var(--idle)">connecting</span>
   <span id="now" class="now"></span>
+  <span id="mode" class="mode"></span>
 </header>
 
 <main>
@@ -158,6 +160,7 @@
                    thinking: "--thinking", verdict: "--verdict" };
   const badge = document.getElementById("badge");
   const now = document.getElementById("now");
+  const mode = document.getElementById("mode");
   const log = document.getElementById("log");
   const toast = document.getElementById("toast");
   let busy = false;
@@ -252,6 +255,7 @@
       badge.textContent = s.state;
       badge.style.background = `var(${COLORS[s.state] || "--idle"})`;
       now.textContent = [s.title, s.subtitle].filter(Boolean).join(" · ");
+      mode.textContent = s.autopilot ? "autopilot: the judge decides" : "wizard mode";
       document.querySelectorAll("button.line, button.verdict, #free button")
         .forEach(b => b.disabled = busy);
       render(s.transcript);

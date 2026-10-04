@@ -4,17 +4,23 @@
 The Pi does everything the participant can see and hear. It opens court when
 someone presses the top button, speaks the judge's lines with Piper, listens with
 Silero VAD, transcribes with faster-whisper, and shows on the Mini PiTFT who has
-the floor. A hidden wizard decides what the judge says next from a web page.
+the floor.
 
-    python mini_judge.py
+By default the judge runs a whole case on its own: it works out which case it
+is hearing, asks that case's questions, and rules from the yes or no answers.
+With --wizard, a hidden wizard decides what it says next from a web page
+instead, for Wizard of Oz testing.
+
+    python mini_judge.py                    # the judge decides on its own
+    python mini_judge.py --wizard           # a wizard drives it from the controller
     python mini_judge.py --mic 4            # choose the microphone
 
-Then open the controller from a laptop on the same network:
+The controller, which in the default mode is just a live transcript, is at:
     http://<pi address>:5000
 
 AI Disclaimer: partially written with help from AI (Claude Code): the audio,
-screen, button and web controller code, and checking that it runs without
-errors. The Mini Judge concept, the storyboard and the charger case are ours;
+screen, button and web controller code, the autopilot, and checking that it
+runs without errors. The Mini Judge concept, the storyboard and the charger case are ours;
 the food and chores cases were suggested by AI, and the judge's lines for all
 three cases were drafted with AI help.
 """
@@ -41,7 +47,9 @@ from flask import Flask, jsonify, render_template, request
 from piper import PiperVoice
 from PIL import Image, ImageDraw, ImageFont
 
-from cases import CASES, OPENING, SHARED, VERDICT_TITLES
+from autopilot import score_answer, verdict_for, which_case
+from cases import (ADJOURN, AGAIN, CASES, CLARIFY, DELIBERATE, OPENING, SHARED,
+                   VERDICT_TITLES, YES_OR_NO)
 
 SAMPLE_RATE = 16000
 HERE = Path(__file__).resolve().parent
@@ -51,6 +59,7 @@ VOICE = LAB_DIR / "voices" / "en_US-lessac-medium.onnx"
 SESSIONS_DIR = HERE / "sessions"
 FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 LISTEN_TIMEOUT = 30
+VERDICT_HOLD = 4  # seconds the verdict stays up before court adjourns
 SUBTITLE_TOP = 48
 
 # Background and text color for every state, so the screen alone tells the
@@ -152,6 +161,7 @@ class Judge:
         self.screen = screen
         self.mic = args.mic
         self.speaker = args.speaker
+        self.autopilot = not args.wizard
         self.whisper = WhisperModel(args.model, device="cpu", compute_type="int8")
         self.voice = PiperVoice.load(str(VOICE))
 
@@ -189,6 +199,7 @@ class Judge:
                 "title": self.title,
                 "subtitle": self.subtitle,
                 "transcript": self.transcript[-60:],
+                "autopilot": self.autopilot,
             }
 
     def submit(self, job):
@@ -278,13 +289,14 @@ class Judge:
                         f"{text or '(nothing, only noise)'}")
                     if text:
                         self.record("participant", text, utterance)
-                        return
+                        return text
                     # Only noise: go back to listening
                     self.set_state("listening", "LISTENING", "Your turn. Pause when you are done.")
 
         outcome = "cancelled by wizard" if self.cancel.is_set() else "no answer"
         log(f"Stopped listening: {outcome}")
         self.record("system", outcome)
+        return ""
 
     # ---- the worker ----
 
@@ -305,6 +317,10 @@ class Judge:
             self.open_session()
         then = job["then"]
 
+        if then == "auto":
+            self.run_case()
+            return
+
         if then == "verdict":
             title = VERDICT_TITLES[job["verdict"]]
             self.speak(job["text"], color=job["verdict"], title=title)
@@ -321,10 +337,65 @@ class Judge:
             self.set_state("thinking", "THINKING...", "The court is considering this dispute.")
             time.sleep(job["seconds"])
         elif then == "adjourn":
-            self.session = None
-            self.go_idle()
+            self.close()
         else:
             self.set_state("thinking", "THINKING...", "")
+
+    def close(self):
+        self.session = None
+        self.go_idle()
+
+    # ---- the judge on its own, with no wizard ----
+
+    def ask(self, line):
+        """Speaks a question and returns the answer, asking once more if there is none."""
+        self.speak(line["text"])
+        answer = self.listen(line["silence"])
+        if not answer and not self.cancel.is_set():
+            self.speak(AGAIN["text"])
+            answer = self.listen(AGAIN["silence"])
+        return answer
+
+    def run_case(self):
+        complaint = self.ask(OPENING)
+        if not complaint:
+            self.speak("The court did not hear a complaint. Court is adjourned.")
+            self.close()
+            return
+
+        case = which_case(complaint) or which_case(self.ask(CLARIFY))
+        if case is None:
+            self.speak("The court only hears cases about chargers, food, or chores. "
+                       "Court is adjourned.")
+            self.close()
+            return
+        log(f"Autopilot: hearing the {case['name'].lower()} case")
+
+        score = 0
+        for step in ("Evidence", "Confirm", "Remedy"):
+            for line in case["steps"][step]:
+                answer = self.ask(line)
+                if "unfair_if" not in line:
+                    continue
+                points = score_answer(line, answer)
+                if points == 0 and answer:  # words, but neither a yes nor a no
+                    points = score_answer(line, self.ask(YES_OR_NO))
+                score += points
+                log(f"Autopilot: {points:+d} for that answer, score {score:+d}")
+
+        self.speak(DELIBERATE["text"])
+        self.set_state("thinking", "THINKING...", "The court is considering this dispute.")
+        time.sleep(DELIBERATE["seconds"])
+
+        kind = verdict_for(score)
+        title = VERDICT_TITLES[kind]
+        log(f"Autopilot: final score {score:+d}, so the verdict is {title}")
+        verdict = case["verdicts"][kind]
+        self.speak(verdict, color=kind, title=title)
+        self.set_state("verdict", title, verdict, kind)
+        time.sleep(VERDICT_HOLD)
+        self.speak(ADJOURN["text"], color=kind, title=title)
+        self.close()
 
 
 def watch_button(judge):
@@ -338,7 +409,7 @@ def watch_button(judge):
             armed = True
         elif judge.state != "idle":
             armed = False  # a press during a case must not carry over to the next one
-        elif armed and judge.submit(dict(OPENING)):
+        elif armed and judge.submit({"then": "auto"} if judge.autopilot else dict(OPENING)):
             armed = False
         time.sleep(0.02)
 
@@ -398,6 +469,8 @@ def main():
                         help="input device index or name (default: system default)")
     parser.add_argument("--speaker", default=None,
                         help="output device index or name (default: system default)")
+    parser.add_argument("--wizard", action="store_true",
+                        help="a hidden wizard drives the judge from the controller")
     parser.add_argument("--port", type=int, default=5000)
     args = parser.parse_args()
 
@@ -420,7 +493,10 @@ def main():
     threading.Thread(target=watch_button, args=(judge,), daemon=True).start()
 
     addresses = subprocess.run(["hostname", "-I"], capture_output=True, text=True).stdout.split()
-    print("\nWizard controller:")
+    if judge.autopilot:
+        print("\nPress the top button to start a case. Live transcript, if you want it:")
+    else:
+        print("\nWizard controller:")
     for address in addresses:
         host = f"[{address}]" if ":" in address else address
         print(f"  http://{host}:{args.port}")

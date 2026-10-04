@@ -298,9 +298,9 @@ stateDiagram-v2
     Idle --> Speaking: someone presses the top button
     Speaking --> Listening: judge asks a question
     Listening --> Thinking: participant pauses 1.2 to 1.5 s
-    Thinking --> Speaking: wizard picks the next line
+    Thinking --> Speaking: next question, chosen by the judge or a wizard
     Speaking --> Thinking: deliberation, 3 s
-    Speaking --> Verdict: wizard rules
+    Speaking --> Verdict: the judge or a wizard rules
     Verdict --> Idle: court is adjourned
 ```
 
@@ -329,7 +329,10 @@ The system should:
 
 ### How the Mini Judge works
 
-It is a Wizard of Oz system. Everything the participant sees and hears comes from the Pi, and the decisions come from a hidden wizard.
+Everything the participant sees and hears comes from the Pi. It runs in two modes:
+
+- **On its own (the default).** Press the top button and the judge runs a whole case by itself. It picks the case from the words in your complaint, asks that case's questions in order, and rules from your yes or no answers.
+- **Wizard of Oz (`--wizard`).** A hidden wizard decides what the judge says next from a controller on a laptop. This is the mode for user testing.
 
 On the Pi, [mini_judge.py](mini_judge/mini_judge.py):
 
@@ -338,9 +341,23 @@ On the Pi, [mini_judge.py](mini_judge/mini_judge.py):
 3. listens with Silero VAD, which decides when the participant's turn is over
 4. transcribes what they said with faster-whisper (`tiny.en`)
 5. shows whose turn it is on the Mini PiTFT
-6. serves the wizard's controller page over the network
+6. serves the controller page over the network: the wizard's buttons in wizard mode, and a live transcript in the default mode
 
-The wizard sits out of sight with a laptop, reads what the participant said on the controller, and clicks the judge's next line or verdict.
+### How the judge decides on its own
+
+[autopilot.py](mini_judge/autopilot.py) does three things:
+
+1. **Picks the case** from keywords in the complaint. "Charger", "phone" or "battery" mean the charger case; "ate", "snack" or "fridge" mean food; "dishes", "trash" or "rent" mean chores. If it cannot tell, it asks "Is this about a charger, food, or chores?"
+2. **Reads each yes or no answer.** The first yes or no word wins, so "Yes, they didn't ask" counts as a yes. If an answer is neither, it asks for a yes or a no.
+3. **Adds up a score.** Every answer that points to the roommate being unfair adds a point, and every answer that points the other way takes one away. 2 or more is UNFAIR, -1 or less is FAIR, and anything in between is SPLIT.
+
+| Case | Answers that point to unfair |
+|---|---|
+| Borrowed charger | they did **not** ask first; your phone **did** die; it **has** happened before; you confirm the complaint |
+| Eaten food | the food **was** labeled; they did **not** offer to replace it; it is **not** the first time; you confirm the complaint |
+| Uneven chores | you **did** agree who does what; you **have** reminded them; you confirm the complaint |
+
+Open questions like "How long did they keep it?" are asked and recorded, but they do not change the verdict.
 
 **Hardware:** Raspberry Pi 5, Mini PiTFT (screen and top button), USB microphone, and USB speaker.
 
@@ -348,7 +365,8 @@ The wizard sits out of sight with a laptop, reads what the participant said on t
 |---|---|
 | [mini_judge/mini_judge.py](mini_judge/mini_judge.py) | runs the screen, button, microphone, speaker, and controller |
 | [mini_judge/cases.py](mini_judge/cases.py) | every line the judge can say, for all three cases |
-| [mini_judge/templates/controller.html](mini_judge/templates/controller.html) | the wizard's controller page |
+| [mini_judge/autopilot.py](mini_judge/autopilot.py) | how the judge picks a case and a verdict on its own |
+| [mini_judge/templates/controller.html](mini_judge/templates/controller.html) | the controller page: the wizard's buttons, and a live transcript |
 
 ### Running it
 
@@ -359,7 +377,7 @@ sudo systemctl stop piscreen.service --now
 python mini_judge.py
 ```
 
-It prints the controller's address. Open that on a laptop on the same network.
+Press the top button and answer out loud; the judge does the rest. For Wizard of Oz testing, start it with `python mini_judge.py --wizard` instead, and open the address it prints on a laptop on the same network.
 
 - **Two microphones plugged in?** List them with `python -c "import sounddevice; print(sounddevice.query_devices())"`, then pick one with `python mini_judge.py --mic 4`.
 
@@ -371,7 +389,7 @@ It prints the controller's address. Open that on a laptop on the same network.
 
 <img src="mini_judge/controller.png" alt="The wizard's controller page: opening and recovery lines, tabs for the three cases with their evidence, confirmation and remedy questions, verdict buttons, a free text box, a stop listening button, and a live transcript" width="960">
 
-The controller has the opening and recovery lines at the top, a tab for each case, and the three verdict buttons for that case. On the right, "What was said" shows the live transcript. Buttons grey out while the judge is speaking or listening, so the wizard cannot talk over the participant. "Stop listening" ends a turn early, and "Say anything" covers whatever the script did not predict.
+In wizard mode, the controller has the opening and recovery lines at the top, a tab for each case, and the three verdict buttons for that case. On the right, "What was said" shows the live transcript. Buttons grey out while the judge is speaking or listening, so the wizard cannot talk over the participant. "Stop listening" ends a turn early, and "Say anything" covers whatever the script did not predict. In the default mode, the same page is just a live transcript of the case.
 
 ### The recorded dataset
 
@@ -383,7 +401,7 @@ Video of the Mini Judge in use: *to be added after testing*
 
 Screen recording of the controller during the same session: *to be added after testing*
 
-> **AI Disclaimer:** The Mini Judge code (`mini_judge.py`, `cases.py`, and `templates/controller.html`) was partially written with help from AI (Claude Code): the audio, screen, button and web controller code, the screen and controller images above, and testing that it runs without errors. AI also helped draft this Part 2 write-up. The Mini Judge concept, the storyboard, and the charger case are ours. The food and chores cases were suggested by AI, and the judge's lines for all three cases were drafted with AI help.
+> **AI Disclaimer:** The Mini Judge code (`mini_judge.py`, `cases.py`, `autopilot.py`, and `templates/controller.html`) was partially written with help from AI (Claude Code): the audio, screen, button and web controller code, the rules the judge uses to decide on its own, the screen and controller images above, and testing that it runs without errors. AI also helped draft this Part 2 write-up. The Mini Judge concept, the storyboard, and the charger case are ours. The food and chores cases were suggested by AI, and the judge's lines for all three cases were drafted with AI help.
 
 ## Test the system
 
