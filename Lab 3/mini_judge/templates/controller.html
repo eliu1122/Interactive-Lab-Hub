@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mini Judge Controller</title>
+<style>
+  :root {
+    --bg: #f6f4ef; --panel: #ffffff; --ink: #1f2430; --muted: #6b7280;
+    --line: #e4ddcd; --accent: #1f2430;
+    --idle: #3b4270; --speaking: #8a5d0a; --listening: #137a3b;
+    --thinking: #5b3291; --verdict: #a3191f;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.4 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  header { position: sticky; top: 0; z-index: 2; background: var(--panel);
+           border-bottom: 1px solid var(--line); padding: 12px 16px;
+           display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  h1 { font-size: 18px; margin: 0 8px 0 0; }
+  .badge { color: #fff; border-radius: 999px; padding: 4px 12px; font-weight: 700;
+           letter-spacing: .5px; text-transform: uppercase; font-size: 13px; }
+  .now { flex: 1 1 260px; color: var(--muted); font-size: 13px; }
+  .sensor { font-size: 13px; color: var(--muted); }
+  main { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+         gap: 16px; padding: 16px; max-width: 1200px; margin: 0 auto; }
+  @media (max-width: 800px) { main { grid-template-columns: 1fr; } }
+  section { background: var(--panel); border: 1px solid var(--line);
+            border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .6px;
+       color: var(--muted); margin: 4px 0 8px; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .tab { border: 1px solid var(--line); background: var(--bg); border-radius: 8px;
+         padding: 6px 12px; cursor: pointer; font: inherit; color: inherit; }
+  .tab[aria-selected="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .question { font-style: italic; color: var(--muted); margin: 0 0 8px; }
+  .lines { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+  button.line { text-align: left; border: 1px solid var(--line); background: #fff;
+                border-radius: 8px; padding: 8px 10px; cursor: pointer; font: inherit;
+                color: inherit; display: flex; gap: 8px; align-items: baseline; }
+  button.line:hover:not(:disabled) { border-color: var(--accent); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .then { font-size: 11px; color: var(--muted); white-space: nowrap; margin-left: auto; }
+  .verdicts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  @media (max-width: 520px) { .verdicts { grid-template-columns: 1fr; } }
+  button.verdict { border: 0; border-radius: 8px; padding: 10px; color: #fff;
+                   font: inherit; font-weight: 700; cursor: pointer; }
+  .v-unfair { background: #8c1414; } .v-fair { background: #194696; } .v-split { background: #46464e; }
+  .free { display: flex; gap: 6px; flex-wrap: wrap; }
+  .free input[type=text] { flex: 1 1 220px; padding: 8px 10px; border: 1px solid var(--line);
+                           border-radius: 8px; font: inherit; }
+  .free select, .free button, .controls button { padding: 8px 12px; border-radius: 8px;
+         border: 1px solid var(--line); background: #fff; font: inherit; cursor: pointer; }
+  .controls { display: flex; gap: 6px; flex-wrap: wrap; }
+  .controls .stop { background: #fff3f3; border-color: #f1c1c1; }
+  ol.log { list-style: none; padding: 0; margin: 0; max-height: 60vh; overflow-y: auto; }
+  ol.log li { padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .who { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+  .who.judge { color: var(--speaking); } .who.participant { color: var(--listening); }
+  .who.system { color: var(--muted); }
+  .time { font-size: 11px; color: var(--muted); margin-left: 6px; }
+  .empty { color: var(--muted); font-style: italic; }
+  .toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+           background: var(--ink); color: #fff; padding: 8px 14px; border-radius: 8px;
+           opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Mini Judge</h1>
+  <span id="badge" class="badge" style="background: var(--idle)">connecting</span>
+  <span id="now" class="now"></span>
+  <span id="sensor" class="sensor"></span>
+</header>
+
+<main>
+  <div>
+    <section>
+      <h2>Opening &amp; recovery</h2>
+      {% for group, lines in shared.items() %}
+        <div class="lines">
+          {% for line in lines %}
+            <button class="line" data-text="{{ line.text }}" data-then="{{ line.then }}"
+                    data-silence="{{ line.silence or '' }}" data-seconds="{{ line.seconds or '' }}">
+              <span>{{ line.text }}</span><span class="then">{{ group }} · {{ line.then }}</span>
+            </button>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </section>
+
+    <section>
+      <h2>Case</h2>
+      <div class="tabs" role="tablist">
+        {% for case in cases %}
+          <button class="tab" role="tab" data-case="{{ case.key }}"
+                  aria-selected="{{ 'true' if loop.first else 'false' }}">{{ case.name }}</button>
+        {% endfor %}
+      </div>
+
+      {% for case in cases %}
+        <div class="case" data-case="{{ case.key }}" {% if not loop.first %}hidden{% endif %}>
+          <p class="question">{{ case.question }}</p>
+          {% for step, lines in case.steps.items() %}
+            <h2>{{ step }}</h2>
+            <div class="lines">
+              {% for line in lines %}
+                <button class="line" data-text="{{ line.text }}" data-then="{{ line.then }}"
+                        data-silence="{{ line.silence }}">
+                  <span>{{ line.text }}</span><span class="then">listen {{ line.silence }}s</span>
+                </button>
+              {% endfor %}
+            </div>
+          {% endfor %}
+
+          <h2>Verdict</h2>
+          <div class="verdicts">
+            {% for kind, text in case.verdicts.items() %}
+              <button class="verdict v-{{ kind }}" data-text="{{ text }}" data-then="verdict"
+                      data-verdict="{{ kind }}" title="{{ text }}">{{ verdict_titles[kind] }}</button>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </section>
+
+    <section>
+      <h2>Say anything</h2>
+      <form class="free" id="free">
+        <input type="text" id="free-text" placeholder="Type a line for the judge" autocomplete="off">
+        <select id="free-then">
+          <option value="listen">then listen</option>
+          <option value="think">then wait</option>
+        </select>
+        <button type="submit">Say</button>
+      </form>
+    </section>
+  </div>
+
+  <div>
+    <section>
+      <h2>Controls</h2>
+      <div class="controls">
+        <button class="stop" id="stop">Stop listening</button>
+      </div>
+    </section>
+    <section>
+      <h2>What was said</h2>
+      <ol class="log" id="log"><li class="empty">Nothing yet. Court opens when someone steps up.</li></ol>
+    </section>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const COLORS = { idle: "--idle", speaking: "--speaking", listening: "--listening",
+                   thinking: "--thinking", verdict: "--verdict" };
+  const badge = document.getElementById("badge");
+  const now = document.getElementById("now");
+  const sensor = document.getElementById("sensor");
+  const log = document.getElementById("log");
+  const toast = document.getElementById("toast");
+  let busy = false;
+  let shown = "";
+
+  function flash(message) {
+    toast.textContent = message;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 1800);
+  }
+
+  async function say(payload) {
+    if (busy) { flash("The judge is busy"); return; }
+    const response = await fetch("/say", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}));
+      flash(body.error || "Could not send");
+    }
+  }
+
+  document.querySelectorAll("button.line, button.verdict").forEach(button => {
+    button.addEventListener("click", () => {
+      const d = button.dataset;
+      const payload = { text: d.text, then: d.then };
+      if (d.silence) payload.silence = Number(d.silence);
+      if (d.seconds) payload.seconds = Number(d.seconds);
+      if (d.verdict) payload.verdict = d.verdict;
+      say(payload);
+    });
+  });
+
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(t =>
+        t.setAttribute("aria-selected", String(t === tab)));
+      document.querySelectorAll(".case").forEach(c =>
+        c.hidden = c.dataset.case !== tab.dataset.case);
+    });
+  });
+
+  document.getElementById("free").addEventListener("submit", event => {
+    event.preventDefault();
+    const input = document.getElementById("free-text");
+    const text = input.value.trim();
+    if (!text) return;
+    const then = document.getElementById("free-then").value;
+    say({ text, then, silence: 1.5 });
+    input.value = "";
+  });
+
+  document.getElementById("stop").addEventListener("click", () =>
+    fetch("/cancel", { method: "POST" }));
+
+  function render(entries) {
+    // The server keeps only the last 60 entries, so compare the newest one too
+    const last = entries[entries.length - 1];
+    const signature = entries.length + "|" + (last ? last.time + last.who + last.text : "");
+    if (signature === shown) return;
+    shown = signature;
+    log.replaceChildren();
+    if (!entries.length) {
+      const li = document.createElement("li");
+      li.className = "empty";
+      li.textContent = "Nothing yet. Court opens when someone steps up.";
+      log.append(li);
+      return;
+    }
+    for (const entry of entries) {
+      const li = document.createElement("li");
+      const who = document.createElement("span");
+      who.className = "who " + entry.who;
+      who.textContent = entry.who;
+      const time = document.createElement("span");
+      time.className = "time";
+      time.textContent = entry.time.slice(11);
+      const text = document.createElement("div");
+      text.textContent = entry.text;
+      li.append(who, time, text);
+      log.append(li);
+    }
+    log.scrollTop = log.scrollHeight;
+  }
+
+  async function poll() {
+    try {
+      const s = await (await fetch("/state")).json();
+      busy = s.busy;
+      badge.textContent = s.state;
+      badge.style.background = `var(${COLORS[s.state] || "--idle"})`;
+      now.textContent = [s.title, s.subtitle].filter(Boolean).join(" · ");
+      sensor.textContent = s.sensor ? `proximity ${s.proximity}` : "no proximity sensor (top button)";
+      document.querySelectorAll("button.line, button.verdict, #free button")
+        .forEach(b => b.disabled = busy);
+      render(s.transcript);
+    } catch (error) {
+      badge.textContent = "offline";
+      badge.style.background = "var(--muted)";
+    }
+    setTimeout(poll, 500);
+  }
+  poll();
+</script>
+</body>
+</html>

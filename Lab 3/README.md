@@ -264,6 +264,58 @@ For Part 2, you will redesign the interaction with the speech-enabled device usi
 3. Make a new storyboard, diagram and/or script based on these reflections.
 4. (optional) Integrate [input devices](inputs.md) in the system
 
+### Our redesign: the Mini Judge
+
+**1. What we improved**
+
+- **Wording.** Our Part 1 questions were clipped. "How much left?" and "Almost empty, but put back?" only make sense if you already know the milk story. Every question now names what it is asking about, like "Did your roommate ask before taking the charger?", so a stranger can follow it.
+- **Timing.** In Part 1 we planned 0.8 seconds of silence to end a yes or no answer, and that cut people off when they started explaining instead. Yes or no questions now wait 1.2 seconds, and open questions keep 1.5 seconds. The 3 second deliberation stays because the suspense worked, but the screen now says THINKING so it does not look like the device froze.
+- **Misunderstandings.** The wizard has recovery lines one click away, like "Could you say that again?" and "The court did not catch that. Please answer yes or no." The confirmation step also repeats the complaint back before any verdict, so a misheard answer gets corrected instead of judged.
+- **Scope.** Part 1 had one scripted milk case with a fixed ending. The judge now hears three kinds of dispute (a borrowed charger, eaten food, and uneven chores), and each has three possible verdicts (unfair, fair, or split), so the ruling depends on what the participant actually says.
+
+**2. Beyond speech: how you know whose turn it is**
+
+The Mini PiTFT is the turn signal. Every state has its own color and title, so you can tell at a glance whether it is your turn to talk:
+
+| Screen | Color | Meaning |
+|---|---|---|
+| MINI JUDGE | navy | waiting for someone to step up |
+| THE JUDGE | amber | the judge is talking, and its words are shown |
+| LISTENING | green | your turn; pause when you are done |
+| THINKING... | purple | the judge is working on your answer |
+| UNFAIR / FAIR / SPLIT | red / blue / gray | the verdict |
+
+The verdict colors never reuse a turn color, so a FAIR verdict is not mistaken for LISTENING. We used the whole screen rather than a single LED because a color with a word on it cannot be misread, and showing the judge's words helps when the speaker is hard to hear.
+
+The **proximity sensor** replaces a wake word. Stepping up to the bench opens court. After a verdict, the judge does not reopen until you step away, so someone still standing at the bench is not pulled into a second case.
+
+**3. New diagram and script**
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> Idle
+    Idle --> Speaking: someone steps up, or top button
+    Speaking --> Listening: judge asks a question
+    Listening --> Thinking: participant pauses 1.2 to 1.5 s
+    Thinking --> Speaking: wizard picks the next line
+    Speaking --> Thinking: deliberation, 3 s
+    Speaking --> Verdict: wizard rules
+    Verdict --> Idle: court is adjourned
+```
+
+Every line the judge can say is in [cases.py](mini_judge/cases.py). Each case follows the six steps from our Part 1 storyboard: complaint, evidence, confirmation, remedy, deliberation, and verdict.
+
+| Case | Evidence the judge asks for | Verdicts |
+|---|---|---|
+| Borrowed charger | Did they ask first? How long did they keep it? Did your phone die? Has it happened before? | unfair, fair, split |
+| Eaten food | Was it labeled? How much did they eat? Did they offer to replace it? Is this the first time? | unfair, fair, split |
+| Uneven chores | Did you agree who does what? How long has it gone on? Have you reminded them? Who has been doing the work? | unfair, fair, split |
+
+**4. Input devices**
+
+We added the APDS-9960 proximity sensor over Qwiic to notice someone at the bench. The Mini PiTFT's top button does the same job if the sensor is not plugged in.
+
 ## Prototype your system
 
 The system should:
@@ -274,6 +326,65 @@ The system should:
 *Document how the system works.*
 
 *Include videos or screencaptures of both the system and the controller.*
+
+### How the Mini Judge works
+
+It is a Wizard of Oz system. Everything the participant sees and hears comes from the Pi, and the decisions come from a hidden wizard.
+
+On the Pi, [mini_judge.py](mini_judge/mini_judge.py):
+
+1. watches the proximity sensor and opens court when someone steps up
+2. speaks the judge's lines with Piper (`en_US-lessac-medium`)
+3. listens with Silero VAD, which decides when the participant's turn is over
+4. transcribes what they said with faster-whisper (`tiny.en`)
+5. shows whose turn it is on the Mini PiTFT
+6. serves the wizard's controller page over the network
+
+The wizard sits out of sight with a laptop, reads what the participant said on the controller, and clicks the judge's next line or verdict.
+
+**Hardware:** Raspberry Pi 5, Mini PiTFT (screen and top button), APDS-9960 proximity sensor, USB microphone, and USB speaker.
+
+| File | What it does |
+|---|---|
+| [mini_judge/mini_judge.py](mini_judge/mini_judge.py) | runs the screen, sensor, microphone, speaker, and controller |
+| [mini_judge/cases.py](mini_judge/cases.py) | every line the judge can say, for all three cases |
+| [mini_judge/templates/controller.html](mini_judge/templates/controller.html) | the wizard's controller page |
+
+### Running it
+
+```
+source ~/venv/bin/activate
+cd ~/Interactive-Lab-Hub/Lab\ 3/mini_judge
+sudo systemctl stop piscreen.service --now
+python mini_judge.py
+```
+
+It prints the controller's address. Open that on a laptop on the same network.
+
+- **Two microphones plugged in?** List them with `python -c "import sounddevice; print(sounddevice.query_devices())"`, then pick one with `python mini_judge.py --mic 4`.
+- **Court opens too early or too late?** The controller's header shows the live proximity reading. Walk up to the bench, note the number, and set it with `python mini_judge.py --proximity 60`.
+
+### What the participant sees
+
+<img src="mini_judge/screens.png" alt="The seven Mini PiTFT screens: idle in navy, judge speaking in amber, listening in green, thinking in purple, and the unfair, fair and split verdicts in red, blue and gray" width="960">
+
+### The wizard's controller
+
+<img src="mini_judge/controller.png" alt="The wizard's controller page: opening and recovery lines, tabs for the three cases with their evidence, confirmation and remedy questions, verdict buttons, a free text box, a stop listening button, and a live transcript" width="960">
+
+The controller has the opening and recovery lines at the top, a tab for each case, and the three verdict buttons for that case. On the right, "What was said" shows the live transcript. Buttons grey out while the judge is speaking or listening, so the wizard cannot talk over the participant. "Stop listening" ends a turn early, and "Say anything" covers whatever the script did not predict.
+
+### The recorded dataset
+
+Every visit is saved to `mini_judge/sessions/<date and time>/`. That folder holds `log.jsonl`, with one line per turn (who spoke, what was said, the time, and the proximity reading), and a `turn_NN.wav` recording of each answer. These recordings stay on the Pi and are kept out of git, because participants' voices should only be shared with their consent.
+
+### Videos
+
+Video of the Mini Judge in use: *to be added after testing*
+
+Screen recording of the controller during the same session: *to be added after testing*
+
+> **AI Disclaimer:** The Mini Judge code (`mini_judge.py`, `cases.py`, and `templates/controller.html`) was partially written with help from AI (Claude Code): the audio, screen, sensor and web controller code, the screen and controller images above, and testing that it runs without errors. AI also helped draft this Part 2 write-up. The Mini Judge concept, the storyboard, and the charger case are ours. The food and chores cases were suggested by AI, and the judge's lines for all three cases were drafted with AI help.
 
 ## Test the system
 
