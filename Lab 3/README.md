@@ -319,7 +319,7 @@ It runs entirely on the Pi, using the mini screen and its button, a USB micropho
 
 <img src="mini_judge/screens.png" alt="The Mini Judge's screens: waiting in navy, judge talking in amber, listening in green, thinking in purple, and the unfair, fair and split verdicts in red, blue and gray" width="960">
 
-Video of the Mini Judge in use: *to be added after testing*
+Video of the Mini Judge in use: https://drive.google.com/file/d/1RMILTvas-BQMBVSTVRinUnw2pYWzzAzT/view?usp=sharing
 
 > **AI Disclaimer:** We used AI (Claude Code) to help write and test the code, make the screen captures, and draft this write-up. The Mini Judge idea, the storyboard, and the charger case are ours. The food and chores cases were suggested by AI, and AI helped write the judge's lines.
 
@@ -330,16 +330,18 @@ Try to get at least two people to interact with your system. (Ideally, you would
 Answer the following:
 
 ### What worked well about the system and what didn't?
-\*\**your answer here*\*\*
+Tony and Yuge liked that the judge could adequately judge all three scenarios. What didn't work was how rigid it felt. The questions were not dynamic and did not change based on their answers, and when we ran the same case (a borrowed charger) more than once, it asked the same questions again. This is because each case has a fixed list of questions.
 
 ### What worked well about the controller and what didn't?
-\*\**your answer here*\*\*
+The controller let us run each case with pre-written buttons for every question and verdict. But because we mostly picked from that same fixed list, it was not very interactive. It would be more interactive if it suggested follow-up questions based on what the person just said, and offered a few different ways to word each question, so repeat visits would not sound the same.
 
 ### What lessons can you take away from the WoZ interactions for designing a more autonomous version of the system?
-\*\**your answer here*\*\*
+As the wizard, we could bring in more scenarios than the three built into the judge. An autonomous version would need to do the same: handle more kinds of complaints, choose its next question based on the last answer, and word its questions differently each time so repeat visits do not feel the same.
 
 ### How could you use your system to create a dataset of interaction? What other sensing modalities would make sense to capture?
-\*\**your answer here*\*\*
+Every case is already saved on the Pi: a transcript of what was said and a recording of each answer. Collected across many people, that becomes a dataset of how people describe disputes and answer the judge.
+
+A camera would also make sense. Our webcam could recognize faces to tell whether the same person has come back, so the judge could avoid asking them the same questions again. It could also capture how people react to the verdict. Because faces and voices are personal, we would only save them with each person's permission.
 
 <details>
   <summary><strong>Submission Cleanup Reminder (Click to Expand)</strong></summary>
