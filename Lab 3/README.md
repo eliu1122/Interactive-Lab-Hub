@@ -321,27 +321,39 @@ It runs entirely on the Pi, using the mini screen and its button, a USB micropho
 
 Video of the Mini Judge in use: https://drive.google.com/file/d/1RMILTvas-BQMBVSTVRinUnw2pYWzzAzT/view?usp=sharing
 
-> **AI Disclaimer:** We used AI to help assist in writing and test the code. The Mini Judge idea, the storyboard, and the write up are ours.
+> **AI Disclaimer:** The Mini Judge code (`mini_judge.py`, `cases.py`, `autopilot.py`, and `templates/controller.html`) was partially written with help from AI (Claude Code). AI also helped format this Part 2 write-up into appropriate mark-down.
 
 ## Test the system
 
-Try to get at least two people to interact with your system. (Ideally, you would inform them that there is a wizard *after* the interaction, but we recognize that can be hard.)
-
-Answer the following:
+We tested the implemented Mini Judge with our peers Tony (yw2946) and Yuge (yx692). The following reflections summarize their feedback and our experience operating the wizard controller. These trials were separate from the Part 1 role-play linked above.
 
 ### What worked well about the system and what didn't?
-Tony (yw2946) and Yuge (yx692) liked that the judge could adequately judge all three scenarios. Tony also liked that if someone stays quiet or gives an unclear answer, the judge asks again instead of getting stuck. What didn't work was how rigid it felt. The questions were not dynamic and did not change based on their answers, and when we ran the same case (a borrowed charger) more than once, it asked the same questions again. This is because each case has a fixed list of questions. Yuge also found that someone who pauses for more than about a second and a half to think could be cut off, which was a problem for her.
+
+When the conversation stayed within the prepared script, the interaction felt like a smooth court experience. The screen states helped Tony and Yuge understand which phase they were in and what was happening. The visible distinction between speaking, listening, thinking, and delivering a verdict made the exchange easier to follow and gave the device a clear courtroom structure.
+
+The main limitation was how strongly the experience depended on the script. It did not work well when participants moved beyond the supported scenarios or expected a response that the prepared dialogue did not cover. We had to explain how the system worked and guide them toward the kinds of interaction it could handle. That extra guidance made the conversation feel less spontaneous: participants were adapting to the system's limitations instead of freely explaining their complaint. The smooth experience therefore depended partly on knowing how to stay within its boundaries.
 
 ### What worked well about the controller and what didn't?
-The controller let us run each case with buttons for every question and verdict, written ahead of time. The live transcript also showed what the person said, so the wizard could react to it. But because we mostly picked from that same fixed list, it was not very interactive. It would be more interactive if it suggested new questions to follow up on what the person just said, and offered a few different ways to word each question, so repeat visits would not sound the same.
+
+From the wizard's side, the controller was intuitive. I could find the next line, click its button, and let the Pi speak and advance the interaction. Having the prepared questions and verdicts available as buttons made it straightforward to operate the judge while following the conversation.
+
+However, an easy-to-use controller did not remove the limits of the scripted dialogue. Finding the next line was simple when an answer matched the expected flow, but an unexpected answer could leave us without a suitable prepared response. Although the controller includes a free-text option, the tested experience still depended heavily on the available script. This suggests that the main improvement needed is more flexible dialogue, rather than simply adding more controls.
 
 ### What lessons can you take away from the WoZ interactions for designing a more autonomous version of the system?
-As the wizard, we could bring in more scenarios than the three built into the judge, and switch cases if the person changed topic. An autonomous version would need to do the same. It should handle more kinds of complaints, switch cases when the topic changes, choose its next question based on the last answer, and word its questions differently each time so repeat visits do not feel the same. One thing an autonomous version does better is consistency. A wizard can give different verdicts for the same story, while clear rules keep verdicts consistent.
+
+The tests showed that clear turn-taking cues and flexible conversation are separate design problems. The screen successfully communicated the current phase, but participants still needed help understanding what the judge could discuss. We would keep the screen states and make the supported scope clear in the opening dialogue, so users do not need as much explanation from us before starting.
+
+A more autonomous version should recognize when an answer does not fit the expected question, ask a relevant clarification, and give users a way to correct the judge's understanding. It should also acknowledge unsupported complaints instead of trying to force them into a prepared case. The current autonomous mode uses keywords and the first recognized yes/no word, while open-ended answers are recorded without affecting the verdict. Using the substance of those answers, including the participant's requested remedy, would make the ruling feel more connected to their actual complaint.
+
+The goal would be to preserve the smooth, clearly signaled court experience while reducing how much participants have to follow our script. These are proposed improvements based on the trials, rather than capabilities the current prototype already has.
 
 ### How could you use your system to create a dataset of interaction? What other sensing modalities would make sense to capture?
-Every case is already saved on the Pi, including a transcript of what was said and a recording of each answer. Collected across many people, that becomes a dataset of how people describe disputes and answer the judge. Every saved line also has a time, so we could measure how long people take to answer and how long the judge takes to reply.
 
-A camera would also make sense. Our webcam could recognize faces to tell whether the same person has come back, so the judge could avoid asking them the same questions again. It could also capture how people react to the verdict.
+The prototype already saves timestamped speaker/text entries in `log.jsonl` and participant utterances as WAV files. With participants' consent, we could annotate these with intended words, dispute category, recognition errors, interruptions, and the wizard's chosen response. Additional state-transition and timing logs would help separate endpointing delay from recognition and wizard response time. Synchronized video could capture facial expressions, gestures, and whether participants notice the screen cues; button-event logs could capture attempts to start or restart a case.
+
+### Implementation limits
+
+The autonomous judge supports charger, food, and chores keywords only. Shared costs are routed to the chores case, but its questions and verdicts are still chore-oriented. Ambiguous/no-keyword complaints trigger one clarification before dismissal; incidental keywords can still misclassify unrelated complaints. Fixed verdicts can assume facts that were never established, so this remains a playful constrained prototype. In wizard mode, a person can adapt the dialogue using the free-text control.
 
 <details>
   <summary><strong>Submission Cleanup Reminder (Click to Expand)</strong></summary>
