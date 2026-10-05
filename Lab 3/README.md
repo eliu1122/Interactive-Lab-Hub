@@ -319,6 +319,10 @@ It runs entirely on the Pi, using the mini screen and its button, a USB micropho
 
 <img src="mini_judge/screens.png" alt="The Mini Judge's screens: waiting in navy, judge talking in amber, listening in green, thinking in purple, and the unfair, fair and split verdicts in red, blue and gray" width="960">
 
+<img src="mini_judge/controller.png" alt="The wizard controller: buttons for each question, verdict buttons, and a transcript of what was said" width="960">
+
+The wizard controller image above shows the question buttons, verdict controls, and transcript area.
+
 Video of the Mini Judge in use: https://drive.google.com/file/d/1RMILTvas-BQMBVSTVRinUnw2pYWzzAzT/view?usp=sharing
 
 > **AI Disclaimer:** The Mini Judge code (`mini_judge.py`, `cases.py`, `autopilot.py`, and `templates/controller.html`) was partially written with help from AI (Claude Code). AI also helped format this Part 2 write-up into appropriate mark-down.
