@@ -17,9 +17,8 @@
 ---
 
 ## Lab Overview
-Team: <canvas group name>  
-Members: Full Name (netid, github-handle), ...  
-Project name: <name>
+**Team:** Hong Yuan Cao (hc2343), Yun-Chung Liu (yl4445)  
+**Project name:** Fly Shoo
 
 
 For lab this week, we focus on both sensing and actuation, bringing new modes of input and output into your devices, while also prototyping the physical structure and overall look of the device. You will consider how the physical form supports sensing and actuation, and how these elements come together to shape the interaction and aesthetics of the device.
@@ -253,45 +252,47 @@ A servo motor is a rotary actuator that allows for precise control of angular po
 ---
 
 ### Part D
-### Physical Interaction Design: Feast Automata
+### Physical Interaction Design: Feast Automata — Fly Shoo
 
-**Feast Automata:** build a device that **transforms ordinary dining rituals into playful physical interactions.** Begin with a familiar experience around eating, drinking, cooking, serving, or sharing food, and explore how sensing and actuation might augment, exaggerate, automate, or reinterpret your dining experience.
+Our concept, **Fly Shoo**, turns the familiar action of waving a hand to chase flies away from food into a button-controlled physical interaction. Pressing the joystick's built-in button triggers a short servo sweep and changes the OLED display from **READY** to **SHOO**. The intended physical design uses a lightweight paper paddle attached to the servo arm beside a plate.
 
-In this part, use the sensing techniques from Parts A–B and the servo actuation from Part C to develop a physical interaction.
+#### Five design sketches
 
-#### Physical considerations for sensing
+![Five Feast Automata concepts: Fly Shoo, Snack Picker, Tea Timer, Snack Guard, and Cheers](assets/sketches.jpg)
 
-Sensors need to be positioned in specific locations or orientations to make them useful for an application. Choose a sensor that fits the dining interaction you want to explore. For example, a distance sensor could detect when a cup is placed on a coaster; where the sensor is positioned determines what it can reliably detect.
+We explored five arrangements using the kit's inputs, a servo, and a Qwiic OLED. 
 
-Think about how the larger object needs to be shaped so the sensor can work reliably, where the actuator needs to sit, what moves, and how a person encounters the interaction.
+| Concept | Input and physical response | Physical arrangement |
+| --- | --- | --- |
+| **1. Fly Shoo** | Press the joystick button to sweep a paper paddle; the OLED shows SHOO. | Servo mounted on a container beside a plate, with the joystick within reach and the display facing the user. |
+| **2. Snack Picker** | Move the joystick to point a paper arrow toward one of two snacks; the OLED identifies the selection. | Servo and arrow sit between two bowls, with the joystick and screen in front. |
+| **3. Tea Timer** | Turn the encoder to set a timer and press to start; a flag rises when time is up. | A servo-mounted flag sits beside the mug, while the OLED displays the countdown. |
+| **4. Snack Guard** | A proximity sensor detects an approaching hand and the servo lifts a lightweight barrier. | The sensor faces the approach to the bowl; the servo sits beside it with space for the barrier to rise. |
+| **5. Cheers** | Bringing a cup near a proximity sensor triggers a waving flag and a CHEERS message. | The sensor faces the cup's placement area, with the flag and display positioned beside it. |
 
-#### Physical Form and Housing
+#### Questions raised by the sketches
 
-Think about how your sensor, actuator, and electronics are physically arranged within your prototype. Consider where components need to be placed, what parts move, how the device is supported or enclosed, and how the overall form and aesthetics shape the interaction.
+The sketches helped us identify physical questions that code alone cannot answer:
 
-Use cardboard, paper, found objects, or other low-fidelity materials to quickly prototype the physical structure before refining your final design.
+- **Mounting and stability:** Will tape hold the servo in place during repeated movement, or will the supporting container slide or tip? We need to test the mount with the moving attachment installed.
+- **Attachment size and clearance:** How large can the paper paddle, flag, or arrow be before it bends, slips, or hits nearby objects? We need to try lightweight attachments and check their complete sweep.
+- **Input placement:** Can the proximity sensors distinguish the intended cup or hand from surrounding objects? We need to compare readings with different placements. For Fly Shoo, we need to check that the joystick can be pressed comfortably without moving the assembly.
+- **Display placement:** Can a seated user read the OLED while operating the device? We need to try screen angles and positions relative to the plate and joystick.
+- **Effectiveness:** Does Fly Shoo's movement actually discourage flies? The prototype explores the interaction; fly deterrence still needs testing.
 
-#### Optional Display Feedback: Qwiic OLED
+#### Why we chose Fly Shoo
 
-Your kit includes these [SparkFun Qwiic OLED screens](https://www.sparkfun.com/products/17153). These use less power than the MiniTFTs you have mounted on the GPIO pins of the Pi, but, more importantly, they can be more flexibly mounted elsewhere on your physical interface. The way you program this display is almost identical to the way you program a  Pi display. Take a look at `oled_test.py` and some more of the [Adafruit examples](https://github.com/adafruit/Adafruit_CircuitPython_SSD1306/tree/master/examples).
+We chose **Fly Shoo** because it gives a familiar dining gesture a playful physical response while keeping the build manageable. The joystick button provides a deliberate trigger, the servo makes the response visible, and the OLED tells the user when the device is active or ready. A paper paddle and a reused container let us explore the form without 3D printing or a complicated cardboard mechanism.
 
-<p float="left">
-<img src="https://cdn.sparkfun.com//assets/parts/1/6/1/3/5/17153-SparkFun_Qwiic_OLED_Display__0.91_in__128x32_-01.jpg" height="200" />
+The white plastic servo arm connects the motor shaft to the paddle. Its center is secured to the shaft with the retaining screw, and the lightweight paper attachment can be taped to the arm. The servo body needs a separate stable mount so that the paddle moves rather than the whole motor. Our design places the mechanism beside the plate with enough clearance to avoid touching the food.
 
-</p>
+#### Rough prototype and interaction
 
+<video src="assets/prototype_1.mp4" controls width="400"></video>
 
-As you develop your Feast Automata concept, consider where the sensor and actuator need to be placed, what parts move, how electronics are housed, and how the overall form and aesthetics support the interaction.
+[Our first Fly Shoo prototype video](assets/prototype_1.mp4)
 
-**\*\*\*Draw 5 sketches that explore different physical arrangements for your sensing and actuation.\*\*\***
-
-**\*\*\*What questions do these sketches raise? What do you need to physically prototype to answer them?\*\*\***
-
-**\*\*\*Pick one design to prototype and explain why.\*\*\***
-
-Build a cardboard or other low-fidelity physical prototype of your design.
-
-**\*\*\*Document your rough prototype with photos and/or video.\*\*\***
+This first prototype focuses on connecting the button, display feedback, and movement. The next physical checks are the paddle attachment, mounting stability, and clearance around a plate. We also need to assess whether the motion is useful for shooing flies rather than assuming the interaction alone proves that it works.
 
 ---
 
