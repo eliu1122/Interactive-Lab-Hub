@@ -35,7 +35,7 @@
 
   <rect x="540" y="200" width="420" height="120" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="556" y="224" font-size="14" font-weight="bold" fill="#334">SCENARIO</text>
-  <text x="556" y="248" font-size="13" fill="#222">23:10 wave at the camera: "Curfew 12:30. Goodnight."</text>
+  <text x="556" y="248" font-size="13" fill="#222">23:10 set 00:30, press top: "Curfew 12:30. Goodnight."</text>
   <text x="556" y="266" font-size="13" fill="#222">00:51 finally leaves. 03:10 back for 4 minutes.</text>
   <text x="556" y="284" font-size="13" fill="#222">07:00 flag drops and it says: "Missed by 26 min,</text>
   <text x="556" y="302" font-size="13" fill="#222">left at 00:51, came back once at 03:10."</text>
@@ -50,23 +50,23 @@
 
   <rect x="540" y="340" width="420" height="120" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="556" y="364" font-size="14" font-weight="bold" fill="#334">TASK</text>
-  <text x="556" y="388" font-size="13" fill="#222">Night (a few seconds): wave goodnight at the camera.</text>
+  <text x="556" y="388" font-size="13" fill="#222">Night (a few seconds): bottom to set the time, top to hand over.</text>
   <text x="556" y="406" font-size="13" fill="#222">Morning: glance at the flag; listen to the report;</text>
-  <text x="556" y="424" font-size="13" fill="#222">wave again to hear it again.</text>
+  <text x="556" y="424" font-size="13" fill="#222">press top to hear it again; hold bottom to finish.</text>
 
   <!-- DISPLAY / CONTROL -->
   <rect x="40" y="480" width="420" height="140" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="56" y="504" font-size="14" font-weight="bold" fill="#334">DISPLAY</text>
   <text x="56" y="528" font-size="13" fill="#222">Servo flag: half = watching, up = kept, down = missed.</text>
-  <text x="56" y="546" font-size="13" fill="#222">OLED, 3 lines: verdict / left at / returns.</text>
+  <text x="56" y="546" font-size="13" fill="#222">PiTFT, 3 lines: verdict (green/red) / left at / returns.</text>
   <text x="56" y="564" font-size="13" fill="#222">Piper voice (Lab 3) reads the report.</text>
-  <text x="56" y="582" font-size="13" fill="#222">Screen is dark all night and after 60 s idle.</text>
+  <text x="56" y="582" font-size="13" fill="#222">Backlight off all night and after 60 s idle.</text>
 
   <rect x="540" y="480" width="420" height="140" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="556" y="504" font-size="14" font-weight="bold" fill="#334">CONTROL</text>
-  <text x="556" y="528" font-size="13" fill="#222">A wave at the webcam (YOLO pose, Part C idea):</text>
-  <text x="556" y="546" font-size="13" fill="#222">  raised wrist swinging = hand over / replay</text>
-  <text x="556" y="564" font-size="13" fill="#222">Curfew: a standing rule (--curfew 00:30)</text>
-  <text x="556" y="582" font-size="13" fill="#222">Ctrl-C ends the night early</text>
+  <text x="556" y="528" font-size="13" fill="#222">Mini PiTFT buttons (Lab 2, as in our clock):</text>
+  <text x="556" y="546" font-size="13" fill="#222">  bottom = curfew +15 min; hold 2 s = end night / finish</text>
+  <text x="556" y="564" font-size="13" fill="#222">  top = goodnight, peek at night, replay in the morning</text>
+  <text x="556" y="582" font-size="13" fill="#222">(earlier tries: Qwiic joystick, then a camera wave)</text>
   <text x="556" y="600" font-size="13" fill="#222">Overnight the webcam only logs, one look / 10 s.</text>
 </svg>

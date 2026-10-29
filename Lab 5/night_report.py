@@ -163,8 +163,8 @@ def sentences(f):
     return out
 
 
-def oled_lines(f):
-    """Three short lines for the 128x32 OLED."""
+def screen_lines(f):
+    """Three short lines for the Mini PiTFT."""
     v = f["verdict"]
     if v == "no data":
         return ["NO DATA", "log is empty", ""]
@@ -187,5 +187,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     d = pathlib.Path(args.dir or ".")
     facts = summarize(*load_night(d / "night_log.jsonl", d / "tonight.json"))
-    print("\n".join(oled_lines(facts)), "\n")
+    print("\n".join(screen_lines(facts)), "\n")
     print(" ".join(sentences(facts)))

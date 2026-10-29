@@ -3,14 +3,17 @@
   <text x="600" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">Desk Curfew: storyboard</text>
 
   <defs>
-    <!-- desk and device box, shared by all three panels (panel-local coordinates) -->
+    <!-- desk, webcam, and the device: Mini PiTFT with its two buttons, plus the servo flag pole -->
     <g id="desk">
       <rect x="150" y="200" width="200" height="10" fill="#8b6a4a"/>
       <rect x="160" y="210" width="8" height="80" fill="#8b6a4a"/>
       <rect x="332" y="210" width="8" height="80" fill="#8b6a4a"/>
-      <rect x="276" y="162" width="56" height="38" rx="4" fill="#3a3a3a"/>
-      <circle cx="283" cy="192" r="4" fill="#9ad"/>
-      <line x1="326" y1="162" x2="326" y2="104" stroke="#555" stroke-width="3"/>
+      <rect x="160" y="162" width="64" height="38" rx="4" fill="#3a3a3a"/>
+      <circle cx="216" cy="172" r="4" fill="#ddd"/>
+      <circle cx="216" cy="187" r="4" fill="#ddd"/>
+      <rect x="162" y="148" width="16" height="12" rx="2" fill="#222"/>
+      <circle cx="170" cy="154" r="3" fill="#9ad"/>
+      <line x1="232" y1="200" x2="232" y2="104" stroke="#555" stroke-width="3"/>
     </g>
     <g id="chair">
       <rect x="100" y="222" width="52" height="7" fill="#556"/>
@@ -27,25 +30,22 @@
     <line x1="0" y1="290" x2="370" y2="290" stroke="#99a"/>
     <use href="#chair"/>
     <use href="#desk"/>
-    <rect x="282" y="168" width="40" height="18" fill="#bfe3ff"/>
-    <text x="302" y="181" font-size="9" text-anchor="middle" fill="#123">00:30</text>
-    <rect x="327" y="130" width="24" height="14" fill="#e8a33a"/>
-    <text x="320" y="141" font-size="10" text-anchor="end" fill="#555">half-mast</text>
-    <!-- person seated, waving at the camera -->
+    <rect x="166" y="167" width="42" height="22" fill="#1c2b4a"/>
+    <text x="187" y="182" font-size="10" text-anchor="middle" fill="#fff">00:30</text>
+    <rect x="233" y="130" width="24" height="14" fill="#e8a33a"/>
+    <text x="262" y="141" font-size="10" fill="#555">half-mast</text>
+    <!-- person seated, pressing the top button -->
     <circle cx="136" cy="134" r="14" fill="#f2c9a0" stroke="#333"/>
     <line x1="136" y1="148" x2="136" y2="218" stroke="#333" stroke-width="4"/>
-    <line x1="136" y1="166" x2="172" y2="112" stroke="#333" stroke-width="4"/>
-    <circle cx="174" cy="108" r="5" fill="#f2c9a0" stroke="#333"/>
-    <path d="M158,118 Q152,108 158,98" fill="none" stroke="#333" stroke-width="2"/>
-    <path d="M150,122 Q142,108 150,94" fill="none" stroke="#333" stroke-width="2"/>
-    <line x1="283" y1="192" x2="182" y2="112" stroke="#6a8fb5" stroke-dasharray="4 4"/>
+    <line x1="136" y1="166" x2="211" y2="172" stroke="#333" stroke-width="4"/>
+    <circle cx="214" cy="172" r="4" fill="#f2c9a0" stroke="#333"/>
     <line x1="136" y1="218" x2="178" y2="220" stroke="#333" stroke-width="4"/>
     <line x1="178" y1="220" x2="178" y2="288" stroke="#333" stroke-width="4"/>
     <rect x="160" y="44" width="196" height="50" rx="10" fill="#fff" stroke="#333"/>
-    <polygon points="300,94 312,94 300,112" fill="#fff" stroke="#333"/>
+    <polygon points="200,94 212,94 194,146" fill="#fff" stroke="#333"/>
     <text x="172" y="64" font-size="13" fill="#222">"Curfew 12:30 a.m.</text>
     <text x="172" y="82" font-size="13" fill="#222">Goodnight." (then dark)</text>
-    <text x="14" y="312" font-size="12" fill="#333">A wave at the camera hands over tonight's curfew.</text>
+    <text x="14" y="312" font-size="12" fill="#333">Bottom button sets the curfew; top button says goodnight.</text>
   </g>
 
   <!-- Panel 2: while asleep -->
@@ -55,13 +55,13 @@
     <circle cx="44" cy="62" r="16" fill="#f4f1c9"/>
     <circle cx="52" cy="56" r="14" fill="#1f2540"/>
     <line x1="0" y1="290" x2="370" y2="290" stroke="#556"/>
-    <polygon points="283,192 96,150 96,290 200,290" fill="#9ad" opacity="0.18"/>
-    <line x1="283" y1="192" x2="96" y2="150" stroke="#9ad" stroke-dasharray="5 4"/>
-    <line x1="283" y1="192" x2="200" y2="290" stroke="#9ad" stroke-dasharray="5 4"/>
+    <polygon points="170,156 88,138 88,290 160,290" fill="#9ad" opacity="0.18"/>
+    <line x1="170" y1="156" x2="88" y2="138" stroke="#9ad" stroke-dasharray="5 4"/>
+    <line x1="170" y1="156" x2="160" y2="290" stroke="#9ad" stroke-dasharray="5 4"/>
     <use href="#chair"/>
     <use href="#desk"/>
-    <rect x="282" y="168" width="40" height="18" fill="#111"/>
-    <rect x="327" y="130" width="24" height="14" fill="#e8a33a"/>
+    <rect x="166" y="167" width="42" height="22" fill="#111"/>
+    <rect x="233" y="130" width="24" height="14" fill="#e8a33a"/>
     <rect x="0" y="246" width="40" height="44" fill="#4a5070"/>
     <text x="4" y="240" font-size="10" fill="#aab">bed: out</text>
     <text x="4" y="252" font-size="10" fill="#aab">of frame</text>
@@ -81,24 +81,24 @@
     <line x1="0" y1="290" x2="370" y2="290" stroke="#cb9"/>
     <use href="#chair"/>
     <use href="#desk"/>
-    <rect x="282" y="168" width="40" height="18" fill="#bfe3ff"/>
-    <text x="302" y="181" font-size="8" text-anchor="middle" fill="#123">MISSED</text>
-    <rect x="327" y="148" width="24" height="14" fill="#c0392b"/>
-    <text x="331" y="176" font-size="10" fill="#555">down</text>
-    <!-- person standing with a mug, waving for a replay -->
-    <circle cx="226" cy="108" r="14" fill="#f2c9a0" stroke="#333"/>
-    <line x1="226" y1="122" x2="226" y2="214" stroke="#333" stroke-width="4"/>
-    <line x1="226" y1="140" x2="196" y2="98" stroke="#333" stroke-width="4"/>
-    <path d="M186,112 Q180,103 186,94" fill="none" stroke="#333" stroke-width="2"/>
-    <line x1="226" y1="140" x2="252" y2="166" stroke="#333" stroke-width="4"/>
-    <rect x="250" y="158" width="14" height="16" fill="#fff" stroke="#333"/>
-    <line x1="226" y1="214" x2="214" y2="288" stroke="#333" stroke-width="4"/>
-    <line x1="226" y1="214" x2="240" y2="288" stroke="#333" stroke-width="4"/>
+    <rect x="166" y="167" width="42" height="22" fill="#111"/>
+    <text x="187" y="182" font-size="9" text-anchor="middle" font-weight="bold" fill="#f05a50">MISSED</text>
+    <rect x="233" y="176" width="24" height="14" fill="#c0392b"/>
+    <text x="262" y="187" font-size="10" fill="#555">down</text>
+    <!-- person standing behind the desk with a mug, pressing the top button -->
+    <circle cx="292" cy="108" r="14" fill="#f2c9a0" stroke="#333"/>
+    <line x1="292" y1="122" x2="292" y2="214" stroke="#333" stroke-width="4"/>
+    <line x1="292" y1="140" x2="221" y2="171" stroke="#333" stroke-width="4"/>
+    <circle cx="218" cy="172" r="4" fill="#f2c9a0" stroke="#333"/>
+    <line x1="292" y1="140" x2="318" y2="166" stroke="#333" stroke-width="4"/>
+    <rect x="316" y="158" width="14" height="16" fill="#fff" stroke="#333"/>
+    <line x1="292" y1="214" x2="280" y2="288" stroke="#333" stroke-width="4"/>
+    <line x1="292" y1="214" x2="306" y2="288" stroke="#333" stroke-width="4"/>
     <rect x="70" y="40" width="290" height="50" rx="10" fill="#fff" stroke="#333"/>
-    <polygon points="256,90 268,90 284,162" fill="#fff" stroke="#333"/>
+    <polygon points="190,90 202,90 190,146" fill="#fff" stroke="#333"/>
     <text x="80" y="60" font-size="12" fill="#222">"Curfew missed: 26 min after 00:30.</text>
     <text x="80" y="78" font-size="12" fill="#222">You left at 00:51, back once at 03:10."</text>
-    <text x="14" y="312" font-size="12" fill="#333">Flag answers at a glance; the voice says why, a wave replays it.</text>
+    <text x="14" y="312" font-size="12" fill="#333">Flag answers at a glance; the top button replays the report.</text>
   </g>
 
   <text x="600" y="420" text-anchor="middle" font-size="13" fill="#444">The flag has three positions: half-mast while watching, up if the chair stayed empty after curfew, down if not.</text>

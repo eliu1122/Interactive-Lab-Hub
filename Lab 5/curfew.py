@@ -1,16 +1,21 @@
 """
 Desk Curfew: a bedtime promise that the desk holds you to.
 
-Before bed (Part G): the device says tonight's curfew and waits. Wave at the camera to
-hand the night over. It answers "Curfew 12 30 a.m. Goodnight.", lowers the flag to
-half-mast, and the OLED goes dark.
+Uses the Mini PiTFT from Lab 2 (its screen and two buttons), the servo from Lab 4 and
+the Piper voice from Lab 3.
+
+Before bed (Part G): the screen shows tonight's curfew. The bottom button adds 15
+minutes; the top button hands the night over. The device says "Curfew 12 30 a.m.
+Goodnight.", lowers the flag to half-mast, and the screen goes dark.
 Overnight (Part H): overnight.py runs underneath and logs who is in the desk chair.
-Morning (Part I): at --morning (or Ctrl-C) logging stops. The flag goes up if the chair
-stayed empty after curfew and down if it did not, and the report is read aloud with
-Piper. Wave at the camera to hear it again.
+The top button shows the curfew for three seconds; holding the bottom one for 2 s
+ends the night early.
+Morning (Part I): at --morning logging stops. The flag goes up if the chair stayed
+empty after curfew and down if it did not, and the report is read aloud. The top
+button replays it; holding the bottom one finishes.
 
     python curfew.py                            # the whole night (start it inside tmux)
-    python curfew.py --curfew 00:30             # tonight's curfew (the standing rule)
+    python curfew.py --curfew 00:30             # where the curfew starts before the bottom button moves it
     python curfew.py --morning 07:30            # when to stop watching and raise the flag
     python curfew.py --interval 10              # seconds between looks, passed to overnight.py
     python curfew.py --report nights/2026-10-30 # replay an archived morning, no camera
@@ -18,7 +23,7 @@ Piper. Wave at the camera to hear it again.
 
 Fake a night first: --curfew one minute from now, --morning three minutes from now
 (`date -d '+3 min' +%H:%M`). Each part falls back to the terminal when its hardware is
-missing: without the pose model or camera, press Enter instead of waving.
+missing: without the PiTFT, press Enter instead of the top button.
 """
 import argparse
 import datetime
@@ -35,23 +40,33 @@ import night_report
 
 FLAG_WATCHING, FLAG_KEPT, FLAG_MISSED = 60, 120, 0   # servo angles; 0-120 is the safe range from Lab 4
 SERVO_CH = 0
-REPLAY_MINUTES = 30         # how long the morning keeps watching for a wave
+REPLAY_MINUTES = 30         # how long the morning keeps listening for the top button
+HOLD = 2.0                  # seconds to hold the bottom button to end the night or finish
+FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 LOG, PLEDGE = pathlib.Path("night_log.jsonl"), pathlib.Path("tonight.json")
 
 
 class Hardware:
-    """OLED and servo from Lab 4, Piper from Lab 3. Anything missing is replaced by the terminal."""
+    """Mini PiTFT screen and buttons (Lab 2), servo (Lab 4), Piper (Lab 3). Anything missing is replaced by the terminal."""
 
     def __init__(self, voices):
-        self.oled = self.servo = None
+        self.disp = self.top = self.bottom = self.servo = None
         self.voices = voices
         try:
-            import adafruit_ssd1306
+            import adafruit_rgb_display.st7789 as st7789
             import board
-            import busio
-            self.oled = adafruit_ssd1306.SSD1306_I2C(128, 32, busio.I2C(board.SCL, board.SDA))
+            import digitalio
+            self.disp = st7789.ST7789(board.SPI(), cs=digitalio.DigitalInOut(board.D5),
+                                      dc=digitalio.DigitalInOut(board.D25), rst=None, baudrate=64000000,
+                                      width=135, height=240, x_offset=53, y_offset=40)
+            self.backlight = digitalio.DigitalInOut(board.D22)
+            self.backlight.switch_to_output()
+            self.top = digitalio.DigitalInOut(board.D23)
+            self.bottom = digitalio.DigitalInOut(board.D24)
+            for b in (self.top, self.bottom):
+                b.switch_to_input(pull=digitalio.Pull.UP)       # reads False while held down
         except Exception as e:
-            print("no OLED, printing instead:", e)
+            print("no Mini PiTFT, using the terminal instead:", e)
         try:
             import pi_servo_hat
             self.servo = pi_servo_hat.PiServoHat()
@@ -59,22 +74,44 @@ class Hardware:
         except Exception as e:
             print("no servo, printing instead:", e)
 
-    def show(self, lines):
+    def show(self, lines, color=(255, 255, 255)):
         print(" | ".join(l for l in lines if l), flush=True)
-        if not self.oled:
+        if not self.disp:
             return
-        from PIL import Image, ImageDraw
-        img = Image.new("1", (128, 32))
+        from PIL import Image, ImageDraw, ImageFont
+        img = Image.new("RGB", (240, 135))
         draw = ImageDraw.Draw(img)
-        for i, line in enumerate(lines[:3]):
-            draw.text((0, i * 11), line, fill=255)
-        self.oled.image(img)
-        self.oled.show()
+        size = 28
+        while size > 14 and draw.textlength(lines[0], font=ImageFont.truetype(FONT, size)) > 228:
+            size -= 2                                           # shrink a long headline to fit the 240 px screen
+        big, small = ImageFont.truetype(FONT, size), ImageFont.truetype(FONT, 20)
+        draw.text((6, 8), lines[0], font=big, fill=color)
+        for i, line in enumerate(lines[1:3]):
+            draw.text((6, 52 + i * 34), line, font=small, fill=(200, 200, 200))
+        self.disp.image(img, 90)
+        self.backlight.value = True
 
     def dark(self):
-        if self.oled:
-            self.oled.fill(0)
-            self.oled.show()
+        if self.disp:
+            from PIL import Image
+            self.disp.image(Image.new("RGB", (240, 135)), 90)
+            self.backlight.value = False
+
+    def pressed(self, button):
+        return button is not None and not button.value
+
+    def held(self, button):
+        """True if `button` is held for HOLD seconds; returns as soon as it is released."""
+        t0 = time.time()
+        while self.pressed(button):
+            if time.time() - t0 >= HOLD:
+                return True
+            time.sleep(0.05)
+        return False
+
+    def wait_release(self, button):
+        while self.pressed(button):
+            time.sleep(0.05)
 
     def flag(self, angle):
         print(f"flag -> {angle} degrees", flush=True)
@@ -98,16 +135,6 @@ class Hardware:
             print("(no speaker)", text)
 
 
-def open_camera():
-    """The wave detector, or None (press Enter instead) if the pose model or webcam is missing."""
-    try:
-        from wave_detect import Camera
-        return Camera()
-    except Exception as e:
-        print("no wave detection, press Enter instead:", e)
-        return None
-
-
 def next_at(hhmm, after):
     t = datetime.datetime.combine(after.date(), datetime.time.fromisoformat(hhmm))
     return t if t > after else t + datetime.timedelta(days=1)
@@ -121,15 +148,28 @@ def spoken_time(hhmm):
 
 
 def bedtime(hw, curfew):
-    """Part G: wait for the goodnight wave. The camera is released before overnight.py needs it."""
-    hw.show(["WAVE GOODNIGHT", f"curfew {curfew}", ""])
-    cam = open_camera()
-    if cam:
-        print("wave at the camera to hand over the night (Ctrl-C to quit)", flush=True)
-        cam.wait_for_wave()
-        cam.close()
-    else:
-        input("press Enter to hand over the night ")
+    """Part G: the hand-off. Returns tonight's curfew as HH:MM."""
+    if not hw.top:
+        while True:
+            s = input(f"curfew tonight [{curfew}], Enter to hand over: ").strip() or curfew
+            try:
+                datetime.time.fromisoformat(s)
+                return s
+            except ValueError:
+                print("use HH:MM, for example 00:30")
+    h, m = map(int, curfew.split(":"))
+    minutes = h * 60 + m
+    hhmm = lambda: f"{minutes // 60:02d}:{minutes % 60:02d}"
+    hw.show(["CURFEW " + hhmm(), "bottom: +15 min", "top: goodnight"])
+    while True:
+        if hw.pressed(hw.bottom):
+            minutes = (minutes + 15) % (24 * 60)
+            hw.show(["CURFEW " + hhmm(), "bottom: +15 min", "top: goodnight"])
+            hw.wait_release(hw.bottom)
+        elif hw.pressed(hw.top):
+            hw.wait_release(hw.top)
+            return hhmm()
+        time.sleep(0.05)
 
 
 def archive_leftovers():
@@ -143,12 +183,19 @@ def archive_leftovers():
         print("moved an earlier log to", dest)
 
 
-def night_shift(morning, interval):
-    """Part H: run overnight.py until the morning time, or until Ctrl-C."""
+def night_shift(hw, curfew, morning, interval):
+    """Part H: run overnight.py until the morning time, a 2 s hold on the bottom button, or Ctrl-C."""
     proc = subprocess.Popen([sys.executable, "overnight.py", "--interval", str(interval)])
     try:
         while proc.poll() is None and datetime.datetime.now() < morning:
-            time.sleep(1)
+            if hw.pressed(hw.top):
+                hw.show(["WATCHING", f"curfew {curfew}", f"until {morning:%H:%M}"])
+                hw.wait_release(hw.top)
+                time.sleep(3)
+                hw.dark()
+            elif hw.pressed(hw.bottom) and hw.held(hw.bottom):
+                break
+            time.sleep(0.1)
     except KeyboardInterrupt:
         pass                                     # Ctrl-C in tmux reaches overnight.py too
     if proc.poll() is None:
@@ -184,47 +231,49 @@ Use only these facts. Keep every time exactly as written. Do not add people, rea
 
 
 def morning_reveal(hw, folder, use_qwen, model, replay):
-    """Part I: flag, OLED and voice. Writes report.json next to the log."""
+    """Part I: flag, screen and voice. Writes report.json next to the log."""
     entries, pledge = night_report.load_night(folder / LOG.name, folder / PLEDGE.name)
     facts = night_report.summarize(entries, pledge)
     hw.flag({"kept": FLAG_KEPT, "missed": FLAG_MISSED}.get(facts["verdict"], FLAG_WATCHING))
-    lines, sentences = night_report.oled_lines(facts), night_report.sentences(facts)
-    hw.show(lines)
+    lines, sentences = night_report.screen_lines(facts), night_report.sentences(facts)
+    color = {"kept": (80, 220, 120), "missed": (240, 90, 80)}.get(facts["verdict"], (255, 255, 255))
+    hw.show(lines, color)
     text, raw = " ".join(sentences), None
     if use_qwen and facts["verdict"] != "no data":
         hw.show([lines[0], "writing report...", ""])
         t0 = time.time()
         text, raw = phrase(sentences, model)
         print(f"Qwen took {time.time() - t0:.1f} s")
-        hw.show(lines)
+        hw.show(lines, color)
     print("\n" + text + "\n")
     (folder / "report.json").write_text(json.dumps(
-        {"oled": lines, "checked": sentences, "qwen_raw": raw, "spoken": text, "verdict": facts["verdict"]},
+        {"screen": lines, "checked": sentences, "qwen_raw": raw, "spoken": text, "verdict": facts["verdict"]},
         indent=2))
     hw.say(text)
-    if not replay:
+    if not (replay and hw.top):
         return
-    cam = open_camera()
-    if not cam:
-        return
-    print(f"wave to hear it again (for {REPLAY_MINUTES} min, Ctrl-C to finish)", flush=True)
-    t_end = time.time() + REPLAY_MINUTES * 60
+    print(f"top button: hear it again (for {REPLAY_MINUTES} min); hold bottom: finish", flush=True)
+    t_end, lit = time.time() + REPLAY_MINUTES * 60, time.time()
     try:
         while time.time() < t_end:
-            if cam.wait_for_wave(timeout=60):    # the screen goes dark after a quiet minute
-                hw.show(lines)
+            if hw.pressed(hw.top):
+                hw.wait_release(hw.top)
+                hw.show(lines, color)
                 hw.say(text)
-            else:
+                lit = time.time()
+            elif hw.pressed(hw.bottom) and hw.held(hw.bottom):
+                break
+            if time.time() - lit > 60:           # the screen goes dark after a quiet minute
                 hw.dark()
+            time.sleep(0.1)
     except KeyboardInterrupt:
         pass
-    cam.close()
     hw.dark()
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--curfew", default="00:30", help="tonight's curfew (HH:MM)")
+    parser.add_argument("--curfew", default="00:30", help="the curfew the screen starts at (HH:MM)")
     parser.add_argument("--morning", default="07:00", help="when to stop watching (HH:MM)")
     parser.add_argument("--interval", type=float, default=10, help="seconds between looks")
     parser.add_argument("--report", help="replay the morning for an archived night folder")
@@ -240,18 +289,18 @@ if __name__ == "__main__":
         raise SystemExit
 
     archive_leftovers()
-    bedtime(hw, args.curfew)
+    curfew = bedtime(hw, args.curfew)
     start = datetime.datetime.now()
     morning = next_at(args.morning, start)
-    PLEDGE.write_text(json.dumps({"curfew": args.curfew, "start": start.isoformat(timespec="seconds"),
+    PLEDGE.write_text(json.dumps({"curfew": curfew, "start": start.isoformat(timespec="seconds"),
                                   "morning": args.morning}))
     hw.flag(FLAG_WATCHING)
-    hw.show(["GOODNIGHT", f"curfew {args.curfew}", f"watching till {morning:%H:%M}"])
-    hw.say(f"Curfew {spoken_time(args.curfew)}. Goodnight.")
+    hw.show(["GOODNIGHT", f"curfew {curfew}", f"watching till {morning:%H:%M}"])
+    hw.say(f"Curfew {spoken_time(curfew)}. Goodnight.")
     time.sleep(3)
     hw.dark()                                    # the acknowledgement ends in darkness, not a glowing screen
 
-    night_shift(morning, args.interval)
+    night_shift(hw, curfew, morning, args.interval)
 
     folder = pathlib.Path("nights") / f"{start:%Y-%m-%d-%H%M}"
     folder.mkdir(parents=True, exist_ok=True)
