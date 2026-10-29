@@ -1,30 +1,29 @@
 """
 Desk Curfew: a bedtime promise that the desk holds you to.
 
-Uses the Mini PiTFT from Lab 2 (its screen and two buttons), the webcam, and the Piper
-voice from Lab 3.
+Hardware: the Raspberry Pi, the webcam, and the Mini PiTFT from Lab 2 (its screen and
+two buttons). Nothing else.
 
 Before bed (Part G): the screen shows tonight's curfew. The bottom button adds 15
-minutes; the top button hands the night over. The device says "Curfew 12 30 a.m.
-Goodnight." and the screen goes dark.
+minutes; the top button hands the night over. The screen says GOODNIGHT and goes dark.
 Overnight (Part H): overnight.py runs underneath and logs who is in the desk chair.
 The top button shows the curfew for three seconds; holding the bottom one for 2 s
 ends the night early.
 Morning (Part I): at --morning logging stops and the screen lights up, green if the
 chair stayed empty after curfew and red if it did not, with the details below. It stays
-lit so it can be read from bed. The top button reads the report aloud; holding the
-bottom one turns the screen off.
+lit so it can be read from bed. The top button shows Qwen's morning message, a page at
+a time; holding the bottom one turns the screen off.
 
     python curfew.py                            # the whole night (start it inside tmux)
     python curfew.py --curfew 00:30             # where the curfew starts before the bottom button moves it
     python curfew.py --morning 07:30            # when to stop watching and light up the answer
     python curfew.py --interval 10              # seconds between looks, passed to overnight.py
     python curfew.py --report nights/2026-10-30 # replay an archived morning, no camera
-    python curfew.py --no-qwen                  # speak the checked template only
+    python curfew.py --no-qwen                  # show the checked template only
 
 Fake a night first: --curfew one minute from now, --morning three minutes from now
-(`date -d '+3 min' +%H:%M`). Each part falls back to the terminal when its hardware is
-missing: without the PiTFT, press Enter instead of the top button.
+(`date -d '+3 min' +%H:%M`). Without the PiTFT everything prints in the terminal and
+Enter replaces the top button.
 """
 import argparse
 import datetime
@@ -48,11 +47,10 @@ LOG, PLEDGE = pathlib.Path("night_log.jsonl"), pathlib.Path("tonight.json")
 
 
 class Hardware:
-    """Mini PiTFT screen and buttons (Lab 2) and Piper (Lab 3). Anything missing is replaced by the terminal."""
+    """Mini PiTFT screen and buttons (Lab 2). Without it, everything goes to the terminal."""
 
-    def __init__(self, voices):
+    def __init__(self):
         self.disp = self.top = self.bottom = None
-        self.voices = voices
         try:
             import adafruit_rgb_display.st7789 as st7789
             import board
@@ -110,33 +108,32 @@ class Hardware:
         while self.pressed(button):
             time.sleep(0.05)
 
-    def say(self, text):
-        piper = [sys.executable, "-m", "piper", "--model", "en_US-lessac-medium", "--data-dir", str(self.voices),
-                 "--output-raw", "--", text]
-        try:
-            synth = subprocess.Popen(piper, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
-            subprocess.run(["aplay", "-q", "-r", "22050", "-f", "S16_LE", "-t", "raw", "-"],
-                           stdin=synth.stdout, check=True)
-            if synth.wait() == 0:
-                return
-        except (OSError, subprocess.CalledProcessError):
-            pass
-        try:
-            subprocess.run(["espeak", text], check=True, stderr=subprocess.DEVNULL)
-        except (OSError, subprocess.CalledProcessError):
-            print("(no speaker)", text)
+    def page(self, rows, n, total):
+        """Show one page of wrapped text (from pages()), with "n/total" in the corner."""
+        print("\n".join(rows), flush=True)
+        if not self.disp:
+            return
+        from PIL import Image, ImageDraw, ImageFont
+        img = Image.new("RGB", (240, 135))
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype(FONT, 17)
+        for i, row in enumerate(rows):
+            draw.text((6, 4 + i * 21), row, font=font, fill=(255, 255, 255))
+        draw.text((200, 116), f"{n + 1}/{total}", font=ImageFont.truetype(FONT, 13), fill=(150, 150, 150))
+        self.disp.image(img, 90)
+        self.backlight.value = True
+
+
+def pages(text, width=24, rows=6):
+    """Wrap `text` for the 240x135 screen and split it into pages of `rows` lines."""
+    import textwrap
+    lines = textwrap.wrap(text, width)
+    return [lines[i:i + rows] for i in range(0, len(lines), rows)] or [[]]
 
 
 def next_at(hhmm, after):
     t = datetime.datetime.combine(after.date(), datetime.time.fromisoformat(hhmm))
     return t if t > after else t + datetime.timedelta(days=1)
-
-
-def spoken_time(hhmm):
-    """00:30 -> "12 30 a.m.", so Piper does not read it as a ratio."""
-    h, m = map(int, hhmm.split(":"))
-    minutes = "o'clock" if m == 0 else f"oh {m}" if m < 10 else str(m)
-    return f"{h % 12 or 12} {minutes} {'a.m.' if h < 12 else 'p.m.'}"
 
 
 def bedtime(hw, curfew):
@@ -230,7 +227,7 @@ Use only these facts. Keep every time exactly as written. Do not add people, rea
 
 
 def morning_reveal(hw, folder, use_qwen, model, replay):
-    """Part I: a lit, colored screen first; the spoken report on request. Writes report.json next to the log."""
+    """Part I: a lit, colored screen first; Qwen's message on request. Writes report.json next to the log."""
     entries, pledge = night_report.load_night(folder / LOG.name, folder / PLEDGE.name)
     facts = night_report.summarize(entries, pledge)
     lines, sentences = night_report.screen_lines(facts), night_report.sentences(facts)
@@ -247,15 +244,20 @@ def morning_reveal(hw, folder, use_qwen, model, replay):
         {"screen": lines, "checked": sentences, "qwen_raw": raw, "spoken": text, "verdict": facts["verdict"]},
         indent=2))
     if not (replay and hw.top):
-        hw.say(text)                             # no buttons to ask with, so just say it
         return
-    print("top button: hear the report; hold bottom: turn the screen off", flush=True)
-    t_end = time.time() + MORNING_HOURS * 3600
+    print("top button: Qwen's message, page by page; hold bottom: screen off", flush=True)
+    message = pages(text)
+    t_end, shown = time.time() + MORNING_HOURS * 3600, -1   # -1 = the green/red summary
     try:
         while time.time() < t_end:
             if hw.pressed(hw.top):
                 hw.wait_release(hw.top)
-                hw.say(text)
+                shown += 1
+                if shown < len(message):
+                    hw.page(message[shown], shown, len(message))
+                else:                                       # past the last page: back to the summary
+                    shown = -1
+                    hw.show(lines, background)
             elif hw.pressed(hw.bottom) and hw.held(hw.bottom):
                 break
             time.sleep(0.1)
@@ -272,10 +274,9 @@ if __name__ == "__main__":
     parser.add_argument("--report", help="replay the morning for an archived night folder")
     parser.add_argument("--no-qwen", action="store_true")
     parser.add_argument("--model", default="qwen3.5:0.8b")
-    parser.add_argument("--voices", default="../Lab 3/voices", help="Piper voices folder (Lab 3)")
     args = parser.parse_args()
     datetime.time.fromisoformat(args.curfew)     # fail now, not at 7 a.m., if the time is malformed
-    hw = Hardware(pathlib.Path(args.voices))
+    hw = Hardware()
 
     if args.report:
         morning_reveal(hw, pathlib.Path(args.report), not args.no_qwen, args.model, replay=False)
@@ -288,7 +289,6 @@ if __name__ == "__main__":
     PLEDGE.write_text(json.dumps({"curfew": curfew, "start": start.isoformat(timespec="seconds"),
                                   "morning": args.morning}))
     hw.show(["GOODNIGHT", f"curfew {curfew}", f"watching till {morning:%H:%M}"])
-    hw.say(f"Curfew {spoken_time(curfew)}. Goodnight.")
     time.sleep(3)
     hw.dark()                                    # the acknowledgement ends in darkness, not a glowing screen
 

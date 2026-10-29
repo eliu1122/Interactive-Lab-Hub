@@ -35,7 +35,7 @@
 
   <rect x="540" y="200" width="420" height="120" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="556" y="224" font-size="14" font-weight="bold" fill="#334">SCENARIO</text>
-  <text x="556" y="248" font-size="13" fill="#222">23:10 set 00:30, press top: "Curfew 12:30. Goodnight."</text>
+  <text x="556" y="248" font-size="13" fill="#222">23:10 set 00:30, press top: GOODNIGHT, screen off.</text>
   <text x="556" y="266" font-size="13" fill="#222">00:51 finally leaves. 03:10 back for 4 minutes.</text>
   <text x="556" y="284" font-size="13" fill="#222">07:00 screen glows red. Top: "Missed by 26 min,</text>
   <text x="556" y="302" font-size="13" fill="#222">left at 00:51, came back once at 03:10."</text>
@@ -51,7 +51,7 @@
   <rect x="540" y="340" width="420" height="120" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="556" y="364" font-size="14" font-weight="bold" fill="#334">TASK</text>
   <text x="556" y="388" font-size="13" fill="#222">Night (a few seconds): bottom to set the time, top to hand over.</text>
-  <text x="556" y="406" font-size="13" fill="#222">Morning: glance at the color; press top to hear why;</text>
+  <text x="556" y="406" font-size="13" fill="#222">Morning: glance at the color; press top to read why;</text>
   <text x="556" y="424" font-size="13" fill="#222">hold bottom to turn the screen off.</text>
 
   <!-- DISPLAY / CONTROL -->
@@ -59,14 +59,14 @@
   <text x="56" y="504" font-size="14" font-weight="bold" fill="#334">DISPLAY</text>
   <text x="56" y="528" font-size="13" fill="#222">Full-screen color: green = kept, red = missed, amber = unsure.</text>
   <text x="56" y="546" font-size="13" fill="#222">PiTFT, 3 lines: verdict (green/red) / left at / returns.</text>
-  <text x="56" y="564" font-size="13" fill="#222">Piper voice (Lab 3) reads the report on a press.</text>
-  <text x="56" y="582" font-size="13" fill="#222">Backlight off all night; no servo (dropped).</text>
+  <text x="56" y="564" font-size="13" fill="#222">Qwen's message on the screen, a page per press.</text>
+  <text x="56" y="582" font-size="13" fill="#222">Backlight off all night. No sound, no servo.</text>
 
   <rect x="540" y="480" width="420" height="140" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="556" y="504" font-size="14" font-weight="bold" fill="#334">CONTROL</text>
   <text x="556" y="528" font-size="13" fill="#222">Mini PiTFT buttons (Lab 2, as in our clock):</text>
   <text x="556" y="546" font-size="13" fill="#222">  bottom = curfew +15 min; hold 2 s = end night / finish</text>
-  <text x="556" y="564" font-size="13" fill="#222">  top = goodnight, peek at night, replay in the morning</text>
+  <text x="556" y="564" font-size="13" fill="#222">  top = goodnight, peek at night, Qwen's message</text>
   <text x="556" y="582" font-size="13" fill="#222">(earlier tries: Qwiic joystick, then a camera wave)</text>
   <text x="556" y="600" font-size="13" fill="#222">Overnight the webcam only logs, one look / 10 s.</text>
 </svg>

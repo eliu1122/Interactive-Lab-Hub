@@ -40,9 +40,9 @@
     <line x1="178" y1="220" x2="178" y2="288" stroke="#333" stroke-width="4"/>
     <rect x="160" y="44" width="196" height="50" rx="10" fill="#fff" stroke="#333"/>
     <polygon points="200,94 212,94 194,146" fill="#fff" stroke="#333"/>
-    <text x="172" y="64" font-size="13" fill="#222">"Curfew 12:30 a.m.</text>
-    <text x="172" y="82" font-size="13" fill="#222">Goodnight." (then dark)</text>
-    <text x="14" y="312" font-size="12" fill="#333">Bottom button sets the curfew; top button says goodnight.</text>
+    <text x="172" y="64" font-size="13" fill="#222">GOODNIGHT</text>
+    <text x="172" y="82" font-size="13" fill="#222">curfew 00:30 (then dark)</text>
+    <text x="14" y="312" font-size="12" fill="#333">Bottom button sets the curfew; top button hands over.</text>
   </g>
 
   <!-- Panel 2: while asleep -->
@@ -91,9 +91,9 @@
     <line x1="292" y1="214" x2="306" y2="288" stroke="#333" stroke-width="4"/>
     <rect x="70" y="40" width="290" height="50" rx="10" fill="#fff" stroke="#333"/>
     <polygon points="190,90 202,90 190,146" fill="#fff" stroke="#333"/>
-    <text x="80" y="60" font-size="12" fill="#222">"Curfew missed: 26 min after 00:30.</text>
-    <text x="80" y="78" font-size="12" fill="#222">You left at 00:51, back once at 03:10."</text>
-    <text x="14" y="312" font-size="12" fill="#333">The red screen answers at a glance; the top button reads why.</text>
+    <text x="80" y="60" font-size="12" fill="#222">Top button: "Curfew missed: 26 min</text>
+    <text x="80" y="78" font-size="12" fill="#222">after 00:30. You left at 00:51, ..."</text>
+    <text x="14" y="312" font-size="12" fill="#333">The red screen answers at a glance; the top button shows why.</text>
   </g>
 
   <text x="600" y="420" text-anchor="middle" font-size="13" fill="#444">In the morning the whole screen lights up: green if the chair stayed empty after curfew, red if not, amber if unsure.</text>
