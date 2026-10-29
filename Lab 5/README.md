@@ -192,7 +192,11 @@ The hand-off takes a few seconds and uses the Mini PiTFT from Lab 2, the same sc
 | **Alignment:** How do I know it did what I meant? | It shows the curfew on screen before going dark. In the morning it states the promised time again next to what it saw. |
 | **Accident:** How do I recover from a mistake? | Holding the bottom button for 2 s ends a night started by mistake and goes straight to the morning report; the curfew wraps around if you press past the time you meant. A leftover log from an unfinished run is moved to `nights/unfinished-…`, so it is never mixed into the next night. Missed detections, glimpses and camera gaps are reported rather than hidden. |
 
-> **TODO:** Add a photo or short clip of the hand-off on the real device.
+<img src="assets/photos/1-bedtime-curfew.jpg" width="420" alt="The Mini PiTFT on the Raspberry Pi showing CURFEW 17:38, bottom: +15 min, top: goodnight, next to the webcam">
+
+*The bedtime screen during fake night 2: the curfew, with the two buttons on the left of the screen.*
+
+> **TODO:** Add a short clip of the hand-off (the photo above is from a fake night).
 
 ## Part H.
 ### The observant system at night
@@ -212,7 +216,11 @@ The Lab 5 environment also needs the PiTFT library from Lab 2 (and `gpiod`, whic
 
 [`test_night_report.py`](test_night_report.py) checks the morning calculations on made-up nights without the Pi: a kept curfew, staying up late, coming back after curfew, a quiet night, missed detections, a glimpse, a camera gap, and an empty log. Run it with `python -m unittest test_night_report`.
 
-> **TODO:** Run a fake night first (curfew one minute from now, `--morning` three minutes from now) and add the terminal output. Then add a photo of the device in place at night, the real night's `night_log.jsonl` and `report.json` from `nights/`, and a screenshot of `tmux` running.
+<img src="assets/photos/2-night-peek.jpg" width="320" alt="A finger pressing the top PiTFT button; the screen shows WATCHING, curfew 17:38, until 17:40">
+
+*Pressing the top button at night shows the curfew for three seconds; otherwise the screen stays dark.*
+
+> **TODO:** Add a photo of the device in place for the real night, the real night's `night_log.jsonl` and `report.json` from `nights/`, and a screenshot of `tmux` running.
 
 ## Part I.
 ### The interaction after
@@ -240,13 +248,30 @@ You left the desk at 00:51. Someone came back once, at 03:10, for 4 min.
 
 **Fake night 2 (October 29, 2026, 17:38):** the first run with the Mini PiTFT working. The Lab 2 boot script (`screen_boot_script.py`) had been holding the screen, so we now stop it with `pkill -f screen_boot_script.py` before each night. The curfew screen, goodnight, the night-time peek, the red morning screen and the paged message all worked. One fix came out of it: the report said "I stopped at 17:39" when watching actually ended at 17:40, because the log only records changes. `curfew.py` now writes a final `stopped` line, so the end time is exact.
 
+<table>
+<tr>
+<td><img src="assets/photos/3-morning-writing-report.jpg" width="200" alt="PiTFT showing MISSED +1 min, writing report..."></td>
+<td><img src="assets/photos/4-morning-missed.jpg" width="200" alt="PiTFT filled red: MISSED +1 min, left 17:39, no returns"></td>
+<td><img src="assets/photos/5-message-page-1.jpg" width="200" alt="PiTFT showing page 1 of 2 of the morning message"></td>
+<td><img src="assets/photos/6-message-page-2.jpg" width="200" alt="PiTFT showing page 2 of 2: Nobody came back before I stopped at 17:39"></td>
+</tr>
+<tr>
+<td>1. Qwen is writing the message (16.9 s).</td>
+<td>2. The red summary, readable from across the room.</td>
+<td>3. Top button: the message, page 1/2.</td>
+<td>4. Page 2/2, showing the end-time bug that we then fixed.</td>
+</tr>
+</table>
+
+*The morning of fake night 2.*
+
 > **TODO:** Add the real morning: a photo of the lit screen and of Qwen's message on it, Qwen's raw rewording from `report.json`, and whether the time check accepted or rejected it.
 
 ## Final documentation
 
 > **TODO:** Fill these in once the device has run a real night.
 
-* **Looks like:** *TODO: photos of the device on the desk at night (screen dark) and in the morning (screen lit green or red).*
+* **Looks like:** the Pi with the Mini PiTFT on top and the webcam beside it (photos in Parts G–I, from fake night 2). *TODO: a photo of the device in place on the desk for the real night, screen dark, and of the green or red screen the next morning.*
 * **Works like:** the pipeline above, with *TODO: a link to a real night's log and report.*
 * **Acts like:** the hand-off in Part G and the morning reveal in Part I, with *TODO: the short video of the whole system.*
 
