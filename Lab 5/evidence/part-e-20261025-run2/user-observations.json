@@ -1,0 +1,17 @@
+{
+  "source": "User report after the second Part E run",
+  "participant_count": 1,
+  "reported_actions": [
+    "entered view",
+    "waved at the camera",
+    "moved closer and farther away",
+    "left view",
+    "returned"
+  ],
+  "suggested_sequence": "Not all suggested steps were followed",
+  "action_timestamps": null,
+  "verbatim_reports": [
+    "Only me; I missed some movements",
+    "i kinda jsut moved in, waved at it, from close at far, left the view, came back etc."
+  ]
+}

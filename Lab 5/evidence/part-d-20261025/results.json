@@ -1,0 +1,50 @@
+{
+  "started_utc": "2026-10-26T02:35:13.878214+00:00",
+  "script_sha256": "d19038130f94fc049cbbe7392d1be94e0d973b4ceb622fc1f66ff88845619c6c",
+  "photo_sha256": "a78c149f37d3734f2e3cd88014db455c6fc789d4b61581e62751a3bd6352a56c",
+  "thinking": false,
+  "max_tokens": 120,
+  "temperature": 0.3,
+  "runs": [
+    {
+      "label": "history",
+      "model": "qwen3.5:0.8b",
+      "question": "Tell me a bit about the history of Roosevelt Island.",
+      "image": null,
+      "completed_utc": "2026-10-26T02:35:44.824617+00:00",
+      "exit_code": 0,
+      "output": "Roosevelt Island was originally built as a private residence for President William McKinley, who named it after himself. The island's history is largely tied to the 1920s and 30s when it became a popular summer resort for wealthy New Yorkers seeking escape from the city's heat.\n\n[qwen3.5:0.8b, 30.4 s]\n",
+      "stderr": ""
+    },
+    {
+      "label": "movement-log",
+      "model": "qwen3.5:0.8b",
+      "question": "A sample movement log contains events at 01:00, 01:15, and 03:00 on the same night. How many events are listed, and what is the longest gap between consecutive events? Use only this log.",
+      "image": null,
+      "completed_utc": "2026-10-26T02:35:52.664737+00:00",
+      "exit_code": 0,
+      "output": "The log lists three distinct events occurring at 01:00, 01:15, and 03:00. The longest gap between these events is 2 hours (from 01:15 to 03:00).\n\n[qwen3.5:0.8b, 7.7 s]\n",
+      "stderr": ""
+    },
+    {
+      "label": "photo",
+      "model": "qwen3.5:0.8b",
+      "question": "What is in this photo?",
+      "image": "snap.jpg",
+      "completed_utc": "2026-10-26T02:36:23.349379+00:00",
+      "exit_code": 0,
+      "output": "A black gaming controller with yellow cables and a USB hub plugged into it.\n\n[qwen3.5:0.8b, 30.5 s]\n",
+      "stderr": ""
+    },
+    {
+      "label": "history-smaller",
+      "model": "qwen3:0.6b",
+      "question": "Tell me a bit about the history of Roosevelt Island.",
+      "image": null,
+      "completed_utc": "2026-10-26T02:36:35.773560+00:00",
+      "exit_code": 0,
+      "output": "Roosevelt Island was established in 1910 as a temporary refuge for the U.S. Navy during World War I. It became a significant location for military and civilian use, with the island serving as a base for the U.S. Army and Navy. After the war, it became a peaceful community, attracting people from all over the world. Today, it remains a popular destination for visitors and a symbol of peace and freedom.\n\n[qwen3:0.6b, 12.3 s]\n",
+      "stderr": ""
+    }
+  ]
+}

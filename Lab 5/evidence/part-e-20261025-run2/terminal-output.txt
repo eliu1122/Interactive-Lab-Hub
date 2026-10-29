@@ -1,0 +1,21 @@
+Loading yolo26n_ncnn_model for NCNN inference...
+23:07:14 nobody
+23:07:39 1 person(s) at right/far
+23:07:39 nobody
+23:07:43 1 person(s) at center/close
+23:07:49 1 person(s) at left/close
+23:07:51 1 person(s) at center/close
+23:07:54 nobody
+23:08:03 1 person(s) at left/close
+23:08:04 1 person(s) at center/close
+23:08:06 nobody
+23:08:06 1 person(s) at center/close
+23:08:07 1 person(s) at left/close
+23:08:08 1 person(s) at center/close
+23:08:10 nobody
+
+14 lines saved to watch_log.txt
+asking Qwen...
+
+Qwen (16.2 s):
+There were 3 distinct individuals identified throughout the 60-second observation: one person was located at right/far, another at center/close, and a third at left/close. No significant changes occurred to their location or activity during this period.

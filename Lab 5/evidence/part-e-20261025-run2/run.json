@@ -1,0 +1,20 @@
+{
+  "prepared_utc": "2026-10-26T03:06:50.651652+00:00",
+  "command": [
+    "/home/pi/Interactive-Lab-Hub/Lab 5/.venv/bin/python",
+    "-u",
+    "yolo_to_qwen.py",
+    "--headless",
+    "--seconds",
+    "60"
+  ],
+  "script_sha256": "e97d84f64c0cbca3721647e7b9276e976d1d5a03b4b5f001d9fc84efe81399f8",
+  "requested_seconds": 60,
+  "mode": "headless",
+  "model": "qwen3.5:0.8b",
+  "question": "How many people were there, what were they doing, and did anything change?",
+  "reason_for_repeat": "User requested a rerun.",
+  "started_utc": "2026-10-26T03:07:10.651995+00:00",
+  "finished_utc": "2026-10-26T03:08:29.663728+00:00",
+  "exit_code": 0
+}

@@ -1,0 +1,33 @@
+22:49:05 nobody
+22:49:07 1 person(s) at right/close
+22:49:09 nobody
+22:49:13 1 person(s) at right/close
+22:49:17 nobody
+22:49:19 1 person(s) at center/close
+22:49:20 nobody
+22:49:21 1 person(s) at right/close
+22:49:22 nobody
+22:49:28 1 person(s) at right/close
+22:49:29 nobody
+22:49:30 1 person(s) at right/close
+22:49:33 nobody
+22:49:35 1 person(s) at right/close
+22:49:36 nobody
+22:49:38 1 person(s) at right/close
+22:49:42 nobody
+22:49:44 1 person(s) at right/close
+22:49:44 nobody
+22:49:45 1 person(s) at right/close
+22:49:46 nobody
+22:49:47 1 person(s) at right/close
+22:49:47 nobody
+22:49:48 1 person(s) at right/close
+22:49:49 nobody
+22:49:49 1 person(s) at right/close
+22:49:50 nobody
+22:49:52 1 person(s) at right/close
+22:49:52 nobody
+22:49:58 1 person(s) at right/close
+22:49:59 nobody
+22:50:01 1 person(s) at right/close
+22:50:01 nobody
