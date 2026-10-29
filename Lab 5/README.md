@@ -138,7 +138,11 @@ We also considered a sleep-turn counter (from our Part C note), a fridge-raid lo
 
 > **TODO:** Add the feedback from classmates on our storyboard, who gave it, and any changes it led to.
 
-> **TODO:** Say where the device sits, who else lives there, and that they agreed before the first run. The bed must be outside the camera frame.
+The device sits on the small round table next to my desk, with the webcam facing my desk and chair; the bed is behind it and out of view. I am the person being recorded and agreed to it, and the snapshots are deleted after the demo.
+
+<img src="assets/photos/0-placement.jpg" width="360" alt="The webcam on a round orange table, facing a desk and office chair">
+
+*Where the device spends the night: the webcam faces the desk chair.*
 
 Part E showed where the pipeline breaks, so we never ask Qwen to count. [`night_report.py`](night_report.py) calculates every time and duration in code, and Qwen only rewords the result. [`curfew.py`](curfew.py) discards Qwen's version if it changes a time, drops the verdict, or speaks as the person. The report says "someone", not who, since the detector cannot tell people apart. Short gaps in detection are merged, glimpses under 30 seconds are ignored but mentioned, and a heartbeat every ten minutes lets the report say when the camera was not watching.
 
@@ -154,8 +158,6 @@ The bottom button moves the curfew 15 minutes later, and the top button hands th
 *The bedtime screen during a test night.*
 
 Against Bellotti's five questions: you address the device only with a button (the camera never takes commands), the lit screen and the night-time `WATCHING` peek show it is paying attention, the actions are few, the curfew is repeated on screen before it goes dark and again in the morning, and a mistaken night can be ended with a long press. Missed detections and camera gaps are reported, not hidden.
-
-> **TODO:** Add a short clip of the hand-off on the real night.
 
 ## Part H.
 ### The observant system at night
@@ -176,8 +178,6 @@ It needs the Lab 2 PiTFT library and `gpiod`, and the Lab 2 boot script must be 
 <img src="assets/photos/2-night-peek.jpg" width="320" alt="A finger pressing the top PiTFT button; the screen shows WATCHING, curfew 17:38, until 17:40">
 
 *Peeking at night; otherwise the screen stays dark.*
-
-> **TODO:** Add a photo of the device in place for the real night, and link that night's `night_log.jsonl` and `report.json` from `nights/`.
 
 ## Part I.
 ### The interaction after
