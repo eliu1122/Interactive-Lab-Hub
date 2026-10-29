@@ -1,6 +1,7 @@
 """
 Desk Curfew's only control: a wave at the camera. YOLO's pose model finds the shoulders
-and wrists; a wave is a wrist held above the shoulders that swings side to side.
+and wrists; a wave is a raised wrist (about shoulder height or higher) that swings side
+to side. The thresholds below are deliberately loose; tighten them if it fires by accident.
 
     python wave_detect.py          # wave at the webcam; prints WAVE each time it sees one
     python wave_detect.py --debug  # also print what the pose model sees, twice a second
@@ -17,9 +18,10 @@ import collections
 import time
 
 L_SHOULDER, R_SHOULDER, L_WRIST, R_WRIST = 5, 6, 9, 10   # COCO keypoint numbers
-MIN_CONF = 0.5      # ignore keypoints the model is unsure about
-WINDOW = 3.0        # seconds of wrist movement to look at
-STEP = 0.3          # a swing must travel this many shoulder-widths before it counts
+MIN_CONF = 0.3      # ignore keypoints the model is unsure about
+WINDOW = 4.0        # seconds of wrist movement to look at
+STEP = 0.2          # a swing must travel this many shoulder-widths before it counts
+BELOW = 0.25        # the hand may be this many shoulder-widths below the shoulders and still count as raised
 MIN_SWINGS = 2      # changes of direction: right-left-right is two
 
 
@@ -58,11 +60,11 @@ class WaveDetector:
             self.status = f"shoulders unsure ({conf[L_SHOULDER]:.2f}, {conf[R_SHOULDER]:.2f})"
             return False
         width = abs(xy[L_SHOULDER][0] - xy[R_SHOULDER][0])
-        top = min(xy[L_SHOULDER][1], xy[R_SHOULDER][1])           # image y grows downwards
+        top = min(xy[L_SHOULDER][1], xy[R_SHOULDER][1]) + BELOW * width   # image y grows downwards
         raised = [i for i in (L_WRIST, R_WRIST) if ok(i) and xy[i][1] < top]
         if width < 1 or not raised:
             wrists = ", ".join(f"y {xy[i][1]:.0f} conf {conf[i]:.2f}" for i in (L_WRIST, R_WRIST))
-            self.status = f"no hand above the shoulders (shoulders y {top:.0f}; wrists {wrists})"
+            self.status = f"no hand raised (must be above y {top:.0f}; wrists {wrists})"
             return False
         wrist = min(raised, key=lambda i: xy[i][1])                 # the higher hand
         self.history.append((t, xy[wrist][0] / width))              # shoulder-widths: distance does not matter

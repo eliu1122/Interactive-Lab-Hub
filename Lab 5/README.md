@@ -174,7 +174,7 @@ These changes already address the places where the Part E pipeline broke:
 The hand-off takes a few seconds and needs nothing but the camera:
 
 1. The OLED shows `WAVE GOODNIGHT / curfew 00:30`.
-2. You **wave at the camera**. [`wave_detect.py`](wave_detect.py) runs YOLO's pose model and counts a wave when a wrist is held above the shoulders and swings side to side at least twice within three seconds. Distances are measured in shoulder-widths, so the wave works whether you are close to the camera or across the desk.
+2. You **wave at the camera**. [`wave_detect.py`](wave_detect.py) runs YOLO's pose model and counts a wave when a wrist is raised to about shoulder height or higher and swings side to side at least twice within four seconds. Our first thresholds (hand fully above the shoulders, wider swings, three seconds) were too strict in testing, so we loosened them. Distances are measured in shoulder-widths, so the wave works whether you are close to the camera or across the desk.
 3. The device saves the promise to `tonight.json`, lowers the servo flag to **half-mast** (watching), shows `GOODNIGHT / curfew 00:30 / watching till 07:00`, and says *"Curfew 12 30 a.m. Goodnight."* with Piper from Lab 3.
 4. After three seconds the screen goes **dark**. The acknowledgement ends in darkness, so the device does not light up the room all night.
 
