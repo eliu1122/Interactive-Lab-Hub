@@ -1,22 +1,23 @@
 """
 Desk Curfew: a bedtime promise that the desk holds you to.
 
-Uses the Mini PiTFT from Lab 2 (its screen and two buttons), the servo from Lab 4 and
-the Piper voice from Lab 3.
+Uses the Mini PiTFT from Lab 2 (its screen and two buttons), the webcam, and the Piper
+voice from Lab 3.
 
 Before bed (Part G): the screen shows tonight's curfew. The bottom button adds 15
 minutes; the top button hands the night over. The device says "Curfew 12 30 a.m.
-Goodnight.", lowers the flag to half-mast, and the screen goes dark.
+Goodnight." and the screen goes dark.
 Overnight (Part H): overnight.py runs underneath and logs who is in the desk chair.
 The top button shows the curfew for three seconds; holding the bottom one for 2 s
 ends the night early.
-Morning (Part I): at --morning logging stops. The flag goes up if the chair stayed
-empty after curfew and down if it did not, and the report is read aloud. The top
-button replays it; holding the bottom one finishes.
+Morning (Part I): at --morning logging stops and the screen lights up, green if the
+chair stayed empty after curfew and red if it did not, with the details below. It stays
+lit so it can be read from bed. The top button reads the report aloud; holding the
+bottom one turns the screen off.
 
     python curfew.py                            # the whole night (start it inside tmux)
     python curfew.py --curfew 00:30             # where the curfew starts before the bottom button moves it
-    python curfew.py --morning 07:30            # when to stop watching and raise the flag
+    python curfew.py --morning 07:30            # when to stop watching and light up the answer
     python curfew.py --interval 10              # seconds between looks, passed to overnight.py
     python curfew.py --report nights/2026-10-30 # replay an archived morning, no camera
     python curfew.py --no-qwen                  # speak the checked template only
@@ -38,19 +39,19 @@ import time
 
 import night_report
 
-FLAG_WATCHING, FLAG_KEPT, FLAG_MISSED = 60, 120, 0   # servo angles; 0-120 is the safe range from Lab 4
-SERVO_CH = 0
-REPLAY_MINUTES = 30         # how long the morning keeps listening for the top button
+MORNING_HOURS = 3           # the morning screen stays lit this long unless the bottom button is held
+COLORS = {"kept": (40, 170, 80), "missed": (200, 50, 40)}   # morning background; anything else is amber
+UNSURE = (200, 150, 40)
 HOLD = 2.0                  # seconds to hold the bottom button to end the night or finish
 FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 LOG, PLEDGE = pathlib.Path("night_log.jsonl"), pathlib.Path("tonight.json")
 
 
 class Hardware:
-    """Mini PiTFT screen and buttons (Lab 2), servo (Lab 4), Piper (Lab 3). Anything missing is replaced by the terminal."""
+    """Mini PiTFT screen and buttons (Lab 2) and Piper (Lab 3). Anything missing is replaced by the terminal."""
 
     def __init__(self, voices):
-        self.disp = self.top = self.bottom = self.servo = None
+        self.disp = self.top = self.bottom = None
         self.voices = voices
         try:
             import adafruit_rgb_display.st7789 as st7789
@@ -67,27 +68,23 @@ class Hardware:
                 b.switch_to_input(pull=digitalio.Pull.UP)       # reads False while held down
         except Exception as e:
             print("no Mini PiTFT, using the terminal instead:", e)
-        try:
-            import pi_servo_hat
-            self.servo = pi_servo_hat.PiServoHat()
-            self.servo.restart()
-        except Exception as e:
-            print("no servo, printing instead:", e)
 
-    def show(self, lines, color=(255, 255, 255)):
+    def show(self, lines, background=None):
+        """Three lines of text; with `background`, the whole screen is filled so it reads from across the room."""
         print(" | ".join(l for l in lines if l), flush=True)
         if not self.disp:
             return
         from PIL import Image, ImageDraw, ImageFont
-        img = Image.new("RGB", (240, 135))
+        img = Image.new("RGB", (240, 135), background or (0, 0, 0))
         draw = ImageDraw.Draw(img)
+        color, detail = ((255, 255, 255), (235, 235, 235)) if background else ((255, 255, 255), (200, 200, 200))
         size = 28
         while size > 14 and draw.textlength(lines[0], font=ImageFont.truetype(FONT, size)) > 228:
             size -= 2                                           # shrink a long headline to fit the 240 px screen
         big, small = ImageFont.truetype(FONT, size), ImageFont.truetype(FONT, 20)
         draw.text((6, 8), lines[0], font=big, fill=color)
         for i, line in enumerate(lines[1:3]):
-            draw.text((6, 52 + i * 34), line, font=small, fill=(200, 200, 200))
+            draw.text((6, 52 + i * 34), line, font=small, fill=detail)
         self.disp.image(img, 90)
         self.backlight.value = True
 
@@ -112,11 +109,6 @@ class Hardware:
     def wait_release(self, button):
         while self.pressed(button):
             time.sleep(0.05)
-
-    def flag(self, angle):
-        print(f"flag -> {angle} degrees", flush=True)
-        if self.servo:
-            self.servo.move_servo_position(SERVO_CH, angle)
 
     def say(self, text):
         piper = [sys.executable, "-m", "piper", "--model", "en_US-lessac-medium", "--data-dir", str(self.voices),
@@ -231,40 +223,34 @@ Use only these facts. Keep every time exactly as written. Do not add people, rea
 
 
 def morning_reveal(hw, folder, use_qwen, model, replay):
-    """Part I: flag, screen and voice. Writes report.json next to the log."""
+    """Part I: a lit, colored screen first; the spoken report on request. Writes report.json next to the log."""
     entries, pledge = night_report.load_night(folder / LOG.name, folder / PLEDGE.name)
     facts = night_report.summarize(entries, pledge)
-    hw.flag({"kept": FLAG_KEPT, "missed": FLAG_MISSED}.get(facts["verdict"], FLAG_WATCHING))
     lines, sentences = night_report.screen_lines(facts), night_report.sentences(facts)
-    color = {"kept": (80, 220, 120), "missed": (240, 90, 80)}.get(facts["verdict"], (255, 255, 255))
-    hw.show(lines, color)
+    background = COLORS.get(facts["verdict"], UNSURE)
     text, raw = " ".join(sentences), None
     if use_qwen and facts["verdict"] != "no data":
         hw.show([lines[0], "writing report...", ""])
         t0 = time.time()
         text, raw = phrase(sentences, model)
         print(f"Qwen took {time.time() - t0:.1f} s")
-        hw.show(lines, color)
+    hw.show(lines, background)
     print("\n" + text + "\n")
     (folder / "report.json").write_text(json.dumps(
         {"screen": lines, "checked": sentences, "qwen_raw": raw, "spoken": text, "verdict": facts["verdict"]},
         indent=2))
-    hw.say(text)
     if not (replay and hw.top):
+        hw.say(text)                             # no buttons to ask with, so just say it
         return
-    print(f"top button: hear it again (for {REPLAY_MINUTES} min); hold bottom: finish", flush=True)
-    t_end, lit = time.time() + REPLAY_MINUTES * 60, time.time()
+    print("top button: hear the report; hold bottom: turn the screen off", flush=True)
+    t_end = time.time() + MORNING_HOURS * 3600
     try:
         while time.time() < t_end:
             if hw.pressed(hw.top):
                 hw.wait_release(hw.top)
-                hw.show(lines, color)
                 hw.say(text)
-                lit = time.time()
             elif hw.pressed(hw.bottom) and hw.held(hw.bottom):
                 break
-            if time.time() - lit > 60:           # the screen goes dark after a quiet minute
-                hw.dark()
             time.sleep(0.1)
     except KeyboardInterrupt:
         pass
@@ -294,7 +280,6 @@ if __name__ == "__main__":
     morning = next_at(args.morning, start)
     PLEDGE.write_text(json.dumps({"curfew": curfew, "start": start.isoformat(timespec="seconds"),
                                   "morning": args.morning}))
-    hw.flag(FLAG_WATCHING)
     hw.show(["GOODNIGHT", f"curfew {curfew}", f"watching till {morning:%H:%M}"])
     hw.say(f"Curfew {spoken_time(curfew)}. Goodnight.")
     time.sleep(3)

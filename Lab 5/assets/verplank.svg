@@ -29,15 +29,15 @@
   <!-- METAPHOR / SCENARIO -->
   <rect x="40" y="200" width="420" height="120" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="56" y="224" font-size="14" font-weight="bold" fill="#334">METAPHOR</text>
-  <text x="56" y="248" font-size="13" fill="#222">A witness you make a promise to. A referee's flag</text>
-  <text x="56" y="266" font-size="13" fill="#222">or a ship's flag at half-mast: the answer is a</text>
-  <text x="56" y="284" font-size="13" fill="#222">position you can read from bed, with no screen glow.</text>
+  <text x="56" y="248" font-size="13" fill="#222">A witness you make a promise to, and a traffic</text>
+  <text x="56" y="266" font-size="13" fill="#222">light in the morning: the answer is a color you</text>
+  <text x="56" y="284" font-size="13" fill="#222">can read from bed, with a dark screen all night.</text>
 
   <rect x="540" y="200" width="420" height="120" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="556" y="224" font-size="14" font-weight="bold" fill="#334">SCENARIO</text>
   <text x="556" y="248" font-size="13" fill="#222">23:10 set 00:30, press top: "Curfew 12:30. Goodnight."</text>
   <text x="556" y="266" font-size="13" fill="#222">00:51 finally leaves. 03:10 back for 4 minutes.</text>
-  <text x="556" y="284" font-size="13" fill="#222">07:00 flag drops and it says: "Missed by 26 min,</text>
+  <text x="556" y="284" font-size="13" fill="#222">07:00 screen glows red. Top: "Missed by 26 min,</text>
   <text x="556" y="302" font-size="13" fill="#222">left at 00:51, came back once at 03:10."</text>
 
   <!-- MODEL / TASK -->
@@ -51,16 +51,16 @@
   <rect x="540" y="340" width="420" height="120" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="556" y="364" font-size="14" font-weight="bold" fill="#334">TASK</text>
   <text x="556" y="388" font-size="13" fill="#222">Night (a few seconds): bottom to set the time, top to hand over.</text>
-  <text x="556" y="406" font-size="13" fill="#222">Morning: glance at the flag; listen to the report;</text>
-  <text x="556" y="424" font-size="13" fill="#222">press top to hear it again; hold bottom to finish.</text>
+  <text x="556" y="406" font-size="13" fill="#222">Morning: glance at the color; press top to hear why;</text>
+  <text x="556" y="424" font-size="13" fill="#222">hold bottom to turn the screen off.</text>
 
   <!-- DISPLAY / CONTROL -->
   <rect x="40" y="480" width="420" height="140" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="56" y="504" font-size="14" font-weight="bold" fill="#334">DISPLAY</text>
-  <text x="56" y="528" font-size="13" fill="#222">Servo flag: half = watching, up = kept, down = missed.</text>
+  <text x="56" y="528" font-size="13" fill="#222">Full-screen color: green = kept, red = missed, amber = unsure.</text>
   <text x="56" y="546" font-size="13" fill="#222">PiTFT, 3 lines: verdict (green/red) / left at / returns.</text>
-  <text x="56" y="564" font-size="13" fill="#222">Piper voice (Lab 3) reads the report.</text>
-  <text x="56" y="582" font-size="13" fill="#222">Backlight off all night and after 60 s idle.</text>
+  <text x="56" y="564" font-size="13" fill="#222">Piper voice (Lab 3) reads the report on a press.</text>
+  <text x="56" y="582" font-size="13" fill="#222">Backlight off all night; no servo (dropped).</text>
 
   <rect x="540" y="480" width="420" height="140" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="556" y="504" font-size="14" font-weight="bold" fill="#334">CONTROL</text>
