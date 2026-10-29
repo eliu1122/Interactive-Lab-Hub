@@ -119,8 +119,136 @@ This run shows that getting the whole pipeline to execute does not guarantee an 
 
 ---
 
+# Part 2: Desk Curfew
+
+> **Draft status:** Everything marked **TODO** needs the Pi, a real night, feedback from classmates, or photos and video. The rest was drafted before the first run, so check it against what actually happens and change it where needed.
+
+**Desk Curfew** is a bedtime promise that the desk holds you to. Before bed, you set tonight's curfew on the device and hand the night over. Overnight, the webcam watches the empty desk chair, not the bed. In the morning, a servo flag shows at a glance whether the chair stayed empty after curfew. Pressing the joystick shows and reads aloud what happened.
+
+## Part F.
+### Storyboard and ideas
+
+**Ideas we considered**
+
+| Idea | Before bed | Overnight | Morning | Why or why not |
+|---|---|---|---|---|
+| **Desk Curfew** (chosen) | Set a curfew with the joystick | Camera watches the desk chair | Flag up or down, plus a spoken report | Uses the one-person detection that worked in Part E. The camera points at a chair, not a bed. A promise gives the morning a clear question to answer. |
+| Sleep-turn counter (from Part C) | Press to start | Pose tracking on the sleeper | Count of position changes | Breaks the house rule against pointing the camera at beds. Pose tracking in the dark and under blankets is also unproven. |
+| Shared-kitchen raid log | Nothing, always on | Camera on the fridge | Who opened it, and when | Watches roommates who did not agree to it. The detector cannot tell people apart (Part E), so "who" would be guesswork. |
+| Doorway traffic | Choose which door | Counts passes | Busiest hour | Easy to build, but nobody needs the answer in the morning. |
+
+**Storyboard**
+
+![Desk Curfew storyboard: set the curfew before bed, the camera watches the empty chair overnight, and the flag and voice report in the morning](assets/storyboard.svg)
+
+**Verplank diagram**
+
+![Desk Curfew Verplank diagram](assets/verplank.svg)
+
+## Prep for Part 2
+
+**Feedback on our storyboard**
+
+> **TODO:** Add the feedback from classmates on Part F, and who gave it.
+
+**Where the device spends the night, and consent**
+
+> **TODO:** Say where the Pi sits (desk, room), who else lives there, and confirm that they agreed before the first run. Make sure the bed is outside the camera frame (see the storyboard, panel 2).
+
+**Revisions from what we learned in Part E**
+
+These changes already address the places where the Part E pipeline broke:
+
+- **Code does the counting.** Qwen got a gap wrong in Part D (2 hours instead of 1 hour 45 minutes). In Part E it counted one person as three and missed obvious changes. [`night_report.py`](night_report.py) now calculates every time and duration. Qwen only rewords the checked sentences, and [`curfew.py`](curfew.py) throws its version away if any time is changed, added or missing.
+- **No identities.** The detector cannot tell people apart, so the report says "someone came back" rather than naming anyone.
+- **A `nobody` reading may be a missed detection.** Gaps under 2 minutes between sightings are merged into one stay. Sightings under 30 seconds are treated as glimpses: they are left out of the verdict but mentioned in the report.
+- **A quiet night is different from a crashed one.** `overnight.py` writes a heartbeat every 10 minutes. Any silence longer than 15 minutes is reported as "I wasn't watching from … to …", and a kept curfew becomes "kept, as far as I could see".
+
+> **TODO:** Add any changes from classmates' feedback, and update the storyboard if they change the design.
+
+## Part G.
+### The interaction before
+
+The hand-off takes about thirty seconds and uses the Qwiic joystick from our Lab 4 Fly Shoo prototype:
+
+1. The OLED shows `CURFEW TONIGHT 00:30`. Pushing the joystick up or down moves the curfew in 15-minute steps.
+2. Pressing the joystick hands the night over. The device saves the promise to `tonight.json`, lowers the servo flag to **half-mast** (watching), shows `GOODNIGHT / curfew 00:30 / watching till 07:00`, and says *"Curfew 12 30 a.m. Goodnight."* with Piper from Lab 3.
+3. After three seconds the screen goes **dark**. The acknowledgement ends in darkness, so the device does not light up the room all night. A short press at night shows the curfew for three seconds and then goes dark again.
+
+**Bellotti's five questions** (from the prep reading):
+
+| Question | Desk Curfew's answer |
+|---|---|
+| **Address:** How do I tell the device I'm talking to it? | Touching the joystick. The camera never takes commands, so walking past the desk does nothing. |
+| **Attention:** How do I know it is listening? | The OLED lights up and shows the curfew while you set it. The half-mast flag shows that it is watching, even when the screen is dark. |
+| **Action:** What can I do? | Set the time, hand over, peek at night, end the night early (hold for 2 s), and replay the report in the morning. |
+| **Alignment:** How do I know it did what I meant? | It repeats the curfew on screen and aloud before going dark. In the morning it states the promised time again next to what it saw. |
+| **Accident:** How do I recover from a mistake? | Holding the joystick for 2 s ends a night started by mistake. A leftover log from an unfinished run is moved to `nights/unfinished-…`, so it is never mixed into the next night. Missed detections, glimpses and camera gaps are reported rather than hidden. |
+
+> **TODO:** Add a photo or short clip of the hand-off on the real device.
+
+## Part H.
+### The observant system at night
+
+![Desk Curfew pipeline from webcam to morning report](assets/pipeline.svg)
+
+[`curfew.py`](curfew.py) runs the whole night. After the hand-off it starts the lab's [`overnight.py`](overnight.py) with one look every 10 seconds, people only, using the Part E `interpret()` without changes. Because the camera is aimed at the desk chair, any person in view means someone is at the desk. Logging stops at `--morning` (default 07:00), or when someone holds the joystick for 2 s. The log and pledge are then moved to `nights/YYYY-MM-DD/`.
+
+The Lab 5 environment also needs the Lab 3 and Lab 4 hardware libraries:
+
+```
+(.venv) pi@raspberrypi:~/Interactive-Lab-Hub/Lab 5 $ pip install sparkfun-qwiic-joystick adafruit-circuitpython-ssd1306 sparkfun-pi-servo-hat piper-tts
+(.venv) pi@raspberrypi:~/Interactive-Lab-Hub/Lab 5 $ tmux new -s night
+(.venv) pi@raspberrypi:~/Interactive-Lab-Hub/Lab 5 $ python curfew.py --morning 07:00
+```
+
+[`test_night_report.py`](test_night_report.py) checks the morning calculations on made-up nights without the Pi: a kept curfew, staying up late, coming back after curfew, a quiet night, missed detections, a glimpse, a camera gap, and an empty log. Run it with `python -m unittest test_night_report`.
+
+> **TODO:** Run a fake night first (curfew one minute from now, `--morning` two minutes from now) and add the terminal output. Then add a photo of the device in place at night, the real night's `night_log.jsonl` and `report.json` from `nights/`, and a screenshot of `tmux` running.
+
+## Part I.
+### The interaction after
+
+The morning answer comes in three layers, from a glance to the full detail:
+
+1. **Flag (no reading needed):** up means the curfew was kept, down means it was missed, and half-mast means there was no usable data. It moves as soon as the night ends, so you can read it from bed.
+2. **OLED (three lines):** for example, `MISSED +26 min / left 00:51 / back 1x`. `gaps!` is added if the camera stopped watching at some point.
+3. **Voice, on a press:** Piper reads the report, and the screen goes dark again after 60 seconds.
+
+When nothing happened, the report still says so plainly, for example: *"Curfew kept: you promised 00:30, and the chair stayed empty after it. The chair was already empty when I started watching at 23:10. Nobody came back before I stopped at 07:00."*
+
+Example output from the made-up night in the storyboard, produced on a laptop with `python curfew.py --report <folder> --no-qwen`:
+
+```
+flag -> 0 degrees
+MISSED +26 min | left 00:51 | back 1x
+
+Curfew missed: you promised 00:30, but someone was at the desk for 26 min after it, last until 03:14.
+You left the desk at 00:51. Someone came back once, at 03:10, for 4 min.
+```
+
+> **TODO:** Add the real morning: a photo of the flag and OLED, a clip of the voice, Qwen's raw rewording from `report.json`, and whether the time check accepted or rejected it.
+
+## Final documentation
+
+> **TODO:** Fill these in once the device has run a real night.
+
+* **Looks like:** *TODO: photos of the device on the desk at night (dark, flag at half-mast) and in the morning (flag up or down, OLED lit).*
+* **Works like:** the pipeline above, with *TODO: a link to a real night's log and report.*
+* **Acts like:** the hand-off in Part G and the morning reveal in Part I, with *TODO: the short video of the whole system.*
+
+> **TODO:** Link the short video of the whole system here.
+
+## Contributions and AI disclosure
+
+- **Hong Yuan Cao:** Part 1 (Parts A–E), including the Pi setup, the tests, and the evidence.
+- **Yun-Chung Liu:** Part 2 concept, interaction design, and code.
+- **AI assistance:** Yun-Chung used Claude (Anthropic) to help draft the Part 2 concept write-up, the storyboard, Verplank and pipeline diagrams (as SVG), and the first versions of `curfew.py`, `night_report.py` and `test_night_report.py`. We reviewed and tested this work and are responsible for it. *TODO: update this once you have edited the drafts and run them on the Pi.*
+
+---
+
 <details>
-<summary>Part 2 instructions — to be completed</summary>
+<summary>Original Part 2 instructions (delete before submitting)</summary>
 
 # Lab 5 Part 2: Overnight Sensation
 
