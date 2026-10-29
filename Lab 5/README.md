@@ -202,13 +202,21 @@ We ran two fake nights on October 29. In the first, Qwen wrote *"I was at the de
 
 *Page 2, with the end-time error we then fixed.*
 
-> **TODO:** Add the real morning: photos of the screen and message, and Qwen's raw rewording from `report.json`.
+The video in the final documentation shows a full hand-off and morning from a third test night, this time with a green result.
 
 ## Final documentation
 
 It looks like a Pi with the PiTFT on top and a webcam facing the desk chair, dark all night and green or red in the morning. It works like the pipeline in Part H, and acts like the hand-off in Part G and the reveal in Part I.
 
-> **TODO:** Add a photo of the device in place on the real night, link the real night's log and report, and link the short video of the whole system.
+The video shows the whole system in two clips, filmed on a shortened test night so that bedtime and morning are a few minutes apart. In the first clip, the screen shows a curfew of 18:30. Pressing the top button brings up `GOODNIGHT` with the curfew and the time it will stop watching (18:32), and then the screen goes dark; the clip ends on the webcam facing the empty desk chair. In the second clip, the night is over and the screen is green: `CURFEW KEPT`, `empty from 18:29`, `no returns`, because nobody sat in the chair during the test night.
+
+<video src="assets/video/1-bedtime.mp4" controls width="320"></video>
+
+[Clip 1: bedtime, setting the curfew and saying goodnight](assets/video/1-bedtime.mp4)
+
+<video src="assets/video/2-morning.mp4" controls width="320"></video>
+
+[Clip 2: morning, the green screen and Qwen's message](assets/video/2-morning.mp4)
 
 ---
 
