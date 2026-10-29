@@ -190,6 +190,8 @@ def night_shift(hw, curfew, morning, interval):
     if proc.poll() is None:
         proc.send_signal(signal.SIGINT)
     proc.wait(timeout=30)
+    with open(LOG, "a") as log:                  # the log only records changes, so mark when watching ended
+        log.write(json.dumps({"t": datetime.datetime.now().isoformat(timespec="seconds"), "stopped": True}) + "\n")
 
 
 def phrase(sentences, model, verdict):
