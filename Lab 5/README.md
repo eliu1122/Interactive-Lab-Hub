@@ -136,7 +136,7 @@ We also considered a sleep-turn counter (from our Part C note), a fridge-raid lo
 
 ## Prep for Part 2
 
-> **TODO:** Add the feedback from classmates on our storyboard, who gave it, and any changes it led to.
+Jovian said the storyboard was good overall but that the device's response could be improved. We put most of our later changes into the morning response: the whole screen now turns green or red so the answer can be read from bed, the details and Qwen's message appear only when you ask with the top button, and Qwen's wording is checked so it cannot drop the verdict or change a time.
 
 The device sits on the small round table next to my desk, with the webcam facing my desk and chair; the bed is behind it and out of view. I am the person being recorded and agreed to it, and the snapshots are deleted after the demo.
 
