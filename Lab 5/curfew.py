@@ -195,15 +195,20 @@ def night_shift(hw, curfew, morning, interval):
     proc.wait(timeout=30)
 
 
-def phrase(sentences, model):
-    """Ask Qwen to make the checked sentences gentler. Rejected if it changes or invents a time."""
+def phrase(sentences, model, verdict):
+    """Ask Qwen to make the checked sentences gentler.
+
+    Rejected if it changes or invents a time, drops the verdict, or talks as if it were the
+    person (the first fake night got "I was at the desk at 16:52..." past a times-only check).
+    """
     import requests                              # only needed on the Pi, where Ollama runs
     facts = " ".join(sentences)
     prompt = f"""You are a small bedside device that watched a desk chair overnight. These facts are already checked:
 
 {facts}
 
-Rewrite them as a friendly morning message of at most three sentences for someone who just woke up.
+Rewrite them as a friendly morning message of at most three sentences, spoken to the person who just woke up.
+Begin with the first sentence's opening words ("Curfew kept" or "Curfew missed") unchanged. Call the person "you".
 Use only these facts. Keep every time exactly as written. Do not add people, reasons or advice."""
     try:
         r = requests.post("http://localhost:11434/api/generate", json={
@@ -216,7 +221,9 @@ Use only these facts. Keep every time exactly as written. Do not add people, rea
         print("Qwen unavailable, using the template:", e)
         return facts, None
     times = lambda s: set(re.findall(r"\b\d{2}:\d{2}\b", s))
-    ok = answer and times(answer) == times(facts)
+    must_say = {"kept": "curfew kept", "missed": "curfew missed"}.get(verdict, "")
+    ok = (answer and times(answer) == times(facts) and must_say in answer.lower()
+          and not re.search(r"\bI (was|sat|left|came)\b", answer))
     if not ok:
         print("Qwen changed the facts, using the template instead:\n ", answer)
     return (answer if ok else facts), answer
@@ -232,7 +239,7 @@ def morning_reveal(hw, folder, use_qwen, model, replay):
     if use_qwen and facts["verdict"] != "no data":
         hw.show([lines[0], "writing report...", ""])
         t0 = time.time()
-        text, raw = phrase(sentences, model)
+        text, raw = phrase(sentences, model, facts["verdict"])
         print(f"Qwen took {time.time() - t0:.1f} s")
     hw.show(lines, background)
     print("\n" + text + "\n")

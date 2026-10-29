@@ -159,7 +159,7 @@ This run shows that getting the whole pipeline to execute does not guarantee an 
 
 These changes already address the places where the Part E pipeline broke:
 
-- **Code does the counting.** Qwen got a gap wrong in Part D (2 hours instead of 1 hour 45 minutes). In Part E it counted one person as three and missed obvious changes. [`night_report.py`](night_report.py) now calculates every time and duration. Qwen only rewords the checked sentences, and [`curfew.py`](curfew.py) throws its version away if any time is changed, added or missing.
+- **Code does the counting.** Qwen got a gap wrong in Part D (2 hours instead of 1 hour 45 minutes). In Part E it counted one person as three and missed obvious changes. [`night_report.py`](night_report.py) now calculates every time and duration. Qwen only rewords the checked sentences, and [`curfew.py`](curfew.py) throws its version away if any time is changed, added or missing, if it drops the verdict, or if it speaks as the person (see fake night 1 in Part I).
 - **No identities.** The detector cannot tell people apart, so the report says "someone came back" rather than naming anyone.
 - **A `nobody` reading may be a missed detection.** Gaps under 2 minutes between sightings are merged into one stay. Sightings under 30 seconds are treated as glimpses: they are left out of the verdict but mentioned in the report.
 - **A quiet night is different from a crashed one.** `overnight.py` writes a heartbeat every 10 minutes. Any silence longer than 15 minutes is reported as "I wasn't watching from … to …", and a kept curfew becomes "kept, as far as I could see".
@@ -234,6 +234,8 @@ MISSED +26 min | left 00:51 | back 1x
 Curfew missed: you promised 00:30, but someone was at the desk for 26 min after it, last until 03:14.
 You left the desk at 00:51. Someone came back once, at 03:10, for 4 min.
 ```
+
+**Fake night 1 (October 29, 2026, 16:52):** the full pipeline ran on the Pi: logging, the archived night in `nights/2026-10-29-1652/`, the morning calculation (`MISSED +2 min / left 16:53 / no returns`), and Qwen (16.6 s). Qwen's rewording was *"I was at the desk at 16:52, but it was already late by 16:53 when I stopped."* It kept both times, so it passed our first check, which only compared times. But it speaks as if the device had been at the desk, and it never says the curfew was missed. We tightened the check: Qwen's version must now also contain "Curfew missed" or "Curfew kept" and must not speak as "I was / sat / left / came". Otherwise the checked template is used. This is the same lesson as Parts D and E: an answer can look right and still mislead.
 
 > **TODO:** Add the real morning: a photo of the lit screen, a clip of the voice, Qwen's raw rewording from `report.json`, and whether the time check accepted or rejected it.
 
