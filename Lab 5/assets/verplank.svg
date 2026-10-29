@@ -35,9 +35,9 @@
 
   <rect x="540" y="200" width="420" height="120" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="556" y="224" font-size="14" font-weight="bold" fill="#334">SCENARIO</text>
-  <text x="556" y="248" font-size="13" fill="#222">23:10 set curfew 00:30, press, "Goodnight," dark.</text>
+  <text x="556" y="248" font-size="13" fill="#222">23:10 wave at the camera: "Curfew 12:30. Goodnight."</text>
   <text x="556" y="266" font-size="13" fill="#222">00:51 finally leaves. 03:10 back for 4 minutes.</text>
-  <text x="556" y="284" font-size="13" fill="#222">07:00 flag drops. Press: "Missed by 26 minutes,</text>
+  <text x="556" y="284" font-size="13" fill="#222">07:00 flag drops and it says: "Missed by 26 min,</text>
   <text x="556" y="302" font-size="13" fill="#222">left at 00:51, came back once at 03:10."</text>
 
   <!-- MODEL / TASK -->
@@ -50,9 +50,9 @@
 
   <rect x="540" y="340" width="420" height="120" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="556" y="364" font-size="14" font-weight="bold" fill="#334">TASK</text>
-  <text x="556" y="388" font-size="13" fill="#222">Night (about 30 s): set a time, hand it over.</text>
-  <text x="556" y="406" font-size="13" fill="#222">Morning: glance at the flag; press for the details;</text>
-  <text x="556" y="424" font-size="13" fill="#222">press again to replay; hold to finish.</text>
+  <text x="556" y="388" font-size="13" fill="#222">Night (a few seconds): wave goodnight at the camera.</text>
+  <text x="556" y="406" font-size="13" fill="#222">Morning: glance at the flag; listen to the report;</text>
+  <text x="556" y="424" font-size="13" fill="#222">wave again to hear it again.</text>
 
   <!-- DISPLAY / CONTROL -->
   <rect x="40" y="480" width="420" height="140" rx="8" fill="#f4f5fb" stroke="#99a"/>
@@ -64,9 +64,9 @@
 
   <rect x="540" y="480" width="420" height="140" rx="8" fill="#f4f5fb" stroke="#99a"/>
   <text x="556" y="504" font-size="14" font-weight="bold" fill="#334">CONTROL</text>
-  <text x="556" y="528" font-size="13" fill="#222">Qwiic joystick (Lab 4):</text>
-  <text x="556" y="546" font-size="13" fill="#222">  up / down = curfew ±15 min</text>
-  <text x="556" y="564" font-size="13" fill="#222">  press = hand over, peek at night, replay in morning</text>
-  <text x="556" y="582" font-size="13" fill="#222">  hold 2 s = end the night early / finish</text>
-  <text x="556" y="600" font-size="13" fill="#222">Webcam: watches only, one look every 10 s.</text>
+  <text x="556" y="528" font-size="13" fill="#222">A wave at the webcam (YOLO pose, Part C idea):</text>
+  <text x="556" y="546" font-size="13" fill="#222">  raised wrist swinging = hand over / replay</text>
+  <text x="556" y="564" font-size="13" fill="#222">Curfew: a standing rule (--curfew 00:30)</text>
+  <text x="556" y="582" font-size="13" fill="#222">Ctrl-C ends the night early</text>
+  <text x="556" y="600" font-size="13" fill="#222">Overnight the webcam only logs, one look / 10 s.</text>
 </svg>
