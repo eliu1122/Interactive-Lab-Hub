@@ -205,6 +205,7 @@ The Lab 5 environment also needs the PiTFT library from Lab 2 (and `gpiod`, whic
 
 ```
 (.venv) pi@raspberrypi:~/Interactive-Lab-Hub/Lab 5 $ pip install adafruit-circuitpython-rgb-display 'gpiod>=2.2.2,<3'
+(.venv) pi@raspberrypi:~/Interactive-Lab-Hub/Lab 5 $ pkill -f screen_boot_script.py    # the Lab 2 boot script holds the PiTFT
 (.venv) pi@raspberrypi:~/Interactive-Lab-Hub/Lab 5 $ tmux new -s night
 (.venv) pi@raspberrypi:~/Interactive-Lab-Hub/Lab 5 $ python curfew.py --morning 07:00
 ```
@@ -236,6 +237,8 @@ You left the desk at 00:51. Someone came back once, at 03:10, for 4 min.
 ```
 
 **Fake night 1 (October 29, 2026, 16:52):** the full pipeline ran on the Pi: logging, the archived night in `nights/2026-10-29-1652/`, the morning calculation (`MISSED +2 min / left 16:53 / no returns`), and Qwen (16.6 s). Qwen's rewording was *"I was at the desk at 16:52, but it was already late by 16:53 when I stopped."* It kept both times, so it passed our first check, which only compared times. But it speaks as if the device had been at the desk, and it never says the curfew was missed. We tightened the check: Qwen's version must now also contain "Curfew missed" or "Curfew kept" and must not speak as "I was / sat / left / came". Otherwise the checked template is used. This is the same lesson as Parts D and E: an answer can look right and still mislead.
+
+**Fake night 2 (October 29, 2026, 17:38):** the first run with the Mini PiTFT working. The Lab 2 boot script (`screen_boot_script.py`) had been holding the screen, so we now stop it with `pkill -f screen_boot_script.py` before each night. The curfew screen, goodnight, the night-time peek, the red morning screen and the paged message all worked. One fix came out of it: the report said "I stopped at 17:39" when watching actually ended at 17:40, because the log only records changes. `curfew.py` now writes a final `stopped` line, so the end time is exact.
 
 > **TODO:** Add the real morning: a photo of the lit screen and of Qwen's message on it, Qwen's raw rewording from `report.json`, and whether the time check accepted or rejected it.
 
