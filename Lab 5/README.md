@@ -130,7 +130,7 @@ The problem: saying "I'll be in bed by 12:30", then staying at the desk until 2 
 
 We also considered a sleep-turn counter (from our Part C note), a fridge-raid log and a doorway counter. The first points a camera at a bed, the second watches roommates who never agreed and needs to tell people apart, which Part E showed the detector cannot do, and the third answers a question nobody asks in the morning. Desk Curfew builds on the one-person detection that worked in Part E.
 
-![Desk Curfew storyboard: set the curfew before bed, the camera watches the empty chair overnight, and the screen reports in the morning](assets/storyboard.svg)
+![Hand-drawn Desk Curfew storyboard in three panels: before bed, the bottom button sets the curfew and the top button hands it over; while asleep, the camera looks at the chair every 10 seconds and logs changes, with the bed out of frame; when awake, the red screen shows the curfew was missed and the top button explains](assets/storyboard.jpg)
 
 ![Desk Curfew Verplank diagram](assets/verplank.svg)
 
