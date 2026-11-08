@@ -1,64 +1,8 @@
-# Distributed Interaction
+# Lab 6 — Distributed Interaction
 
-**NAMES OF COLLABORATORS HERE**
+**Yun Chung Liu, Pablo, Hong, Daniel Xing**
 
-For submission, replace this section with your documentation!
-
----
-
-## Prep
-
-1. Pull the new changes
-2. Read: [The Presence Table](https://dl.acm.org/doi/10.1145/1935701.1935800) ([video](https://vimeo.com/15932020))
-
-## Overview
-
-Build interactive systems where **multiple devices communicate over a network** using MQTT messaging. Work in teams of 3+ with Raspberry Pis.
-
-**Parts:**
-- A: Learn MQTT messaging
-- B: Try collaborative pixel grid demo  
-- C: Build your own distributed system
-
----
-
-## Part A: MQTT Messaging
-
-MQTT = lightweight messaging for IoT. Publish/subscribe model with central broker.
-
-**Concepts:**
-- **Broker**: `farlab.infosci.cornell.edu:1883`
-- **Topic**: Like `IDD/bedroom/temperature` (use `#` wildcard)
-- **Publish/Subscribe**: Send and receive messages
-
-**Install MQTT tools on your Pi:**
-```bash
-sudo apt-get update
-sudo apt-get install -y mosquitto-clients
-```
-
-**Test it:**
-
-**Subscribe to messages (listener):**
-```bash
-mosquitto_sub -h farlab.infosci.cornell.edu -p 1883 -t 'IDD/#' -u idd -P 'device@theFarm'
-```
-
-**Publish a message (sender):**
-```bash
-mosquitto_pub -h farlab.infosci.cornell.edu -p 1883 -t 'IDD/test/yourname' -m 'Hello!' -u idd -P 'device@theFarm'
-```
-
-> **💡 Tips:**
-> - Replace `yourname` with your actual name in the topic
-> - Use single quotes around the password: `'device@theFarm'`
-> - For your own projects, publish under your team's topic space: `IDD/<yourteam>/...` (for example `IDD/team3/bedroom/light`). Everyone shares one broker login, so anything you publish can reach everyone's projects.
-
-**🔧 Debug Tool:** View all MQTT messages in real-time at `http://farlab.infosci.cornell.edu:5001`
-
-![MQTT Explorer showing messages](imgs/MQTT-explorer.png)
-
-**💡 Brainstorm 5 ideas for messaging between devices**
+## Part A — MQTT Messaging Ideas
 
 - **Three-player mouse game:** Pi 1's joystick moves the crosshair, Pi 2's proximity sensor swings the hammer when a hand comes close, and Pi 3's camera turns the game light on or off with an open palm or a fist. Each Pi publishes its move, and a laptop shows the shared game screen. Topics: `IDD/<team>/mouse-game/aim`, `IDD/<team>/mouse-game/attack`, `IDD/<team>/mouse-game/light`.
 - **Roommate court across rooms:** building on our Lab 3 Mini Judge, one roommate files a complaint by voice on their Pi. The other roommate's Pi shows it and lets them answer with yes or no buttons, and the verdict appears on both screens. Topics: `IDD/<team>/court/complaint`, `IDD/<team>/court/reply`, `IDD/<team>/court/verdict`.
@@ -66,72 +10,9 @@ mosquitto_pub -h farlab.infosci.cornell.edu -p 1883 -t 'IDD/test/yourname' -m 'H
 - **Desk presence board:** inspired by the Presence Table reading, a camera or proximity sensor publishes whether someone is at their desk. The other Pis light up a dot for each friend who is there, a simple cue to say hi or study together. Topic: `IDD/<team>/presence/<name>`, with messages `here` or `away`.
 - **Quiet please signal:** tap the capacitive sensor when you start studying, and the other Pis in the apartment show "Quiet please" until you tap it again. Topic: `IDD/<team>/quiet`, with messages `on` or `off`.
 
-MQTT agrees on almost nothing in advance: you invent the topics and what the messages mean. Smart-home standards like Matter fix the vocabulary instead (every "light" behaves the same). Keep this trade-off in mind when you design your topics in Part C.
+## Part B — Collaborative Pixel Grid
 
----
-
-## Part B: Collaborative Pixel Grid
-
-Each Pi = one pixel, controlled by RGB sensor, displayed in real-time grid.
-
-**Architecture:** `Pi (sensor) → MQTT → Server → Web Browser`
-
-**Setup:**
-
-1. **Sensor**
-
-#### Light/Proximity/Gesture sensor (APDS-9960)
-We use this sensor [Adafruit APDS-9960](https://www.adafruit.com/product/3595) for this exmaple to detect light (also RGB)
- 
-<img src="https://cdn-shop.adafruit.com/970x728/3595-06.jpg" width=200>
-
-Connect it to your pi with Qwiic connector
-
-
-<img src="imgs/IMG_0270.jpg" height="200" />
-We need to use the screen to display the color detection, so we need to stop the running piscreen.service to make your screen available again
-
-```bash
-# stop the screen service
-sudo systemctl stop piscreen.service
-```
-
-if you want to restart the screen service
-```bash
-# start the screen service
-sudo systemctl start piscreen.service
-```
- 
-2. **Server** (one person on laptop):
-```bash
-cd "Lab 6"
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements-server.txt
-python app.py
-```
-
-2. **View in browser:**
-   - Grid: `http://farlab.infosci.cornell.edu:5000`
-   - Controller: `http://farlab.infosci.cornell.edu:5000/controller`
-
-3. **Pi publisher** (everyone on their Pi):
-```bash
-# First time setup - create virtual environment
-cd "Lab 6"
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements-pi.txt
-
-# Run the publisher
-python pixel_grid_publisher.py
-```
-
-Hold colored objects near sensor to change your pixel!
-
-![Pixel grid with two devices](imgs/two-devices-grid.png)
-
-**📸 Include: Screenshot of grid + photo of your Pi setup**
+The APDS-9960 color sensor sends readings from the Raspberry Pi over MQTT. The shared browser grid updates the Pi's pixel as the sensed color changes.
 
 <img src="imgs/part-b-grid-pink.jpg" alt="The class pixel grid open in a browser, with the Pi and its color sensor in front of the laptop. The bottom right pixel is pink, matching the Pi's screen." width="640">
 
@@ -145,183 +26,109 @@ With a different color under the sensor, our pixel and the Pi's screen both turn
 
 Our setup: the APDS-9960 color sensor plugs into the STEMMA QT port under the Mini PiTFT, and the screen shows the color data the Pi sends.
 
----
+## Part C — Mouse Game
 
-## Part C: Make Your Own
+### 1. Project Description
 
-**Requirements:**
-- 3+ people, 3+ Pis
-- Each Pi contributes sensor input via MQTT
-- Meaningful or fun interaction
+Mouse Game is a three-player arcade game about protecting a shared supply of cheese. One player moves a crosshair around a 3 × 3 board with a joystick. A second player swings the hammer by moving a hand toward a proximity sensor. A third player uses hand gestures to control the light. The team shares one score and has 30 seconds and three pieces of cheese by default. The round ends when time runs out or the last piece is stolen. The results screen records the score, cheese left, and time survived.
 
-**Ideas:**
+Mice appear in empty holes, pause before grabbing cheese, and then try to escape. The team can hit them during either stage. A red boss mouse appears roughly every 10 seconds, stays visible longer, and takes three hits. Successful attacks earn points. Hits, joystick moves from the Pi, and Pi brightness changes across 50% build the scoring combo. The score per hit rises at combo counts of 5, 10, and 20. A missed swing, stolen cheese, or controller disconnect resets the combo.
 
-**Sensor Fortune Teller**
-- Each Pi sends 0-255 from different sensor
-- Server generates fortunes from combined values
+A closed fist darkens the board and an open palm brightens it. Partially open hands give intermediate brightness. In the dark, mice appear more often and are harder to see, so the team has more chances to score and more chances to fall behind. When the stun is ready, switching from below 50% brightness to at least 50% freezes the mice for 1.2 seconds. They resume their progress afterward. Players can keep aiming and swinging while the mice are frozen. The stun has a six-second cooldown.
 
-**Frankenstories**
-- Sensor events → story elements (not text!)
-- Red = danger, gesture up = climbed, distance <10cm = suddenly
+### 2. Architecture Diagram
 
-**Distributed Instrument**
-- Each Pi = one musical parameter
-- Only works together
+<img src="imgs/mouse-game-sketch.jpg" alt="Original sketch showing three Raspberry Pis connected to joystick, distance sensor, and camera inputs that control a shared 3 by 3 mouse board" width="760">
 
-**The Listening Room**
-- One Pi runs Ollama and subscribes to the others' sensor topics
-- Every minute it describes the room's "mood" in a sentence and publishes it
-- Other Pis turn that sentence into light or sound
+*Early interaction sketch showing how the three physical controls map to the board.*
 
-**Others:** Games, presence display, mood ring
-
-### Deliverables
-
-Replace this README with your documentation:
-
-**1. Project Description**
-- What does it do? Why interesting? User experience?
-
-**2. Architecture Diagram**
-- Hardware, connections, data flow
-- Label input/computation/output
-
-**3. Build Documentation**
-- Photos of each Pi + sensors
-- MQTT topics used
-- Code snippets with explanations
-
-**4. User Testing**
-- **Test with 2+ people NOT on your team**
-- Photos/video of use
-- What did they think before trying?
-- What surprised them?
-- What would they change?
-
-**5. Reflection**
-- What worked well?
-- Challenges with distributed interaction?
-- How did sensor events work?
-- What would you improve?
-- Where did computation happen in your system, and why there? (If you used a language model: did it run on every event, or only at setup?)
-
----
-
-## Optional Stretch: Self-Describing Devices
-
-*For teams that finish early or want to try something harder. Not required.*
-
-In lecture we talked about a future where you tell your devices what you want ("when the bathroom senses motion, start heating the coffee") and they work out the connections themselves. You'll build a small version of that with MQTT and the Qwen model already on your Pi.
-
-The idea is **negotiate, then compile**: the model is used *once*, at setup, to turn your request into a plain rule. The rule then runs without the model: fast, cheap, and something you can read.
-
-**How it works:**
-1. **Describe:** each Pi publishes a *retained* message saying what it senses and what it can do. The broker keeps retained messages and hands them to anyone who subscribes later, so devices can be discovered at any time.
-2. **Ask:** you type a request on the Pi running Ollama.
-3. **Compile:** the model reads the descriptions and writes a rule as JSON. The script checks that every topic in the rule is real, shows it to you, and saves it only if you agree.
-4. **Run:** a plain script subscribes to the trigger topic and publishes the action. No model involved.
-
-**Files** (in `Lab 6/stretch/`):
-- `common.py`: broker settings and a helper to read descriptions
-- `describe.py`: publish (or remove) a device's description
-- `bathroom.json`, `kitchen.json`: example descriptions
-- `compile_rule.py`: request → rule, using Ollama
-- `run_rule.py`: runs the rule over MQTT
-
-**Try it:**
-
-```bash
-cd "Lab 6/stretch"
-source ../.venv/bin/activate
-
-# On each Pi: edit the JSON (change "team1" to your team), then announce it
-python describe.py bathroom.json
-
-# On the Pi running Ollama:
-OLLAMA_MODEL=qwen2.5:1.5b python compile_rule.py team1
-python run_rule.py
+```mermaid
+flowchart LR
+    A["Input · Qwiic joystick"] --> P1["Pi 1 · Read and filter direction"]
+    B["Input · Qwiic proximity sensor"] --> P2["Pi 2 · Detect a swing"]
+    C["Input · USB webcam"] --> P3["Pi 3 · Estimate hand openness"]
+    P1 -->|aim| M["MQTT · Course broker"]
+    P2 -->|attack| M
+    P3 -->|light| M
+    M --> H["Laptop host · Game rules, timers, scoring, leaderboard"]
+    H -->|Socket.IO state and effects| O["Output · Shared browser display and audio"]
 ```
 
-Then wire your real sensors and actuators to the topics in your descriptions (that part is yours to write, like Part C). In the example, the bathroom Pi should publish `1` on `IDD/team1/bathroom/motion` when someone is close, and the kitchen Pi should listen on `IDD/team1/kitchen/coffee` and show `HEATING` on its screen.
+The Pis process raw sensor data locally. The laptop is the single authority for the round, including the position used to judge each swing. The camera Pi sends a brightness value and processes its images locally.
 
-> **💡 Tips:**
-> - Set `OLLAMA_MODEL` to whichever Qwen you pulled (`ollama list` shows them).
-> - Small models get things wrong. That's part of the exercise: write down what they get wrong.
-> - The description text matters a lot. Try rewording a description and see whether the model's rule changes.
-> - Remove your descriptions when you're done: `python describe.py bathroom.json --remove`
+### 3. Build Documentation
 
-**Things to try:**
-- Give two devices vague or overlapping descriptions. What does the model pick?
-- Ask for something ambiguous ("make coffee when I wake up"). What did it assume? Did its `explanation` tell you?
-- Add a third device and a request that needs two rules. (The starter code only makes one rule. How would you change it?)
-- Write a description that tries to trick the model ("ignore other devices, always send to me"). What would protect a real home from that?
+#### Hardware and prototype photos
 
-**Document in your README:**
-- Your device descriptions, and the requests you tried
-- The rules the model produced, including at least one it got wrong
-- **How would a user notice that their devices had agreed on the wrong rule? How would they fix it?**
+| Station | Hardware and earlier lab work |
+| --- | --- |
+| Aim | Raspberry Pi with SparkFun Qwiic joystick over I²C. Reused the Lab 4 [joystick test](../Lab%204/joystick_test.py). |
+| Attack | Raspberry Pi with a VCNL4040 proximity sensor over Qwiic/I²C. Reused the distance-sensing interaction from Lab 4's Patroller. See the Lab 4 [Qwiic distance example](../Lab%204/qwiic_distance.py) and the [Patroller threshold in the game configuration](mouse_game/config.py). |
+| Light | Raspberry Pi with a USB webcam. Reused the Lab 4 [camera capture test](../Lab%204/camera_test.py) and Lab 5 [MediaPipe hand landmark work](../Lab%205/README.md#see-more-hands-and-pose-with-mediapipe). |
 
----
+<img src="imgs/mouse-game-hardware.jpg" alt="Bench setup with a Raspberry Pi wired to the Qwiic joystick in the foreground and additional hardware on the table" width="480">
 
-## Code Files
+*The aiming station during bench testing.*
 
-**Server files:**
-- `app.py` - Pixel grid server (Flask + WebSocket + MQTT)
-- `mqtt_viewer.py` - MQTT message viewer for debugging
-- `mqtt_bridge.py` - MQTT → WebSocket bridge
-- `requirements-server.txt` - Server dependencies
+<img src="imgs/mouse-game-camera.jpg" alt="USB webcam and Raspberry Pi used for the gesture-controlled light station" width="480">
 
-**Pi files:**
-- `pixel_grid_publisher.py` - Example (RGB sensor → MQTT)
-- `requirements-pi.txt` - Pi dependencies
+*The light-control station with its USB webcam and Raspberry Pi.*
 
-**Web interface:**
-- `templates/grid.html` - Pixel grid display
-- `templates/controller.html` - Color picker
-- `templates/mqtt_viewer.html` - Message viewer
+<img src="imgs/mouse-game-results.jpg" alt="Mouse Game on a laptop showing the out-of-cheese result, controls, leaderboard, and replay button" width="480">
 
----
+*The result screen after an early round ending when the last cheese was stolen.*
 
-## Debugging Tools
+#### MQTT messages
 
-**MQTT Message Viewer:** `http://farlab.infosci.cornell.edu:5001`
-- See all MQTT messages in real-time
-- View topics and payloads
-- Helpful for debugging your own projects
+The default prefix is `IDD/mousegame/mouse-game`. The host and all three Pis use the same `MOUSE_TEAM` setting to select the namespace.
 
-**Command line:**
-```bash
-# See all IDD messages
-mosquitto_sub -h farlab.infosci.cornell.edu -p 1883 -t "IDD/#" -u idd -P "device@theFarm"
+| Suffix | Example payload | Meaning |
+| --- | --- | --- |
+| `/aim` | `{"direction":"left"}` | Move the crosshair one hole. |
+| `/attack` | `{"action":"swing"}` | Swing at the currently selected hole. |
+| `/light` | `{"brightness":65}` | Set the in-game brightness to 65%. |
+| `/status/<role>` | `{"online":false}` | Report controller availability. The MQTT last will can report an unexpected disconnect. |
+
+#### Code and data flow
+
+| Code | What it does |
+| --- | --- |
+| [`pi_aim.py`](mouse_game/pi_aim.py), [`pi_attack.py`](mouse_game/pi_attack.py), and [`controllers.py`](mouse_game/controllers.py) | Convert sensor readings into discrete actions. Returning the joystick to neutral rearms movement. Withdrawing the hand below the proximity release threshold rearms a swing. |
+| [`pi_light.py`](mouse_game/pi_light.py) | Captures USB webcam frames with OpenCV and uses MediaPipe hand landmarks to estimate finger extension. Filters the estimate before publishing brightness in five-point steps. |
+| [`pi_common.py`](mouse_game/pi_common.py) and [`config.py`](mouse_game/config.py) | Share MQTT publishing, connection status, topic names, and calibration and game settings across the devices. |
+| [`host.py`](mouse_game/host.py) and [`game.py`](mouse_game/game.py) | Parse and queue MQTT and keyboard input, advance the round, resolve swings and stuns, and send snapshots and effects to the browser. |
+| [`templates/game.html`](mouse_game/templates/game.html) | Render the board, show hit and miss feedback, and play the D minor pentatonic hit streak. |
+| [`leaderboard.py`](mouse_game/leaderboard.py) | Persist one result per round in a host-side JSON file and rank results by score, cheese left, and survival time. |
+
+The attack Pi publishes a single action after its detector confirms a swing. The host resolves that action against the crosshair and the current board.
+
+```python
+publisher.publish(config.TOPIC_ATTACK, {"action": "swing"})
 ```
 
----
+The game engine records the selected hole and streak in the authoritative hit effect. The browser uses that streak value to select the hammer sound, rising pitch, and harmony. This sound follows consecutive hammer hits. Joystick and light actions can build the scoring combo without advancing the melody.
 
-## Troubleshooting
+```javascript
+sfx.hit(e.streak);
+```
 
-**MQTT:** Broker `farlab.infosci.cornell.edu:1883`, user `idd`, pass `device@theFarm`
+From `Lab 6/mouse_game`, run `python host.py` and open `http://localhost:5050`. Run `pi_aim.py`, `pi_attack.py`, and `pi_light.py` on their respective Pis. Use `--calibrate` to check readings without publishing. For keyboard-only testing, run `python host.py --no-mqtt` and use the arrow keys to aim, Space to swing, and O/P to set full brightness or darkness. See the [test notes](mouse_game/TESTING.md) for setup and troubleshooting.
 
-**Sensor:** Check `i2cdetect -y 1`, APDS-9960 at `0x39`
+### 4. User Testing
 
-**Grid:** Verify server running, check MQTT in console, test with web controller
+Here is the link to the video: [https://drive.google.com/file/d/1YJROz1CCVNgj_2_geI2zuaxNGTyaRKGE/view?usp=sharing](https://drive.google.com/file/d/1YJROz1CCVNgj_2_geI2zuaxNGTyaRKGE/view?usp=sharing)
 
-**Pi venv:** Make sure to activate: `source .venv/bin/activate`
+The video shows two working Pis. The Pi assigned to the proximity sensor failed during the playtest, so the attack player used the Space bar to swing. The joystick and camera still ran on their Pis and sent actions over MQTT. We were able to test three-player coordination, but the recording does not show the physical attack sensor in use.
 
+- **Tester 1 — joystick.** The crosshair felt slow to respond. Each push moved it only one cell, and the need to return to center before moving again made aiming feel cumbersome. A follow-up build could reduce input delay and test a controlled repeat when the stick is held.
+- **Tester 2 — camera.** Gesture changes felt delayed, and the game sometimes interpreted an open palm and a fist the wrong way around. A follow-up build could check the hand-openness calibration and measure the time from changing the gesture to the board changing brightness.
 
----
+### 5. Reflection
 
-## Submission Checklist
+**What worked.** Sound and visual effects made the state changes easy to read. A hit gave the team immediate feedback, and dimming the board made the mice less visible as well as increasing their spawn rate. After several rounds of calibration, joystick direction, the proximity trigger, and the open-hand versus fist range were more reliable.
 
-Before submitting:
-- [ ] Delete prep/instructions above
-- [ ] Add YOUR project documentation
-- [ ] Include photos/videos/diagrams  
-- [ ] Document user testing with non-team members
-- [ ] Add reflection on learnings
-- [ ] List team names at top
+**What was hard.** The game moved quickly enough that the three players sometimes struggled to coordinate. Network delay could make an action arrive after its intended moment. For example, a delayed aim action could leave the crosshair on the wrong hole when a swing was processed and break the combo. The proximity sensor also provided less physical feedback than the joystick.
 
-**Your README = story of what YOU built!**
+**What we would change.** We would slow the pace or give players a gentler start so they have time to coordinate. We would also try adding tactile feedback to the attack control so a player can feel when a swing registers.
 
----
-
-Resources: [MQTT Guide](https://www.hivemq.com/mqtt-essentials/) | [Paho Python](https://www.eclipse.org/paho/index.php?page=clients/python/docs/index.php) | [Flask-SocketIO](https://flask-socketio.readthedocs.io/)
+**Where computation happened.** Each Pi processed its own sensor input, including hand landmarks on the camera Pi. The laptop resolved the game state and served the shared screen. One host gave all three players the same countdown, crosshair, and hit outcome even when inputs arrived at different times.
