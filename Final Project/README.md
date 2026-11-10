@@ -24,11 +24,21 @@ Each friend in a group keeps a small paper apartment building on their desk, wit
 
 ## Storyboard
 
-1. **10 PM:** I sit down to study, and my window lights up on three desks across campus.
-2. **1 AM:** I'm tired, glance over, see two other windows lit, and keep going.
-3. **1:30 AM:** Daniel's window starts fading. I knock on Pablo's window, and he knocks back.
-4. **2 AM:** I pull my curtain down to focus.
-5. **Morning:** the bottom row shows who was up until when.
+<img src="assets/storyboard-1.jpg" width="600" alt="Storyboard panels 1 to 3">
+
+1. Eric begins a night studying alone and wonders if anyone else is studying.
+2. Eric sits down, and his window lights up on his friends' buildings.
+3. A glance at his building shows Pablo's and Daniel's windows lit, and Eric feels connected.
+
+<img src="assets/storyboard-2.jpg" width="600" alt="Storyboard panels 4 to 6">
+
+4. Daniel leaves his chair, and his window light gradually fades.
+5. Eric taps Pablo's window to say a quick hello (a knock).
+6. In Pablo's room, Eric's window pulses. Pablo taps back, and both buildings flash once.
+
+<img src="assets/storyboard-3.jpg" width="600" alt="Storyboard panel 7">
+
+7. Time to focus: Eric closes his curtain. Sensing pauses, and Eric can't send knocks.
 
 ## What it builds on
 
