@@ -74,5 +74,3 @@ Each friend in a group keeps a small paper apartment building on their desk, wit
 - **Roommate Court across rooms:** fun, but mostly a speech-recognition problem.
 - **Pulse Room on the last train:** my favorite emotionally, but hard to test with real strangers.
 - **Desk Curfew between friends:** folded in as an open question, since it leans toward judging people.
-
-> **AI Disclaimer:** This write-up was drafted with help from AI (Claude Code), working from my six lab write-ups. The concept direction and final edits are mine.
