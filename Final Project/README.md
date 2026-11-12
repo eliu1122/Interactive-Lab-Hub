@@ -2,6 +2,62 @@
 
 **Yun-Chung Liu (yl4445) and Hong Yuan Cao (hc2343)** · November 9, 2026
 
+## Project Plan
+
+### 1. Team and project name
+
+**Lit Windows**, by Yun-Chung Liu (yl4445) and Hong Yuan Cao (hc2343).
+
+### 2. Who works on what
+
+Each of us builds one complete building, so both of us do hardware, code, and documentation. The split is by feature, not by "tech person" and "writing person."
+
+| | Yun-Chung | Hong |
+|---|---|---|
+| **Hardware** | Chair presence sensor; LED wiring behind the windows | Capacitive knock pads; picture screens behind the windows; curtain switch |
+| **Software** | Presence detection and the ten-minute fade; MQTT topics and message format | Knock and knock-back logic; showing the knocker's picture; curtain state; "offline" flicker |
+| **Building** | Building #1 | Building #2 |
+| **Testing** | Plan the two-room evening test | Run the multi-night group test and interviews |
+| **Documentation** | Write up presence, fade, and MQTT design | Write up knocking, curtain, and test findings |
+
+**Together:** the cardboard building design, integration sessions where both buildings talk to each other, the demo video, and a final edit of the whole write-up. We each review the other's code and writing before it's merged.
+
+### 3. The big idea
+
+A small paper apartment building on each friend's desk, with one window per person. Your window lights up on everyone's building when you're at your desk, fades when you leave, and can be curtained off. Tapping a friend's window "knocks," and your picture appears in your window on their building. It lets friends studying late in separate rooms feel each other's presence without texting or video calls.
+
+### 4. Timeline
+
+| Week of | Goal |
+|---|---|
+| **Nov 9** | Finalize concept and plan; agree on MQTT topics; list and order parts |
+| **Nov 16** | One window lights from an MQTT message; a picture shows on a screen; first chair sensor and knock pad readings on the Pi |
+| **Nov 23** | Presence and fade working on Building #1; knock-to-picture and curtain working on Building #2 |
+| **Nov 30** | Both buildings fully built and talking to each other; two-room evening test; fix what it showed |
+| **Dec 7** | Short group test with friends; record the demo video; finish documentation |
+| **Dec 8** | **Final demo and submission** |
+
+### 5. Parts to acquire
+
+- 2 Raspberry Pis (we have these from the course kit)
+- Chair presence sensor per person: a force-sensitive resistor under the seat cushion, or a proximity sensor aimed at the chair
+- MPR121 capacitive touch sensor and copper tape for the knock pads (kit)
+- Small color screens to show pictures behind the windows (e.g. the kit's MiniPiTFT, or small SPI LCDs if we need one per window)
+- Small micro switch for each curtain
+- Addressable LED strip (WS2812 / NeoPixel) or individual LEDs, plus resistors and jumper wires
+- Cardboard, tracing paper or vellum for the windows, fabric or paper for curtains
+- Power supplies for both Pis and LEDs
+
+### 6. Fall-back plan
+
+- **Chair sensor is unreliable:** swap it for a desk-lamp-style toggle switch you flip when you sit down, so the rest of the system still works.
+- **Knocking feels laggy over MQTT:** keep the pictures stored on each Pi ahead of time so a knock only sends a short message, not an image. Show the knock locally right away and confirm when it arrives.
+- **One screen per window is too many:** use one shared screen in the building's front door that shows whoever knocked, or fall back to the window blinking twice.
+- **Two full buildings take too long:** build one complete building and simulate the other friends' windows from a laptop script publishing to MQTT.
+- **Running low on time:** cut the morning history row first, then the curtain, keeping presence and knocking as the core.
+
+---
+
 ## The idea
 
 Each friend in a group keeps a small paper apartment building on their desk, with one window per person. A window lights up when that friend is at their desk. Late at night you can look over and see who else is still up working, like noticing whose lights are on across a courtyard.
@@ -74,57 +130,3 @@ Each friend in a group keeps a small paper apartment building on their desk, wit
 - **Roommate Court across rooms:** fun, but mostly a speech-recognition problem.
 - **Pulse Room on the last train:** my favorite emotionally, but hard to test with real strangers.
 - **Desk Curfew between friends:** folded in as an open question, since it leans toward judging people.
-
-## Project Plan
-
-### 1. Team and project name
-
-**Lit Windows**, by Yun-Chung Liu (yl4445) and Hong Yuan Cao (hc2343).
-
-### 2. Who works on what
-
-Each of us builds one complete building, so both of us do hardware, code, and documentation. The split is by feature, not by "tech person" and "writing person."
-
-| | Yun-Chung | Hong |
-|---|---|---|
-| **Hardware** | Chair presence sensor; LED wiring behind the windows | Capacitive knock pads; picture screens behind the windows; curtain switch |
-| **Software** | Presence detection and the ten-minute fade; MQTT topics and message format | Knock and knock-back logic; showing the knocker's picture; curtain state; "offline" flicker |
-| **Building** | Building #1 | Building #2 |
-| **Testing** | Plan the two-room evening test | Run the multi-night group test and interviews |
-| **Documentation** | Write up presence, fade, and MQTT design | Write up knocking, curtain, and test findings |
-
-**Together:** the cardboard building design, integration sessions where both buildings talk to each other, the demo video, and a final edit of the whole write-up. We each review the other's code and writing before it's merged.
-
-### 3. The big idea
-
-A small paper apartment building on each friend's desk, with one window per person. Your window lights up on everyone's building when you're at your desk, fades when you leave, and can be curtained off. Tapping a friend's window "knocks," and your picture appears in your window on their building. It lets friends studying late in separate rooms feel each other's presence without texting or video calls.
-
-### 4. Timeline
-
-| Week of | Goal |
-|---|---|
-| **Nov 9** | Finalize concept and plan; agree on MQTT topics; list and order parts |
-| **Nov 16** | One window lights from an MQTT message; a picture shows on a screen; first chair sensor and knock pad readings on the Pi |
-| **Nov 23** | Presence and fade working on Building #1; knock-to-picture and curtain working on Building #2 |
-| **Nov 30** | Both buildings fully built and talking to each other; two-room evening test; fix what it showed |
-| **Dec 7** | Short group test with friends; record the demo video; finish documentation |
-| **Dec 8** | **Final demo and submission** |
-
-### 5. Parts to acquire
-
-- 2 Raspberry Pis (we have these from the course kit)
-- Chair presence sensor per person: a force-sensitive resistor under the seat cushion, or a proximity sensor aimed at the chair
-- MPR121 capacitive touch sensor and copper tape for the knock pads (kit)
-- Small color screens to show pictures behind the windows (e.g. the kit's MiniPiTFT, or small SPI LCDs if we need one per window)
-- Small micro switch for each curtain
-- Addressable LED strip (WS2812 / NeoPixel) or individual LEDs, plus resistors and jumper wires
-- Cardboard, tracing paper or vellum for the windows, fabric or paper for curtains
-- Power supplies for both Pis and LEDs
-
-### 6. Fall-back plan
-
-- **Chair sensor is unreliable:** swap it for a desk-lamp-style toggle switch you flip when you sit down, so the rest of the system still works.
-- **Knocking feels laggy over MQTT:** keep the pictures stored on each Pi ahead of time so a knock only sends a short message, not an image. Show the knock locally right away and confirm when it arrives.
-- **One screen per window is too many:** use one shared screen in the building's front door that shows whoever knocked, or fall back to the window blinking twice.
-- **Two full buildings take too long:** build one complete building and simulate the other friends' windows from a laptop script publishing to MQTT.
-- **Running low on time:** cut the morning history row first, then the curtain, keeping presence and knocking as the core.
